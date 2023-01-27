@@ -34,6 +34,8 @@ public class Chassis extends SubsystemBase {
 
     leftleader = new MotorControllerGroup(leftmotor1, leftmotor2, leftmotor3);
 
+    rightleader.setInverted(true);
+
     stick = new Joystick(0);
     drive = new DifferentialDrive(leftleader, rightleader);
   }
@@ -41,6 +43,6 @@ public class Chassis extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    drive.arcadeDrive(stick.getX(), stick.getY());
+    drive.arcadeDrive(-stick.getX(), -stick.getY());
   }
 }
