@@ -13,7 +13,53 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+
+    /* Device IDs */
+    public static class DeviceIDs {
+
+        //Device IDs
+        public static final int POWER_DISTRIBUTION_BOARD  = 0;
+        public static final int PNEUMATICS_CONTROL_MODULE = 1;
+
+        // Chassis IDs
+        public static final int LEFT_LEADER_ID      = 1;
+        public static final int LEFT_FOLLOWER1_ID   = 2;
+        public static final int LEFT_FOLLOWER2_ID   = 3;
+
+        public static final int RIGHT_LEADER_ID     = 4;
+        public static final int RIGHT_FOLLOWER1_ID  = 7;
+        public static final int RIGHT_FOLLOWER2_ID  = 8;
+
+        // Intake IDs
+        public static final int LEFT_INTAKE_MOTOR_ID  = 9;
+        public static final int RIGHT_INTAKE_MOTOR_ID = 8;
+
+        // Elevator IDs
+        public static final int ELEVATOR_MOTOR1 = 5;
+        public static final int ELEVATOR_MOTOR2 = 6;
+        public static final int WORM_GEAR_MOTOR = 7;
+
+        //Sensor IDs
+        public static final int MAGNETIC_LIMIT_SWITCH = 0;
+
+        // Joysticks Port IDs
+        public static final int JOYSTICK_PORT = 0;
+
+        // Solenoids
+        public static final int INTAKE_SOLENOID1         = 0;
+        public static final int INTAKE_SOLENOID2         = 2;
+        public static final int ELEVATOR_SOLENOID_REAL   = 3;
+        public static final int ELEVATOR_SOLENOID_FAKE   = 5;
+        public static final int DRIVETRAIN_SOLENOID_LOW  = 1;
+        public static final int DRIVETRAIN_SOLENOID_HIGH = 4;
+    }
+
+    /* Buttons for Joystick */
+    public static class JoystickButtons {
+        public static final int LOW_GEAR    = 2;
+        public static final int ELEVATE     = 3;
+        public static final int DESCALATE   = 4;
+        public static final int INTAKE_IN   = 5;
+        public static final int INTAKE_OUT  = 6;
+    }
 }
