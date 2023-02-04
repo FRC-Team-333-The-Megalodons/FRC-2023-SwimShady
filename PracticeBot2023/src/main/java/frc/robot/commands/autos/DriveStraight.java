@@ -5,6 +5,7 @@
 package frc.robot.commands.autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveForwards;
 import frc.robot.commands.TurnDegrees;
 import frc.robot.subsystems.Chassis;
@@ -18,6 +19,14 @@ public class DriveStraight extends SequentialCommandGroup {
   public DriveStraight(Chassis chassis, NavX navX) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new TurnDegrees(chassis, navX, 0));
+    addCommands(
+      new TurnDegrees(chassis, navX, 0),
+      new WaitCommand(2),
+      new DriveForwards(chassis, navX),
+      new WaitCommand(2),
+      new TurnDegrees(chassis, navX, 0),
+      new WaitCommand(2),
+      new DriveForwards(chassis, navX)
+    );
   }
 }

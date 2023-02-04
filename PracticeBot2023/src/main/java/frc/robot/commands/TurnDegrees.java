@@ -17,17 +17,19 @@ public class TurnDegrees extends CommandBase {
   double degrees;
 
   private final double kP = 0.0056;
-  private final double kI = 0.0003;
+  private final double kI = 0.00023;
   private final double kD = 0;
-  private final double iLim = 58;
-  private final double maxTolerance = 180.3;
-  private final double minTolerance = 179.7;
+  private final double iLim = 59;
+  private final double maxTolerance = 180.2;
+  private final double minTolerance = 179.8;
 
   private double error = 0;
   private double output = 0;
   private double errorSum = 0;
   private double lastTimeStamp = 0;
   double currentTime = 0;
+
+  boolean isGyroNearTarget = false;
 
   /** Creates a new TurnDegrees. */
   public TurnDegrees(Chassis chassis, NavX gyro, double degrees) {
@@ -41,7 +43,9 @@ public class TurnDegrees extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    gyro.reset();
+  }
 
   boolean greaterThanMax = false;
   boolean lowerThanMin = false;
@@ -76,15 +80,19 @@ public class TurnDegrees extends CommandBase {
     lastTimeStamp = Timer.getFPGATimestamp();
     SmartDashboard.putNumber("Error", error);
     SmartDashboard.putNumber("Sum", errorSum);
+    isGyroNearTarget = (maxTolerance) >= gyro.getAngle() && (minTolerance) <= gyro.getAngle();
+    SmartDashboard.putBoolean("Is near", isGyroNearTarget);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isGyroNearTarget;
   }
 }

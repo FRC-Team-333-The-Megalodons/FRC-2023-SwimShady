@@ -30,7 +30,9 @@ public class DriveForwards extends CommandBase {
   private double lastTimeStamp = 0;
 
   double currentTime = 0;
-
+  double autoTimeMils = 5000;
+  double timeLapse = 0;
+  double timeStamp = 0;
 
   /** Creates a new DriveForwards. */
   public DriveForwards(Chassis chassis, NavX gyro) {
@@ -43,7 +45,10 @@ public class DriveForwards extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    gyro.reset();
+    timeStamp = Timer.getFPGATimestamp();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   boolean greaterThanMax = false;
@@ -51,7 +56,7 @@ public class DriveForwards extends CommandBase {
   @Override
   public void execute() {
     currentTime = Timer.getFPGATimestamp() - lastTimeStamp;
-    
+    timeLapse += Timer.getFPGATimestamp() - timeStamp;
     if(gyro.getAngle() > maxTolerance){
       error = maxTolerance - gyro.getAngle();
       greaterThanMax = true;
@@ -72,11 +77,12 @@ public class DriveForwards extends CommandBase {
     }
 
     output = (kP * error) + (kI * errorSum);
-    drivetrain.drive(-output, .7);
+    drivetrain.drive(-output, .6);
     
     lastTimeStamp = Timer.getFPGATimestamp();
     SmartDashboard.putNumber("Error", error);
     SmartDashboard.putNumber("Sum", errorSum);
+    SmartDashboard.putNumber("time",timeLapse);
     //this may or may not work lol   
   }
 
@@ -87,6 +93,6 @@ public class DriveForwards extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timeLapse  >= 300;
   }
 }
