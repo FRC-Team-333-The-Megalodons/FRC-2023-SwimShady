@@ -16,12 +16,12 @@ public class TurnDegrees extends CommandBase {
   NavX gyro;
   double degrees;
 
-  private final double kP = 0.0056;
-  private final double kI = 0.00023;
+  private final double kP = 0.005;
+  private final double kI = 0.00026;
   private final double kD = 0;
-  private final double iLim = 59;
-  private final double maxTolerance = 180.2;
-  private final double minTolerance = 179.8;
+  private final double iLim = 62;
+  private final double maxTolerance;
+  private final double minTolerance;
 
   private double error = 0;
   private double output = 0;
@@ -39,6 +39,9 @@ public class TurnDegrees extends CommandBase {
     this.chassis = chassis;
     this.degrees = degrees;
     this.gyro = gyro;
+
+    this.maxTolerance = degrees + .3;
+    this.minTolerance = degrees - .3;
   }
 
   // Called when the command is initially scheduled.

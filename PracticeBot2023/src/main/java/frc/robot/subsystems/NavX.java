@@ -29,6 +29,7 @@ public class NavX extends SubsystemBase {
   }
 
   public double getTilt(){
+    //todo get rid of gyro noise
     return navx.getPitch();
   }
 

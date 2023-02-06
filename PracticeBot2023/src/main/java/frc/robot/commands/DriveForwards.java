@@ -30,24 +30,27 @@ public class DriveForwards extends CommandBase {
   private double lastTimeStamp = 0;
 
   double currentTime = 0;
-  double autoTimeMils = 5000;
+  double autoTimeMils = 0;
   double timeLapse = 0;
   double timeStamp = 0;
 
+  boolean reverse;
+
   /** Creates a new DriveForwards. */
-  public DriveForwards(Chassis chassis, NavX gyro) {
+  public DriveForwards(Chassis chassis, NavX gyro, boolean reverse, double time) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis);
     addRequirements(gyro);
     this.drivetrain = chassis;
     this.gyro = gyro;
+    this.reverse = reverse;
+    this.autoTimeMils = time;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    gyro.reset();
-    timeStamp = Timer.getFPGATimestamp();
+     gyro.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,7 +59,7 @@ public class DriveForwards extends CommandBase {
   @Override
   public void execute() {
     currentTime = Timer.getFPGATimestamp() - lastTimeStamp;
-    timeLapse += Timer.getFPGATimestamp() - timeStamp;
+    timeLapse++;
     if(gyro.getAngle() > maxTolerance){
       error = maxTolerance - gyro.getAngle();
       greaterThanMax = true;
@@ -77,7 +80,7 @@ public class DriveForwards extends CommandBase {
     }
 
     output = (kP * error) + (kI * errorSum);
-    drivetrain.drive(-output, .6);
+    drivetrain.drive(-output, reverse ? -.8 : .8);
     
     lastTimeStamp = Timer.getFPGATimestamp();
     SmartDashboard.putNumber("Error", error);
@@ -93,6 +96,6 @@ public class DriveForwards extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timeLapse  >= 300;
+    return timeLapse  >= autoTimeMils;
   }
 }
