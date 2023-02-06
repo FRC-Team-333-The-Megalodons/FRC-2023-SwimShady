@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.DriveForwards;
+import frc.robot.commands.Drive;
 import frc.robot.commands.autos.DriveStraight;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.NavX;

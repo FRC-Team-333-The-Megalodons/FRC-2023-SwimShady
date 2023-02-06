@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.NavX;
 
-public class DriveForwards extends CommandBase {
+public class Drive extends CommandBase {
 
   private final Chassis drivetrain;
   private final NavX gyro;
 
-  private final double DRIVE_SPEED = 0.5;
+  private final double DRIVE_SPEED = 0.8;
 
   private final double kP = 0.05;
   private final double kI = 0.001;
@@ -37,7 +37,7 @@ public class DriveForwards extends CommandBase {
   boolean reverse;
 
   /** Creates a new DriveForwards. */
-  public DriveForwards(Chassis chassis, NavX gyro, boolean reverse, double time) {
+  public Drive(Chassis chassis, NavX gyro, boolean reverse, double time) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis);
     addRequirements(gyro);
@@ -80,7 +80,7 @@ public class DriveForwards extends CommandBase {
     }
 
     output = (kP * error) + (kI * errorSum);
-    drivetrain.drive(-output, reverse ? -.8 : .8);
+    drivetrain.drive(-output, reverse ? -DRIVE_SPEED : DRIVE_SPEED);
     
     lastTimeStamp = Timer.getFPGATimestamp();
     SmartDashboard.putNumber("Error", error);
