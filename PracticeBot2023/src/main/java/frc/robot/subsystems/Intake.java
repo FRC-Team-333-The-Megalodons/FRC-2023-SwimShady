@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  CANSparkMax motor;
+  CANSparkMax wristMotor;
   Joystick stick;
 
   public Intake() {
-    motor = new CANSparkMax(9, MotorType.kBrushless);
+    wristMotor = new CANSparkMax(9, MotorType.kBrushless);
     stick = new Joystick(0);
   }
 
