@@ -22,9 +22,9 @@ public class Chassis extends SubsystemBase {
   DifferentialDrive drive;
 
   public Chassis() {
-    rightmotor1  = new CANSparkMax(1, MotorType.kBrushless);
-    rightmotor2  = new CANSparkMax(2, MotorType.kBrushless);
-    rightmotor3  = new CANSparkMax(3, MotorType.kBrushless);
+    rightmotor1 = new CANSparkMax(1, MotorType.kBrushless);
+    rightmotor2 = new CANSparkMax(2, MotorType.kBrushless);
+    rightmotor3 = new CANSparkMax(3, MotorType.kBrushless);
 
     rightleader = new MotorControllerGroup(rightmotor1, rightmotor2, rightmotor3);
 
@@ -41,6 +41,6 @@ public class Chassis extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    drive.arcadeDrive(stick.getX(), stick.getY());
+    drive.arcadeDrive(-stick.getX(), -stick.getY());
   }
 }

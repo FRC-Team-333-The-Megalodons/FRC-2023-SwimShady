@@ -5,83 +5,71 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
-  CANSparkMax  rihgtmotor, leftmotor;
+  CANSparkMax rihgtmotor, leftmotor;
   Joystick stick;
-  double espeed = 0.333;
+  double espeed = 1.0;
 
   public Elevator() {
     rihgtmotor = new CANSparkMax(7, MotorType.kBrushless);
     leftmotor = new CANSparkMax(8, MotorType.kBrushless);
     stick = new Joystick(0);
+
+    rihgtmotor.setIdleMode(IdleMode.kBrake);
+    leftmotor.setIdleMode(IdleMode.kBrake);
   }
-  public void eUp(){
+
+  public void eUp() {
     rihgtmotor.set(espeed);
     leftmotor.set(-espeed);
   }
-  public void eDown(){
+
+  public void eDown() {
     rihgtmotor.set(-espeed);
     leftmotor.set(espeed);
   }
-  public void stop(){
+
+  public void stop() {
     rihgtmotor.set(0);
     leftmotor.set(0);
   }
 
+  public void resetEncoders() {
+    leftmotor.getEncoder().setPosition(0);
+    rihgtmotor.getEncoder().setPosition(0);
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(stick.getRawButton(4)){
+    if (stick.getRawButton(4)) {
       eUp();
-    }else if(stick.getRawButton(3)){
+    } else if (stick.getRawButton(3)) {
       eDown();
-    }else {
+    } else {
       stop();
     }
+
+    if (stick.getRawButton(2)) {
+      resetEncoders();
+    }
+
+    SmartDashboard.putNumber("Left Elevatator Encoder", leftmotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("Right Elevatator Encoder", rihgtmotor.getEncoder().getPosition());
   }
 }
+
+/*
+ * Elevator Encoder Values
+ * 1. 69.5 max extension, high shot
+ * 2. 50 mid shot
+ * 3. 0 home position low shot
+ */
