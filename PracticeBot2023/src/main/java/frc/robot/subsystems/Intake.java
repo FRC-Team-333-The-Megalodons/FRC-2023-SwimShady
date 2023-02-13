@@ -5,31 +5,72 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.GenericHID;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  CANSparkMax wristMotor;
+  CANSparkMax wristMotor1, wristMotor2;
   Joystick stick;
+  double ispeed = 0.;
+  DoubleSolenoid solenoid;
 
   public Intake() {
-    wristMotor = new CANSparkMax(9, MotorType.kBrushless);
+    wristMotor1 = new CANSparkMax(9, MotorType.kBrushless);
+    wristMotor2 = new CANSparkMax(10, MotorType.kBrushless);
     stick = new Joystick(0);
+    solenoid = new DoubleSolenoid(1, PneumaticsModuleType.CTREPCM, 0, 0);
+
+    wristMotor1.setIdleMode(IdleMode.kBrake);
+    wristMotor2.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void wristUp() {
+    wristMotor1.set(ispeed);
+    wristMotor2.set(-ispeed);
+  }
+
+  public void wristDown() {
+    wristMotor1.set(-ispeed);
+    wristMotor2.set(ispeed);
+  }
+
+  public void iStop() {
+    wristMotor1.set(0);
+    wristMotor2.set(0);
+  }
+
+  public void pSqueeze() {
+    solenoid.set(Value.kForward);
+  }
+
+  public void pUnsqueeze() {
+    solenoid.set(Value.kReverse);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (stick.getPOV() == 0) {
-      System.out.println("Extend");
-    } else if (stick.getPOV() == 180) {
-      System.out.println("Reverse");
+
+    if (stick.getRawButton(1)) {
+      pSqueeze();
     } else {
-      System.out.println("Stop");
+      pUnsqueeze();
+    }
+
+    if (stick.getPOV() == 0) {
+      wristDown();
+    } else if (stick.getPOV() == 180) {
+      wristUp();
+    } else {
+      iStop();
     }
   }
 }
