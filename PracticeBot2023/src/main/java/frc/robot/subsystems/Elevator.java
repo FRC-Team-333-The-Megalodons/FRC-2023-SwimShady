@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,15 +17,22 @@ public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   CANSparkMax rihgtmotor, leftmotor;
   Joystick stick;
-  double espeed = 1.0;
+  double espeed = .4;
+  frc.robot.utils.PIDController ePidController;
 
   public Elevator() {
     rihgtmotor = new CANSparkMax(7, MotorType.kBrushless);
     leftmotor = new CANSparkMax(8, MotorType.kBrushless);
     stick = new Joystick(0);
+    ePidController = new frc.robot.utils.PIDController(.0118,.0005,0,0,10,10);
 
     rihgtmotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void ePID_Up(){
+    leftmotor.set(ePidController.getOutput(leftmotor.getEncoder().getPosition()));
+    rihgtmotor.set(ePidController.getOutput(leftmotor.getEncoder().getPosition()));
   }
 
   public void eUp() {
