@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -21,8 +22,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  Chassis chassis1 = new Chassis();
-  Elevator elevator1 = new Elevator();
+  // Chassis chassis1 = new Chassis();
+  // Elevator elevator1 = new Elevator();
+  Intake intake1 = new Intake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -67,7 +69,8 @@ public class RobotContainer {
   }
 
   public void teleopp() {
-    chassis1.periodic();
-    elevator1.periodic();
+    // chassis1.periodic();
+    // elevator1.periodic();
+    intake1.periodic();
   }
 }
