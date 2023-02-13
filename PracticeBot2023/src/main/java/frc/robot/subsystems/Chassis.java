@@ -18,7 +18,6 @@ public class Chassis extends SubsystemBase {
   CANSparkMax leftmotor1, leftmotor2, leftmotor3;
   MotorControllerGroup rightleader;
   MotorControllerGroup leftleader;
-  Joystick stick;
   DifferentialDrive drive;
 
   public Chassis() {
@@ -33,14 +32,10 @@ public class Chassis extends SubsystemBase {
     leftmotor3 = new CANSparkMax(6, MotorType.kBrushless);
 
     leftleader = new MotorControllerGroup(leftmotor1, leftmotor2, leftmotor3);
-
-    stick = new Joystick(0);
     drive = new DifferentialDrive(leftleader, rightleader);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    drive.arcadeDrive(stick.getX(), stick.getY());
+  public void drive(double speed, double rotation) {
+    drive.arcadeDrive(speed, rotation);
   }
 }

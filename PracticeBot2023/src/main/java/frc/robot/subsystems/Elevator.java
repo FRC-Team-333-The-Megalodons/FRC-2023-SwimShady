@@ -7,79 +7,53 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
-  CANSparkMax  rihgtmotor, leftmotor;
+  CANSparkMax  leftMotor, rightMotor;
   Joystick stick;
-  double espeed = 0.333;
+
+  public PIDController elevatorController;
+
+  private final double ELEVATOR_SPEED = 0.333;
 
   public Elevator() {
-    rihgtmotor = new CANSparkMax(7, MotorType.kBrushless);
-    leftmotor = new CANSparkMax(8, MotorType.kBrushless);
+    leftMotor = new CANSparkMax(7, MotorType.kBrushless);
+    rightMotor = new CANSparkMax(8, MotorType.kBrushless);
     stick = new Joystick(0);
   }
-  public void eUp(){
-    rihgtmotor.set(espeed);
-    leftmotor.set(-espeed);
+  public void elevate(){
+    leftMotor.set(ELEVATOR_SPEED);
+    rightMotor.set(ELEVATOR_SPEED);
   }
-  public void eDown(){
-    rihgtmotor.set(-espeed);
-    leftmotor.set(espeed);
+  public void descelate(){
+    leftMotor.set(-ELEVATOR_SPEED);
+    rightMotor.set(-ELEVATOR_SPEED);
   }
   public void stop(){
-    rihgtmotor.set(0);
-    leftmotor.set(0);
+    leftMotor.set(0);
+    rightMotor.set(0);
   }
 
+  public void resetEncoders() {
+    leftMotor.getEncoder().setPosition(0);
+    rightMotor.getEncoder().setPosition(0);
+  }
 
+  public double getPosMeters() {
+    return -1;
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if(stick.getRawButton(4)){
-      eUp();
+      elevate();
     }else if(stick.getRawButton(3)){
-      eDown();
+      descelate();
     }else {
       stop();
     }

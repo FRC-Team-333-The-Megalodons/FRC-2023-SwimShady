@@ -21,15 +21,16 @@ package frc.robot;
  * 6. Camera (april tag line ups, driver(s) visionh)
  * 
  * Some logic to consider:
- * 1. Elevtor stops moving at the top and bottom when limit switch is engaged
- * 2. If no button is being pressed, the elevator returns to the 'home' position and resets encoders
- * 3. When the elevator is up, reduce drive speed
- * 4. Automatic Mode: smart robot, automated tasks
- * 5. Manual Mode: driver(s) has full controll of every subsystem
- * 6. Wrist should ALWAYS be between -90 & 90 to avoid breaking robot (via encoder or magenetic limit swtich)
- * 7. When the limelight is in scoring postion, turn LEDs green, else be red
- * 8. When yellow button is pressed, LEDs go yellow (vice persa for purple button)
- * 9. When robot is balanced, flicker blue and orange
+ * 1.  Elevtor stops moving at the top and bottom when limit switch is engaged
+ * 2.  If no button is being pressed, the elevator returns to the 'home' position and resets encoders
+ * 3.  When the elevator is up, reduce drive speed
+ * 4.  Automatic Mode: smart robot, automated tasks
+ * 5.  Manual Mode: driver(s) has full controll of every subsystem
+ * 6.  Wrist should ALWAYS be between -90 & 90 to avoid breaking robot (via encoder or magenetic limit swtich)
+ * 7.  When the limelight is in scoring postion, turn LEDs green, else be red
+ * 8.  When yellow button is pressed, LEDs go yellow (vice persa for purple button)
+ * 9.  When robot is balanced, flicker blue and orange
+ * 10. Intake should ALWAYS be out when in possesion of cube and can come if in possesion of cone (might be 2 different button to intake cone/cube?)
  * 
  * Button Commands: 
  * (NOTE: the cone & cube node scoring postiton will change based on which game piece the robot detects in its claw)
@@ -63,5 +64,43 @@ public final class Constants {
 
         public static final int CONE_LIGHTS = -1;
         public static final int CUBE_LIGHTS = -1;
+    }
+
+    public static class DeviceIDs {
+        //drivetrain motors
+        public static final int LEFT_DRIVE_MOTOR_1  = 1;
+        public static final int LEFT_DRIVE_MOTOR_2  = 2;
+        public static final int LEFT_DRIVE_MOTOR_3  = 3;
+        public static final int RIGHT_DRIVE_MOTOR_1 = 4;
+        public static final int RIGHT_DRIVE_MOTOR_2 = 5;
+        public static final int RIGHT_DRIVE_MOTOR_3 = 6;
+
+        //control system devices
+        public static final int PNEMATICS_CONTROL_MODULE = -1;
+        public static final int POWER_DISTRIBUTION_BOARD = -1;
+
+        //drivetrain solennoids
+        public static final int LOW_GEAR  = -1;
+        public static final int HIGH_GEAR = -1;
+
+        //intake solenoids
+        public static final int CLAW_IN  = -1;
+        public static final int CLAW_OUT = -1;
+
+        //elevator motors
+        public static final int LEFT_ELEVATOR_MOTOR  = 7;
+        public static final int RIGHT_ELEVATOR_MOTOR = 8;
+
+        //intake motors
+        public static final int LEFT_INTAKE_MOTOR  = 9;
+        public static final int RIGHT_INTAKE_MOTOR = 10;
+
+        //sensors, cameras, etc..
+        public static final int ELEVATOR_LIMIT_SWITCH = -1;
+        public static final int INTAKE_COLOR_SENSOR = -1;
+    }
+
+    public static class LogicalConstants {
+        public static final boolean SOLO_DRIVER_MODE = true;
     }
 }
