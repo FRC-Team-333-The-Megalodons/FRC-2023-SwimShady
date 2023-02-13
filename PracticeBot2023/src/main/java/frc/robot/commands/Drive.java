@@ -15,7 +15,7 @@ public class Drive extends CommandBase {
   private final Chassis drivetrain;
   private final NavX gyro;
 
-  private final double DRIVE_SPEED = 0.8;
+  private final double DRIVE_SPEED = .86;
 
   private final double kP = 0.05;
   private final double kI = 0.001;
@@ -56,6 +56,8 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   boolean greaterThanMax = false;
   boolean lowerThanMin = false;
+  double rampSpeed = .4; 
+
   @Override
   public void execute() {
     currentTime = Timer.getFPGATimestamp() - lastTimeStamp;
@@ -76,11 +78,16 @@ public class Drive extends CommandBase {
     SmartDashboard.putBoolean("lower than min", lowerThanMin);
 
     if(Math.abs(error) < iLim && Math.round(error) != 0){
-      errorSum += error + currentTime;
+      errorSum += error * currentTime;
     }
 
     output = (kP * error) + (kI * errorSum);
-    drivetrain.drive(-output, reverse ? -DRIVE_SPEED : DRIVE_SPEED);
+
+    if(rampSpeed != DRIVE_SPEED){
+     rampSpeed += .01; 
+    }
+
+    drivetrain.drive(-output, reverse ? -rampSpeed : rampSpeed);
     
     lastTimeStamp = Timer.getFPGATimestamp();
     SmartDashboard.putNumber("Error", error);

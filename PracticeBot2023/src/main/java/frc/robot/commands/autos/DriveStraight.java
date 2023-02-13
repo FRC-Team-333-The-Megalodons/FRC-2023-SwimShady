@@ -21,12 +21,12 @@ public class DriveStraight extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new Drive(chassis, navX, false,30),
-      new Drive(chassis, navX, true,100),
-      new WaitCommand(.8),
+      new Drive(chassis, navX, true,120),
+      new WaitCommand(1.2),
       new TurnDegrees(chassis, navX, 180),
-      new WaitCommand(1),
-      new Drive(chassis, navX, true,80),
-      new WaitCommand(.8),
+      new WaitCommand(1.2),
+      new Drive(chassis, navX, true,100),
+      new WaitCommand(1.2),
       new TurnDegrees(chassis, navX, 180)
     );
   }
