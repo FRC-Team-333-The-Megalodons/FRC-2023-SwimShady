@@ -24,13 +24,13 @@ public class Elevator extends SubsystemBase {
     rihgtmotor = new CANSparkMax(7, MotorType.kBrushless);
     leftmotor = new CANSparkMax(8, MotorType.kBrushless);
     stick = new Joystick(0);
-    ePidController = new frc.robot.utils.PIDController(.008,.0006,0,0,10,10);
+    ePidController = new frc.robot.utils.PIDController(.008, .0006, 0, 0, 10, 10);
 
     rihgtmotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
   }
 
-  public void ePID_Up(){
+  public void ePID_Up() {
     leftmotor.set(ePidController.getOutput(leftmotor.getEncoder().getPosition()));
     rihgtmotor.set(ePidController.getOutput(leftmotor.getEncoder().getPosition()));
   }
