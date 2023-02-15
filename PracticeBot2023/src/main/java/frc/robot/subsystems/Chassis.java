@@ -5,11 +5,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Chassis extends SubsystemBase {
@@ -20,6 +24,8 @@ public class Chassis extends SubsystemBase {
   MotorControllerGroup leftleader;
   Joystick stick;
   DifferentialDrive drive;
+
+  ColorSensorV3 cs;
 
   public Chassis() {
     rightmotor1  = new CANSparkMax(1, MotorType.kBrushless);
@@ -38,11 +44,17 @@ public class Chassis extends SubsystemBase {
 
     stick = new Joystick(0);
     drive = new DifferentialDrive(leftleader, rightleader);
-  }
 
+    cs = new ColorSensorV3(I2C.Port.kOnboard);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     drive.arcadeDrive(-stick.getX(), -stick.getY());
+
+    SmartDashboard.putNumber("        Blue", cs.getBlue());
+    SmartDashboard.putNumber("        Purple", cs.getPurple());
+    SmartDashboard.putNumber("        Yellow", cs.getYellow());
+    SmartDashboard.putNumber("        Proximity", proximity);
   }
 }
