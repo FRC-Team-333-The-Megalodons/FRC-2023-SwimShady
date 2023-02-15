@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
@@ -21,8 +22,8 @@ public class Elevator extends SubsystemBase {
   frc.robot.utils.PIDController ePidController;
 
   public Elevator() {
-    rihgtmotor = new CANSparkMax(7, MotorType.kBrushless);
-    leftmotor = new CANSparkMax(8, MotorType.kBrushless);
+    rihgtmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR1, MotorType.kBrushless);
+    leftmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
     ePidController = new frc.robot.utils.PIDController(.008, .0006, 0, 0, 10, 10);
 

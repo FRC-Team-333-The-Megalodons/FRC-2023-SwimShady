@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.utils.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -22,24 +23,32 @@ import edu.wpi.first.wpilibj.GenericHID;
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   CANSparkMax wristMotor1, wristMotor2,intakemotor1, intakemotor2;
-  MotorControllerGroup wrist;
+  MotorControllerGroup wrist, intake;
   Joystick stick;
   DoubleSolenoid solenoid;
 
-  PIDController wrisController;
+  PIDController wristController;
 
   public Intake() {
-    wristMotor1 = new CANSparkMax(9, MotorType.kBrushless);
+    wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
     wristMotor1.setInverted(true);
-    wristMotor2 = new CANSparkMax(10, MotorType.kBrushless);
-    stick = new Joystick(0);
-    solenoid = new DoubleSolenoid(1, PneumaticsModuleType.CTREPCM, 0, 0);
+    wristMotor2 = new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless);
+
     wristMotor1.setIdleMode(IdleMode.kBrake);
     wristMotor2.setIdleMode(IdleMode.kBrake);
+
     wrist = new MotorControllerGroup(wristMotor1, wristMotor2);
-    intakemotor1 = new CANSparkMax(11, MotorType.kBrushless);
-    intakemotor2 = new CANSparkMax(14, MotorType.kBrushless);
-    wrisController = new PIDController(0, 0, 0, 0, 0, 0);
+
+    intakemotor1 = new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless);
+    intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
+
+    intake = new MotorControllerGroup(intakemotor1, intakemotor2);
+
+    stick = new Joystick(0);
+
+    solenoid = new DoubleSolenoid(Constants.RobotMap.PCM_ID, PneumaticsModuleType.CTREPCM, 0, 0);
+
+    wristController = new PIDController(0, 0, 0, 0, 0, 0);
   }
 
   public void resetEncoder(int val) {

@@ -64,4 +64,38 @@ public final class Constants {
         public static final int CONE_LIGHTS = -1;
         public static final int CUBE_LIGHTS = -1;
     }
+
+    public static class RobotMap{
+        /*
+         * Motor IDS
+         */
+        public static final int DRIVE_TRAIN_L_LEADER = 4;
+        public static final int DRIVE_TRAIN_L_FOLLOWER1 = 5;
+        public static final int DRIVE_TRAIN_L_FOLLOWER2 = 6;
+
+        public static final int DRIVE_TRAIN_R_LEADER = 1;
+        public static final int DRIVE_TRAIN_R_FOLLOWER1 = 2;
+        public static final int DRIVE_TRAIN_R_FOLLOWER2 = 3;
+
+        public static final int ELEVATOR1 = 7;
+        public static final int ELEVATOR2 = 8;
+
+        public static final int WRIST1 = 9;
+        public static final int WRIST2 = 10;
+
+        public static final int INTAKE1 = 11;
+        public static final int INTAKE2 = 14;
+
+        /*
+         * Solenoid IDS
+         */
+
+        public static final int PCM_ID = 1; 
+
+        public static final int SHIFT_HIGH = 0;
+        public static final int SHIFT_LOW = 0;
+        
+        public static final int INTAKE_SQUEEZE = 0;
+        public static final int INTAKE_UNSQUEEZE = 0;
+    }
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Chassis extends SubsystemBase {
   /** Creates a new Chassis. */
@@ -21,15 +22,15 @@ public class Chassis extends SubsystemBase {
   DifferentialDrive drive;
 
   public Chassis() {
-    rightmotor1 = new CANSparkMax(1, MotorType.kBrushless);
-    rightmotor2 = new CANSparkMax(2, MotorType.kBrushless);
-    rightmotor3 = new CANSparkMax(3, MotorType.kBrushless);
+    rightmotor1 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_LEADER, MotorType.kBrushless);
+    rightmotor2 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER1, MotorType.kBrushless);
+    rightmotor3 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER2, MotorType.kBrushless);
 
     rightleader = new MotorControllerGroup(rightmotor1, rightmotor2, rightmotor3);
 
-    leftmotor1 = new CANSparkMax(4, MotorType.kBrushless);
-    leftmotor2 = new CANSparkMax(5, MotorType.kBrushless);
-    leftmotor3 = new CANSparkMax(6, MotorType.kBrushless);
+    leftmotor1 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_LEADER, MotorType.kBrushless);
+    leftmotor2 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_FOLLOWER1, MotorType.kBrushless);
+    leftmotor3 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_FOLLOWER2, MotorType.kBrushless);
 
     leftleader = new MotorControllerGroup(leftmotor1, leftmotor2, leftmotor3);
 
