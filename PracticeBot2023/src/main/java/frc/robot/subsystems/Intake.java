@@ -7,18 +7,15 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.GenericHID;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
@@ -41,6 +38,7 @@ public class Intake extends SubsystemBase {
 
     intakemotor1 = new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless);
     intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
+    intakemotor2.setInverted(true);
 
     intake = new MotorControllerGroup(intakemotor1, intakemotor2);
 
@@ -63,16 +61,13 @@ public class Intake extends SubsystemBase {
     solenoid.set(Value.kReverse);
   }
   public void iIn(){
-    intakemotor1.set(0.333);
-    intakemotor2.set(-0.333);
+    intake.set(.333);
   }
   public void iOut(){
-    intakemotor1.set(-0.333);
-    intakemotor2.set(0.333);
+    intake.set(-.333);
   }
   public void iStop(){
-    intakemotor1.set(-0.333);
-    intakemotor2.set(0.333);
+    intake.set(0);
   }
 
   @Override
