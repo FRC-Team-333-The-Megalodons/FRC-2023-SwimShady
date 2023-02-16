@@ -35,6 +35,7 @@ public class PIDController {
 
     boolean greaterThanMax = false;
     boolean lowerThanMin = false;
+    boolean isOnTarget = false;
 
     public PIDController(double kP, double kI, double kD, double iLimit, double maxTolerance, double minTolerance, double target){
         this.kP = kP;
@@ -71,6 +72,8 @@ public class PIDController {
         lastTimeStamp = Timer.getFPGATimestamp();
         lastError = error;
 
+        isOnTarget = maxTarget >= sensorValue && minTarget <= sensorValue;
+
         return (kP * error) + (kI * errorSum) + (kD * errorRate);//only PI for now
     }
 
@@ -101,4 +104,5 @@ public class PIDController {
     
     public boolean isGreaterThanMax(){return greaterThanMax;}
     public boolean isLowerThanMin(){return lowerThanMin;}
+    public boolean isOnTarget(){return isOnTarget;}
 }

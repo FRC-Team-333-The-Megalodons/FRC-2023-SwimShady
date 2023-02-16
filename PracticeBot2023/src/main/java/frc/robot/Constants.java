@@ -84,7 +84,7 @@ public final class Constants {
         public static final int WRIST2 = 10;
 
         public static final int INTAKE1 = 11;
-        public static final int INTAKE2 = 14;
+        public static final int INTAKE2 = 12;
 
         /*
          * Solenoid IDS

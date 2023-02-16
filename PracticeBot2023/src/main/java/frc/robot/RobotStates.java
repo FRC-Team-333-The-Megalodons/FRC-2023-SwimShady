@@ -7,6 +7,11 @@ package frc.robot;
 /** Add your docs here. */
 public class RobotStates {
 
+    /*
+     * These robot states will assist our autonomous code and also allow the robot to become smarter during teleop. 
+     * With these states we can add failsafes and debug modes
+     */
+
     public static enum ElevatorState{
         LOW,
         MEDIUM,
@@ -30,7 +35,10 @@ public class RobotStates {
         IN,
         MOTORS_RUNNING_F,
         MOTORS_RUNNING_R,
-        MOTORS_STOPPED
+        MOTORS_STOPPED,
+        OUT_AND_MOTORS_F,
+        OUT_AND_MOTORS_R,
+        OUT_AND_MOTORS_S,
     }
 
     public static enum ChassisStates{
@@ -39,6 +47,7 @@ public class RobotStates {
         MOVING_FORWARD,
         MOVING_BACK,
         TURNING_L,
-        TURNING_R
+        TURNING_R,
+        STOPPED
     }
 }

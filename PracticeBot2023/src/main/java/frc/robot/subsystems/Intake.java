@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotStates.IntakeStates;
+import frc.robot.RobotStates.WristStates;
 import frc.robot.utils.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
@@ -22,9 +24,12 @@ public class Intake extends SubsystemBase {
   CANSparkMax wristMotor1, wristMotor2,intakemotor1, intakemotor2;
   MotorControllerGroup wrist, intake;
   Joystick stick;
-  DoubleSolenoid solenoid;
+  //DoubleSolenoid solenoid;
 
   PIDController wristController;
+
+  IntakeStates intakeState;
+  WristStates wristState;
 
   public Intake() {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
@@ -44,7 +49,7 @@ public class Intake extends SubsystemBase {
 
     stick = new Joystick(0);
 
-    solenoid = new DoubleSolenoid(Constants.RobotMap.PCM_ID, PneumaticsModuleType.CTREPCM, 0, 0);
+    //solenoid = new DoubleSolenoid(Constants.RobotMap.PCM_ID, PneumaticsModuleType.CTREPCM, 0, 0);
 
     wristController = new PIDController(0, 0, 0, 0, 0, 0,0);
   }
@@ -54,11 +59,13 @@ public class Intake extends SubsystemBase {
   }
 
   public void pSqueeze() {
-    solenoid.set(Value.kForward);
+    //solenoid.set(Value.kForward);
+    intakeState = IntakeStates.IN;
   }
 
   public void pUnsqueeze() {
-    solenoid.set(Value.kReverse);
+    //solenoid.set(Value.kReverse);
+    intakeState = IntakeStates.OUT;
   }
   public void iIn(){
     intake.set(.333);
@@ -80,10 +87,23 @@ public class Intake extends SubsystemBase {
     }
     if(stick.getRawButton(2)){
       iIn();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_F;
+      }else{
+        intakeState = IntakeStates.MOTORS_RUNNING_F;
+      }
     }else if(stick.getRawButton(5)){
       iOut();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_R;
+      }else{
+        intakeState = IntakeStates.MOTORS_RUNNING_F;
+      }
     }else{
       iStop();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_S;
+      }
     }
     if (stick.getPOV() == 0) {
       wrist.set(-.15);

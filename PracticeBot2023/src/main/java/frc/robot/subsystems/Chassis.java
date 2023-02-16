@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotStates;
+import frc.robot.RobotStates.ChassisStates;
 
 public class Chassis extends SubsystemBase {
   /** Creates a new Chassis. */
@@ -26,6 +28,8 @@ public class Chassis extends SubsystemBase {
   Joystick stick;
 
   DifferentialDrive drive;
+
+  RobotStates.ChassisStates chassisState;
 
   public Chassis() {
     rightmotor1 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_LEADER, MotorType.kBrushless);
@@ -48,17 +52,33 @@ public class Chassis extends SubsystemBase {
     drive = new DifferentialDrive(leftleader, rightleader);
   }
 
-  public double getEncoderAverage(){
+  public double getEncodersAverage(){
     return (rightLeaderEncoder.getPosition() + leftLeaderEncoder.getPosition())/2;
   }
 
-  public void resetEncoder(){
+  public void resetEncoders(){
     rightLeaderEncoder.setPosition(0);
     leftLeaderEncoder.setPosition(0);
   }
 
   public double getChassisMetersMoved(){
-    return getEncoderAverage()/Constants.Values.TICKS_PER_METER;
+    return getEncodersAverage()/Constants.Values.TICKS_PER_METER;
+  }
+
+  public void arcadeDrive(double x, double y){
+    if(y > 0.05){
+      chassisState = ChassisStates.MOVING_FORWARD;
+    }else if(y < 0.05){
+      chassisState = ChassisStates.MOVING_BACK;
+    }else{
+      chassisState = ChassisStates.STOPPED;
+    }
+    if(x > 0.05){
+      chassisState = ChassisStates.TURNING_R;
+    }else if(x < 0.05){
+      chassisState = ChassisStates.TURNING_L;
+    }
+    drive.arcadeDrive(x, y);
   }
 
   @Override
