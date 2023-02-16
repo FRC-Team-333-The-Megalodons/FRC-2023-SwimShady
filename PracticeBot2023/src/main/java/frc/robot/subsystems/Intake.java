@@ -46,7 +46,7 @@ public class Intake extends SubsystemBase {
 
     solenoid = new DoubleSolenoid(Constants.RobotMap.PCM_ID, PneumaticsModuleType.CTREPCM, 0, 0);
 
-    wristController = new PIDController(0, 0, 0, 0, 0, 0);
+    wristController = new PIDController(0, 0, 0, 0, 0, 0,0);
   }
 
   public void resetEncoder(int val) {

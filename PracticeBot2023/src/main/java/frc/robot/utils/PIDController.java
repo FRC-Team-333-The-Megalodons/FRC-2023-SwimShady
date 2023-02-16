@@ -7,6 +7,10 @@ package frc.robot.utils;
 import edu.wpi.first.wpilibj.Timer;
 
 /** Add your docs here. */
+
+/* 
+ * Use https://www.desmos.com/calculator/vcdedzbmag to input values and simulate the PID algorythm. This should prevent the need to eyeball values
+ */
 public class PIDController {
 
     final double kP;
@@ -14,8 +18,11 @@ public class PIDController {
     final double kD;
 
     final double iLimit;
-    final double maxTolerance;
-    final double minTolerance;
+    double maxTolerance;
+    double minTolerance;
+    double target;
+    double maxTarget;
+    double minTarget;
 
     double error = 0;
     double output = 0;
@@ -29,25 +36,28 @@ public class PIDController {
     boolean greaterThanMax = false;
     boolean lowerThanMin = false;
 
-    public PIDController(double kP, double kI, double kD, double iLimit, double maxTolerance, double minTolerance){
+    public PIDController(double kP, double kI, double kD, double iLimit, double maxTolerance, double minTolerance, double target){
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         this.iLimit = iLimit;
         this.maxTolerance = maxTolerance;
         this.minTolerance = minTolerance;
+        this.target = target;
+        minTarget = target- minTolerance;
+        maxTarget = target + maxTolerance;
     }
 
     public double getOutput(double sensorValue){
         currentTime = Timer.getFPGATimestamp() - lastTimeStamp;
-        if(sensorValue > maxTolerance){
-            error = maxTolerance - sensorValue;
+        if(sensorValue > maxTarget){
+            error = maxTarget - sensorValue;
             greaterThanMax = true;
             lowerThanMin = false;
         }
 
-        if(sensorValue < minTolerance){
-            error = minTolerance - sensorValue;
+        if(sensorValue < minTarget){
+            error = minTarget - sensorValue;
             greaterThanMax = false;
             lowerThanMin = true;
         }
@@ -62,6 +72,14 @@ public class PIDController {
         lastError = error;
 
         return (kP * error) + (kI * errorSum) + (kD * errorRate);//only PI for now
+    }
+
+    public void setTarget(double minTolerance, double maxTolerance, double target){
+        this.target = target;
+        this.maxTolerance = maxTarget;
+        this.minTolerance = minTolerance;
+        this.maxTarget = target + maxTolerance;
+        this.minTarget = target - minTolerance;
     }
 
     public double getP(){return kP;}

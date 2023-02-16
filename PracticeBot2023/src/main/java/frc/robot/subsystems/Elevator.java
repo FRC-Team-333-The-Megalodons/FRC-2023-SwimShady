@@ -23,7 +23,7 @@ public class Elevator extends SubsystemBase {
     rihgtmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR1, MotorType.kBrushless);
     leftmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
-    ePidController = new frc.robot.utils.PIDController(.008, .0006, 0, 0, 10, 10);
+    ePidController = new frc.robot.utils.PIDController(.008, .0006, 0, 0, 10, 10,69.5);
 
     rihgtmotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
