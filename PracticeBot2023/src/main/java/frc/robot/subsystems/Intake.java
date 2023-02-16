@@ -53,7 +53,7 @@ public class Intake extends SubsystemBase {
 
     hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
 
-    solenoid = hub.makeDoubleSolenoid(4, 6);
+    solenoid = hub.makeDoubleSolenoid(2, 3);
 
     wristController = new PIDController(0, 0, 0, 0, 0, 0,0);
   }
@@ -86,9 +86,9 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     hub.enableCompressorDigital();
     if (stick.getRawButton(1)) {
-      pSqueeze();
-    } else {
       pUnsqueeze();
+    } else {
+      pSqueeze();
     }
     if(stick.getRawButton(2)){
       iIn();
