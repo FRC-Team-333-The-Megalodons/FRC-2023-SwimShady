@@ -98,4 +98,9 @@ public final class Constants {
         public static final int INTAKE_SQUEEZE = 0;
         public static final int INTAKE_UNSQUEEZE = 0;
     }
+
+    public static class Values{
+        //values that can be used for autonomous.
+        public final static double TICKS_PER_METER = 0;
+    }
 }

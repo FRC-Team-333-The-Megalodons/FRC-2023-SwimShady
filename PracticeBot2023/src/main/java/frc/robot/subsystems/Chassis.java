@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -16,9 +17,14 @@ public class Chassis extends SubsystemBase {
   /** Creates a new Chassis. */
   CANSparkMax rightmotor1, rightmotor2, rightmotor3;
   CANSparkMax leftmotor1, leftmotor2, leftmotor3;
+
+  RelativeEncoder rightLeaderEncoder, leftLeaderEncoder;
+
   MotorControllerGroup rightleader;
   MotorControllerGroup leftleader;
+
   Joystick stick;
+
   DifferentialDrive drive;
 
   public Chassis() {
@@ -26,11 +32,15 @@ public class Chassis extends SubsystemBase {
     rightmotor2 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER1, MotorType.kBrushless);
     rightmotor3 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER2, MotorType.kBrushless);
 
+    rightLeaderEncoder = rightmotor1.getEncoder();
+
     rightleader = new MotorControllerGroup(rightmotor1, rightmotor2, rightmotor3);
 
     leftmotor1 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_LEADER, MotorType.kBrushless);
     leftmotor2 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_FOLLOWER1, MotorType.kBrushless);
     leftmotor3 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_FOLLOWER2, MotorType.kBrushless);
+
+    leftLeaderEncoder = leftmotor1.getEncoder();
 
     leftleader = new MotorControllerGroup(leftmotor1, leftmotor2, leftmotor3);
 
@@ -38,9 +48,22 @@ public class Chassis extends SubsystemBase {
     drive = new DifferentialDrive(leftleader, rightleader);
   }
 
+  public double getEncoderAverage(){
+    return (rightLeaderEncoder.getPosition() + leftLeaderEncoder.getPosition())/2;
+  }
+
+  public void resetEncoder(){
+    rightLeaderEncoder.setPosition(0);
+    leftLeaderEncoder.setPosition(0);
+  }
+
+  public double getChassisMetersMoved(){
+    return getEncoderAverage()/Constants.Values.TICKS_PER_METER;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    drive.arcadeDrive(-stick.getX(), -stick.getY());
+    //drive.arcadeDrive(-stick.getX(), -stick.getY());
   }
 }
