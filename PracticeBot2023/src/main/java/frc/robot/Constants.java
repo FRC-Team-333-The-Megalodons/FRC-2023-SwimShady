@@ -90,7 +90,7 @@ public final class Constants {
          * Solenoid IDS
          */
 
-        public static final int PCM_ID = 1; 
+        public static final int PCM_ID = 22; 
 
         public static final int SHIFT_HIGH = 0;
         public static final int SHIFT_LOW = 0;
