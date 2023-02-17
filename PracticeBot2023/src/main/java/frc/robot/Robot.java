@@ -34,9 +34,6 @@ public class Robot extends TimedRobot {
   Thread m_visionThread;
 
   private RobotContainer m_robotContainer;
-  private Object cs;
-  private Port i2cPort;
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort); 
 
 
   /**
@@ -100,10 +97,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-
-    Color detectedColor = m_colorSensor.getColor();
-    double IR = m_colorSensor.getIR();
-    int proximity = m_colorSensor.getProximity();
 
     
     // Runs the Scheduler. This is responsible for polling buttons, adding

@@ -53,8 +53,43 @@ public class Chassis extends SubsystemBase {
     drive.arcadeDrive(-stick.getX(), -stick.getY());
 
     SmartDashboard.putNumber("        Blue", cs.getBlue());
-    SmartDashboard.putNumber("        Purple", cs.getPurple());
-    SmartDashboard.putNumber("        Yellow", cs.getYellow());
-    SmartDashboard.putNumber("        Proximity", proximity);
+    SmartDashboard.putNumber("        Red", cs.getRed());
+    //SmartDashboard.putNumber("        Purple", cs.getPurple())
+    //SmartDashboard.putNumber("        Yellow", cs.getYellow());
+
+  
+    SmartDashboard.putNumber("        Proximity", cs.getProximity());
+    SmartDashboard.getString("        Color", cs.getColor().toString());
+    SmartDashboard.getString("Purple", cs.getColor().toString());
+    
+   // SmartDashboard.putBoolean("Is Cone?", isCone());
   }
+
+    public boolean isCone() {
+    //TODO: Amina, add your logic here!!
+    boolean isCone;
+
+    if( cs.getColor().toString()=="#324D7F") {
+      isCone = true;
+    } else {
+     isCone = false;
+    }
+
+   return isCone;
+ }
+
+  public boolean isCube() {
+    //TODO: Amina, add your logic here!!
+
+    boolean isCube;
+   if(true) {
+      isCube = true;
+    } else {
+      isCube = false;
+    }
+    return isCone();
+  }
+
 }
+
+  
