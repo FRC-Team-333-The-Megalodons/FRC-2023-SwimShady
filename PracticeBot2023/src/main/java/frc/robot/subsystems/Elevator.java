@@ -78,6 +78,7 @@ public class Elevator extends SubsystemBase {
 
     SmartDashboard.putNumber("Left Elevatator Encoder", leftmotor.getEncoder().getPosition());
     SmartDashboard.putNumber("Right Elevatator Encoder", rihgtmotor.getEncoder().getPosition());
+    SmartDashboard.putString("Elevator State", elevatorState+"");
   }
 }
 
