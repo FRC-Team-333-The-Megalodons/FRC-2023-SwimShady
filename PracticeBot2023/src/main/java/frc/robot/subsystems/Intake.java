@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,7 +18,6 @@ import frc.robot.Constants;
 import frc.robot.RobotStates.IntakeStates;
 import frc.robot.RobotStates.WristStates;
 import frc.robot.utils.PIDController;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Intake extends SubsystemBase {
@@ -53,7 +51,7 @@ public class Intake extends SubsystemBase {
 
     hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
 
-    solenoid = hub.makeDoubleSolenoid(2, 3);
+    solenoid = hub.makeDoubleSolenoid(Constants.RobotMap.INTAKE_SQUEEZE, Constants.RobotMap.INTAKE_UNSQUEEZE);
 
     wristController = new PIDController(0, 0, 0, 0, 0, 0,0);
   }
@@ -112,10 +110,13 @@ public class Intake extends SubsystemBase {
     }
     if (stick.getPOV() == 0) {
       wrist.set(-.15);
+      wristState = WristStates.ROTATING_IN;
     } else if (stick.getPOV() == 180) {
       wrist.set(.15);
+      wristState = WristStates.ROTATING_OUT;
     } else {
       wrist.set(0);
+      wristState = WristStates.MOTORS_STOPPED;
     }
 
     if (stick.getRawButton(12)) {
@@ -123,6 +124,8 @@ public class Intake extends SubsystemBase {
     }
 
     SmartDashboard.putNumber("wrist", wristMotor1.getEncoder().getPosition());
+    SmartDashboard.putString("Wrist State", wristState+"");
+    SmartDashboard.putString("Intake State", intakeState+"");
   }
 
   /* Wrist encoder vals

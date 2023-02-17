@@ -95,8 +95,8 @@ public final class Constants {
         public static final int SHIFT_HIGH = 0;
         public static final int SHIFT_LOW = 0;
         
-        public static final int INTAKE_SQUEEZE = 0;
-        public static final int INTAKE_UNSQUEEZE = 0;
+        public static final int INTAKE_SQUEEZE = 2;
+        public static final int INTAKE_UNSQUEEZE = 3;
     }
 
     public static class Values{
