@@ -38,7 +38,7 @@ public class DriveBackMeters extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    chassis.arcadeDrive(turnController.getOutput(gyro.getAngle()), driveController.getOutput(chassis.getEncodersAverage()));
+    chassis.arcadeDrive(turnController.getOutput(gyro.getAngle()), driveController.getOutput(chassis.getChassisMetersMoved()));
   }
 
   // Called once the command ends or is interrupted.

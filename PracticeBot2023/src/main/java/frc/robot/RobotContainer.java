@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -61,8 +62,9 @@ public class RobotContainer {
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
-  public void getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     // An example command will be run in autonomous
+    return null;//TODO test community auto
   }
 
   public void teleopp() {

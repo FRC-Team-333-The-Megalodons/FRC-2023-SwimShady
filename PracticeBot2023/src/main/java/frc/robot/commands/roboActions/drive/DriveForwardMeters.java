@@ -17,7 +17,7 @@ public class DriveForwardMeters extends CommandBase {
   frc.robot.utils.PIDController turnController, driveController;
   boolean encodersReset;
   
-  public DriveForwardMeters(Chassis chassis, frc.robot.subsystems.Gyro gyro, double degrees, frc.robot.utils.PIDController driveController, PIDController turnController, boolean encodersReset) {
+  public DriveForwardMeters(Chassis chassis, frc.robot.subsystems.Gyro gyro, double meters, frc.robot.utils.PIDController driveController, PIDController turnController, boolean encodersReset) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
     this.chassis = chassis;
@@ -39,7 +39,7 @@ public class DriveForwardMeters extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    chassis.arcadeDrive(turnController.getOutput(gyro.getAngle()), driveController.getOutput(chassis.getEncodersAverage()));
+    chassis.arcadeDrive(turnController.getOutput(gyro.getAngle()), driveController.getOutput(chassis.getChassisMetersMoved()));
   }
 
   // Called once the command ends or is interrupted.
