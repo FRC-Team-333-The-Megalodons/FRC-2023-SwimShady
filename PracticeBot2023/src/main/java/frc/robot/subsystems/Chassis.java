@@ -46,43 +46,45 @@ public class Chassis extends SubsystemBase {
     drive = new DifferentialDrive(leftleader, rightleader);
 
     cs = new ColorSensorV3(I2C.Port.kOnboard);
-  }
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    drive.arcadeDrive(-stick.getX(), -stick.getY());
-
-    SmartDashboard.putNumber("        Blue", cs.getBlue());
-    SmartDashboard.putNumber("        Red", cs.getRed());
-    //SmartDashboard.putNumber("        Purple", cs.getPurple())
-    //SmartDashboard.putNumber("        Yellow", cs.getYellow());
-
   
-    SmartDashboard.putNumber("        Proximity", cs.getProximity());
-    SmartDashboard.getString("        Color", cs.getColor().toString());
-    SmartDashboard.getString("Purple", cs.getColor().toString());
-    
-   // SmartDashboard.putBoolean("Is Cone?", isCone());
+    SmartDashboard.getNumber("Blue", cs.getBlue());
+    SmartDashboard.getNumber("Red", cs.getRed());
+    SmartDashboard.getString("Color", cs.getColor().toString());
   }
 
-    public boolean isCone() {
-    //TODO: Amina, add your logic here!!
-    boolean isCone;
+    public boolean isCone(){
+    boolean isCone = false;
+    if(cs.getBlue()==4444 && cs.getRed()==7777 || cs.getColor().toString()=="#5F900F"){
+        isCone = true;
+        System.out.println("workin");
+    } else{
+      isCone = false;
+    }
+    return isCone;
+  }
+  }
 
-    if( cs.getColor().toString()=="#324D7F") {
+
+    //TODO: Amina, add your logic here!!
+   // boolean isCone = false;
+
+   /*  if( 
+      cs.getColor().toString()=="#5F900F") {
       isCone = true;
+      System.out.println("oui")
     } else {
      isCone = false;
     }
 
    return isCone;
- }
+  }
 
   public boolean isCube() {
+
     //TODO: Amina, add your logic here!!
 
-    boolean isCube;
-   if(true) {
+    boolean isCube;   
+   if( cs.getColor().toString()=="#33507A") {
       isCube = true;
     } else {
       isCube = false;
@@ -90,6 +92,16 @@ public class Chassis extends SubsystemBase {
     return isCone();
   }
 
-}
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    drive.arcadeDrive(-stick.getX(), -stick.getY());
+
+    SmartDashboard.putBoolean("Is Cone?", isCone());
+    SmartDashboard.putString("Color", cs.getColor().toString());
+  }
+  */
+
+
 
   
