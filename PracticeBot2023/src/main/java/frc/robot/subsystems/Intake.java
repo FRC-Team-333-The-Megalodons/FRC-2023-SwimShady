@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,14 +18,13 @@ import frc.robot.Constants;
 import frc.robot.RobotStates.IntakeStates;
 import frc.robot.RobotStates.WristStates;
 import frc.robot.utils.PIDController;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   CANSparkMax wristMotor1, wristMotor2,intakemotor1, intakemotor2;
   MotorControllerGroup wrist, intake;
   Joystick stick;
-  DoubleSolenoid solenoid;
+  Solenoid solenoid;
   PneumaticHub hub;
   PIDController wristController;
   IntakeStates intakeState;
@@ -54,7 +53,7 @@ public class Intake extends SubsystemBase {
 
     hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
 
-    solenoid = hub.makeDoubleSolenoid(Constants.RobotMap.INTAKE_SQUEEZE, Constants.RobotMap.INTAKE_UNSQUEEZE);
+    solenoid = hub.makeSolenoid(Constants.RobotMap.INTAKE_SQUEEZE);
 
     wristController = new PIDController(0, 0, 0, 0, 0, 0,0);
   }
@@ -64,12 +63,12 @@ public class Intake extends SubsystemBase {
   }
 
   public void pSqueeze() {
-    solenoid.set(Value.kForward);
+    solenoid.set(true);
     intakeState = IntakeStates.IN;
   }
 
   public void pUnsqueeze() {
-    solenoid.set(Value.kReverse);
+    solenoid.set(false);
     intakeState = IntakeStates.OUT;
   }
   public void iIn(){
