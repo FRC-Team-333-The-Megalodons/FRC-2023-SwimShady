@@ -71,26 +71,44 @@ public class Chassis extends SubsystemBase {
     return getEncodersAverage()/Constants.Values.TICKS_PER_METER;
   }
 
-  public void arcadeDrive(double x, double y){
-    if(y > 0.05){
-      chassisState = ChassisStates.MOVING_FORWARD;
-    }else if(y < 0.05){
-      chassisState = ChassisStates.MOVING_BACK;
-    }else{
-      chassisState = ChassisStates.STOPPED;
-    }
-    if(x > 0.05){
-      chassisState = ChassisStates.TURNING_R;
-    }else if(x < 0.05){
-      chassisState = ChassisStates.TURNING_L;
-    }
+  public void arcadeDrive(double x, double y)
+  {
     drive.arcadeDrive(x, y);
   }
 
+  public void teleopPeriodic()
+  {
+    double x = stick.getX(), y = stick.getY();
+    arcadeDrive(x, y);
+  }
+
+  // The 'periodic' function is called constantly, even when the robot is not enabled.
+  // Therefore, the periodic function should not attempt to move any motors or parts.
+  // Instead, it should be used to report data to the SmartDashboard, and to update
+  // any Global Variables related to State.
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    //drive.arcadeDrive(-stick.getX(), -stick.getY());
+    chassisState = evaluateState();
     SmartDashboard.putString("chassis State", chassisState+"");
+  }
+
+  public ChassisStates evaluateState()
+  {
+    // TODO: Should we do this evaluation based on actual Drivetrain Encoders, rather than indirectly by the joystick inputs?
+    double x = stick.getX(), y = stick.getY();
+    if(y > 0.05){
+      return ChassisStates.MOVING_FORWARD;
+    }
+    if (y < -0.05) {
+      return ChassisStates.MOVING_BACK;
+    }
+    if(x > 0.05){
+      return ChassisStates.TURNING_R;
+    }
+    if(x < -0.05){
+      return ChassisStates.TURNING_L;
+    }
+
+    return ChassisStates.STOPPED;
   }
 }

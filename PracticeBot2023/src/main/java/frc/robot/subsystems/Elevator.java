@@ -61,9 +61,8 @@ public class Elevator extends SubsystemBase {
     rihgtmotor.getEncoder().setPosition(0);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void teleopPeriodic()
+  {
     if (stick.getRawButton(4)) {
       eUp();
     } else if (stick.getRawButton(3)) {
@@ -76,6 +75,11 @@ public class Elevator extends SubsystemBase {
       resetEncoders();
     }
 
+  }
+
+
+  @Override
+  public void periodic() {
     SmartDashboard.putNumber("Left Elevatator Encoder", leftmotor.getEncoder().getPosition());
     SmartDashboard.putNumber("Right Elevatator Encoder", rihgtmotor.getEncoder().getPosition());
     SmartDashboard.putString("Elevator State", elevatorState+"");

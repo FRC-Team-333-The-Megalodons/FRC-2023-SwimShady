@@ -31,6 +31,9 @@ public class Intake extends SubsystemBase {
   IntakeStates intakeState;
   WristStates wristState;
 
+  public double INTAKE_SPEED = 0.333;
+  public double WRIST_SPEED = 0.15;
+
   public Intake() {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
     wristMotor1.setInverted(true);
@@ -70,18 +73,18 @@ public class Intake extends SubsystemBase {
     intakeState = IntakeStates.OUT;
   }
   public void iIn(){
-    intake.set(.333);
+    intake.set(INTAKE_SPEED);
   }
   public void iOut(){
-    intake.set(-.333);
+    intake.set(-INTAKE_SPEED);
   }
   public void iStop(){
     intake.set(0);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+
+  public void teleopPeriodic()
+  {
     hub.enableCompressorDigital();
     if (stick.getRawButton(1)) {
       pUnsqueeze();
@@ -109,19 +112,28 @@ public class Intake extends SubsystemBase {
       }
     }
     if (stick.getPOV() == 0) {
-      wrist.set(-.15);
+      wrist.set(-WRIST_SPEED);
       wristState = WristStates.ROTATING_IN;
     } else if (stick.getPOV() == 180) {
-      wrist.set(.15);
+      wrist.set(WRIST_SPEED);
       wristState = WristStates.ROTATING_OUT;
     } else {
       wrist.set(0);
       wristState = WristStates.MOTORS_STOPPED;
     }
 
+    // TODO: This is a manual encoder reset. During initial development, we're doing this with
+    //       a manually pressed button, but in the future this should be done using a Limit Switch
+    //       (or, if a potentiometer is used, we don't need to do an encoder reset at all.)
     if (stick.getRawButton(12)) {
       resetEncoder(0);
     }
+
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
 
     SmartDashboard.putNumber("wrist", wristMotor1.getEncoder().getPosition());
     SmartDashboard.putString("Wrist State", wristState+"");
