@@ -30,16 +30,16 @@ public class Intake extends SubsystemBase {
   IntakeStates intakeState;
   WristStates wristState;
 
-  public double INTAKE_SPEED = 0.5;
-  public double WRIST_SPEED = 0.15;
+  public double INTAKE_SPEED = 0.55;
+  public double WRIST_SPEED = 0.4;
 
   public Intake() {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
     wristMotor1.setInverted(true);
     wristMotor2 = new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless);
 
-    wristMotor1.setIdleMode(IdleMode.kBrake);
-    wristMotor2.setIdleMode(IdleMode.kBrake);
+    wristMotor1.setIdleMode(IdleMode.kCoast);
+    wristMotor2.setIdleMode(IdleMode.kCoast);
 
     wrist = new MotorControllerGroup(wristMotor1, wristMotor2);
 
