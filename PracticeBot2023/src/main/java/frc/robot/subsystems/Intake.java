@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase {
   IntakeStates intakeState;
   WristStates wristState;
 
-  public double INTAKE_SPEED = 0.333;
+  public double INTAKE_SPEED = 0.5;
   public double WRIST_SPEED = 0.15;
 
   public Intake() {
@@ -45,7 +45,7 @@ public class Intake extends SubsystemBase {
 
     intakemotor1 = new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless);
     intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
-    intakemotor2.setInverted(true);
+    //intakemotor2.setInverted(true);
 
     intake = new MotorControllerGroup(intakemotor1, intakemotor2);
 
@@ -87,6 +87,7 @@ public class Intake extends SubsystemBase {
     hub.enableCompressorDigital();
     if (stick.getRawButton(1)) {
       pUnsqueeze();
+
     } else {
       pSqueeze();
     }
