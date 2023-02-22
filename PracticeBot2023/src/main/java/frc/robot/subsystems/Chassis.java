@@ -87,7 +87,7 @@ public class Chassis extends SubsystemBase {
     @Override
     public void periodic() {
         //compressor.enableDigital();
-        drive.arcadeDrive(-shtiq.getX(), shtiq.getY());
+        drive.arcadeDrive(-shtiq.getX(), -shtiq.getY());
 
         if (shtiq.getRawButton(2)) {
             lowTrans();

@@ -17,7 +17,7 @@ public class TurnDegrees extends CommandBase {
   double degrees;
 
   private final double kP = 0.005;
-  private final double kI = 0.00026;
+  private final double kI = 0.00027;
   private final double kD = 0;
   private final double iLim = 62;
   private final double maxTolerance;
@@ -74,7 +74,7 @@ public class TurnDegrees extends CommandBase {
     SmartDashboard.putBoolean("lower than min", lowerThanMin);
 
     if(Math.abs(error) < iLim && Math.round(error) != 0){
-      errorSum += error + currentTime;
+      errorSum += error * currentTime;
     }
 
     output = (kP * error) + (kI * errorSum);

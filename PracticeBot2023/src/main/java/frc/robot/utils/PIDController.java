@@ -20,6 +20,8 @@ public class PIDController {
     double error = 0;
     double output = 0;
     double errorSum = 0;
+    double errorRate = 0;
+    double lastError = 0;
     double lastTimeStamp = 0;
     double currentTime = 0;
     double sensorValue;
@@ -51,12 +53,15 @@ public class PIDController {
         }
 
         if(Math.abs(error) < iLimit && Math.round(error) != 0){
-        errorSum += error + currentTime;
+            errorSum += error * currentTime;
         }
+
+        errorRate = (error - lastError)/currentTime;
     
         lastTimeStamp = Timer.getFPGATimestamp();
+        lastError = error;
 
-        return (kP * error) + (kI * errorSum);//only PI for now
+        return (kP * error) + (kI * errorSum) + (kD * errorRate);//only PI for now
     }
 
     public double getP(){return kP;}
