@@ -21,7 +21,7 @@ public class Elevator extends SubsystemBase {
   CANSparkMax rightMotor, leftmotor;
   MotorControllerGroup elevator;
   Joystick stick;
-  double espeed = 0.4;
+  double espeed = 0.25;
 
   frc.robot.utils.PIDController ePidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
@@ -33,7 +33,7 @@ public class Elevator extends SubsystemBase {
     rightMotor = new CANSparkMax(Constants.RobotMap.ELEVATOR1, MotorType.kBrushless);
     leftmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
-    ePidController = new frc.robot.utils.PIDController(.008, .0006, 0, 0, 7, 7,50);
+    ePidController = new frc.robot.utils.PIDController(.015, .005, 0, 10, 2, 2,50);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
@@ -51,16 +51,24 @@ public class Elevator extends SubsystemBase {
   }
 
   public void eUp() {
-    elevator.set(ePidController.getOutput(rightMotor.getEncoder().getPosition()));
-    elevatorState = RobotStates.ElevatorState.TRAVERSING_UP;
+    if(lowerLimitSwitch.get() == false){
+      elevator.set(0);
+      return;
+    }else{
+      //elevator.set(-ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
+      elevator.set(-espeed);
+      elevatorState = RobotStates.ElevatorState.TRAVERSING_UP;
+    }
   }
 
   public void eDown() {
-    elevator.set(espeed);
-    elevatorState = RobotStates.ElevatorState.TRAVERSING_DOWN;
-    if(lowerLimitSwitch.get() == true){
+    if(upperLimitSwitch.get() == false){
       elevator.set(0);
       rightMotor.getEncoder().setPosition(0);
+      return;
+    }else{
+      elevator.set(espeed);
+      elevatorState = RobotStates.ElevatorState.TRAVERSING_DOWN;
     }
   }
 
