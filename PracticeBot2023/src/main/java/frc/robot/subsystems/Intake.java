@@ -38,14 +38,13 @@ public class Intake extends SubsystemBase {
     wristMotor1.setInverted(true);
     wristMotor2 = new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless);
 
-    wristMotor1.setIdleMode(IdleMode.kCoast);
-    wristMotor2.setIdleMode(IdleMode.kCoast);
+    wristMotor1.setIdleMode(IdleMode.kBrake);
+    wristMotor2.setIdleMode(IdleMode.kBrake);
 
     wrist = new MotorControllerGroup(wristMotor1, wristMotor2);
 
     intakemotor1 = new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless);
     intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
-    //intakemotor2.setInverted(true);
 
     intake = new MotorControllerGroup(intakemotor1, intakemotor2);
 
@@ -82,35 +81,37 @@ public class Intake extends SubsystemBase {
   }
 
 
-  public void teleopPeriodic()
-  {
+  public void teleopPeriodic() {
     hub.enableCompressorDigital();
+
     if (stick.getRawButton(1)) {
       pUnsqueeze();
 
     } else {
       pSqueeze();
     }
-    if(stick.getRawButton(2)){
+
+    if (stick.getRawButton(2)){
       iIn();
       if(intakeState == IntakeStates.OUT){
         intakeState = IntakeStates.OUT_AND_MOTORS_F;
       }else{
         intakeState = IntakeStates.MOTORS_RUNNING_F;
       }
-    }else if(stick.getRawButton(5)){
+    } else if(stick.getRawButton(5)){ 
       iOut();
       if(intakeState == IntakeStates.OUT){
         intakeState = IntakeStates.OUT_AND_MOTORS_R;
-      }else{
+      } else{
         intakeState = IntakeStates.MOTORS_RUNNING_F;
       }
-    }else{
+    } else{
       iStop();
       if(intakeState == IntakeStates.OUT){
         intakeState = IntakeStates.OUT_AND_MOTORS_S;
       }
     }
+
     if (stick.getPOV() == 0) {
       wrist.set(-WRIST_SPEED);
       wristState = WristStates.ROTATING_IN;

@@ -24,8 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  //Chassis chassis1 = new Chassis();
-  Elevator elevator1 = new Elevator();
+  Chassis chassis = new Chassis();
+  Elevator elevator = new Elevator();
   Intake intake = new Intake();
   Gyro gyro = new Gyro();
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -70,14 +70,14 @@ public class RobotContainer {
   }
 
   public void periodic(){
-    elevator1.periodic();
+    elevator.periodic();
     intake.periodic();
     gyro.periodic();
   }
 
   public void teleopPeriodic() {
-    //chassis1.teleopPeriodic();
-    elevator1.teleopPeriodic();;
+    chassis.teleopPeriodic();
+    elevator.teleopPeriodic();;
     intake.teleopPeriodic();;
   }
 }
