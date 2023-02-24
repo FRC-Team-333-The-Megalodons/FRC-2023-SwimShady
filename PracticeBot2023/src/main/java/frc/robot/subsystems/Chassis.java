@@ -56,12 +56,23 @@ public class Chassis extends SubsystemBase {
     boolean isCone = false;
     if(cs.getBlue()==4444 && cs.getRed()==7777 || cs.getColor().toString()=="#5F900F"){
         isCone = true;
-        System.out.println("workin");
+        System.out.println("workin cone");
     } else{
       isCone = false;
     }
     return isCone;
   }
+  public boolean isCube(){
+    boolean isCube = false;
+    if(cs.getBlue()==4433 && cs.getRed()==8888 || cs.getColor().toString()=="#33507A"){
+      isCube = true;
+      System.out.println("workin cube");
+    } else{
+      isCube = false;
+    }
+    return isCube;
+  }
+
   }
 
 
