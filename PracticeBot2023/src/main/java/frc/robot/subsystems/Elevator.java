@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -21,7 +20,7 @@ public class Elevator extends SubsystemBase {
   CANSparkMax rightMotor, leftmotor;
   MotorControllerGroup elevator;
   Joystick stick;
-  double espeed = 0.25;
+  double espeed = 1;
 
   frc.robot.utils.PIDController ePidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
@@ -39,6 +38,7 @@ public class Elevator extends SubsystemBase {
     leftmotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setInverted(true);
     elevator = new MotorControllerGroup(rightMotor, leftmotor);
+    elevator.setInverted(true);
 
     lowerLimitSwitch = new DigitalInput(0);
     upperLimitSwitch = new DigitalInput(1);
@@ -55,8 +55,17 @@ public class Elevator extends SubsystemBase {
       elevator.set(0);
       return;
     }else{
-      //elevator.set(-ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
-      elevator.set(-espeed);
+      elevator.set(espeed);
+      elevatorState = RobotStates.ElevatorState.TRAVERSING_UP;
+    }
+  }
+
+  public void e_Mid(){
+    if(lowerLimitSwitch.get() == false){
+      elevator.set(0);
+      return;
+    }else{
+      elevator.set(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
       elevatorState = RobotStates.ElevatorState.TRAVERSING_UP;
     }
   }
@@ -66,9 +75,11 @@ public class Elevator extends SubsystemBase {
       elevator.set(0);
       rightMotor.getEncoder().setPosition(0);
       return;
-    }else{
-      elevator.set(espeed);
+    }else if(stick.getRawAxis(3) < 1){
+      elevator.set(-espeed);
       elevatorState = RobotStates.ElevatorState.TRAVERSING_DOWN;
+    }else{
+      stop();
     }
   }
 
@@ -91,9 +102,9 @@ public class Elevator extends SubsystemBase {
     if (stick.getRawButton(4)) {
       eUp();
     } else if (stick.getRawButton(3)) {
-      eDown();
+      ePID_Up();
     } else {
-      stop();
+      eDown();
     }
 
     if (!lowerLimitSwitch.get()) {
@@ -111,11 +122,12 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Left Elevatator Encoder", leftmotor.getEncoder().getPosition());
-    SmartDashboard.putNumber("Right Elevatator Encoder", rightMotor.getEncoder().getPosition());
-    SmartDashboard.putNumber("Aveage Encoder Distance", averageEncoderDistance());
+    SmartDashboard.putNumber("Right Elevatator Encoder", -rightMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("Average Encoder Distance", averageEncoderDistance());
     SmartDashboard.putString("Elevator State", elevatorState+"");
     SmartDashboard.putBoolean("Lower Switch", lowerLimitSwitch.get());
     SmartDashboard.putBoolean("Upper Switch", upperLimitSwitch.get());
+    SmartDashboard.putNumber("Stick lever", stick.getRawAxis(3));
   }
 }
 

@@ -20,9 +20,9 @@ public class CommunityAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
 
     frc.robot.utils.PIDController driveController, straightHeadingController;
-    driveController = new PIDController(.05, .005, 0, 0, .3, .3, 5);
+    driveController = new PIDController(.06, .005, 0, 0, .3, .3, 5);
     straightHeadingController = new PIDController(.5, .05, 0, .15, .2, .2, 0);
 
-    addCommands(new DriveForwardMeters(chassis,gyro,0,driveController,straightHeadingController,true)); 
+    addCommands(new DriveForwardMeters(chassis,gyro,3,driveController,straightHeadingController,true)); 
   }
 }

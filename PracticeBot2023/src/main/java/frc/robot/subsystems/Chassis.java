@@ -59,7 +59,7 @@ public class Chassis extends SubsystemBase {
   }
 
   public double getEncodersAverage(){
-    return (rightLeaderEncoder.getPosition() + leftLeaderEncoder.getPosition())/2;
+    return rightLeaderEncoder.getPosition() + (-leftLeaderEncoder.getPosition())/2;
   }
 
   public void resetEncoders(){
@@ -78,7 +78,7 @@ public class Chassis extends SubsystemBase {
 
   public void teleopPeriodic()
   {
-    double x = stick.getX(), y = stick.getY();
+    double x = stick.getX(), y = -stick.getY();
     arcadeDrive(x, y);
   }
 
@@ -90,6 +90,9 @@ public class Chassis extends SubsystemBase {
   public void periodic() {
     chassisState = evaluateState();
     SmartDashboard.putString("chassis State", chassisState+"");
+    SmartDashboard.putNumber("left chassis encoder", leftLeaderEncoder.getPosition());
+    SmartDashboard.putNumber("right chassis encoder", rightLeaderEncoder.getPosition());
+    SmartDashboard.putNumber("Meters moved", getChassisMetersMoved());
   }
 
   public ChassisStates evaluateState()

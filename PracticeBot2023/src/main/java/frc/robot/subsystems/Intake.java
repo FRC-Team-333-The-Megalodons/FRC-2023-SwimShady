@@ -31,7 +31,7 @@ public class Intake extends SubsystemBase {
   WristStates wristState;
 
   public double INTAKE_SPEED = 0.55;
-  public double WRIST_SPEED = 0.4;
+  public double WRIST_SPEED = 0.5;
 
   public Intake() {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
@@ -92,14 +92,16 @@ public class Intake extends SubsystemBase {
     }
 
     if (stick.getRawButton(2)){
-      iIn();
+      intakemotor1.set(.5);
+      intakemotor2.set(-.5);
       if(intakeState == IntakeStates.OUT){
         intakeState = IntakeStates.OUT_AND_MOTORS_F;
       }else{
         intakeState = IntakeStates.MOTORS_RUNNING_F;
       }
     } else if(stick.getRawButton(5)){ 
-      iOut();
+      intakemotor1.set(-.5);
+      intakemotor2.set(.5);
       if(intakeState == IntakeStates.OUT){
         intakeState = IntakeStates.OUT_AND_MOTORS_R;
       } else{

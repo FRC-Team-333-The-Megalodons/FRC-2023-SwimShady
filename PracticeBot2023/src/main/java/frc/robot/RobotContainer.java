@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.roboAutos.CommunityAuto;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  public static boolean TWO_DRIVER_MODE = false;
 
   Chassis chassis = new Chassis();
   Elevator elevator = new Elevator();
@@ -79,6 +81,11 @@ public class RobotContainer {
     chassis.teleopPeriodic();
     elevator.teleopPeriodic();;
     intake.teleopPeriodic();;
+  }
+
+  public void resetEncoders(){
+    gyro.reset();
+    chassis.resetEncoders();
   }
 }
 
