@@ -4,15 +4,19 @@
 
 package frc.robot.subsystems;
 
+import org.w3c.dom.css.RGBColor;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.simulation.AddressableLEDSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,6 +28,7 @@ public class Chassis extends SubsystemBase {
   MotorControllerGroup leftleader;
   Joystick stick;
   DifferentialDrive drive;
+  AddressableLED color;
 
   ColorSensorV3 cs;
 
@@ -44,13 +49,11 @@ public class Chassis extends SubsystemBase {
 
     stick = new Joystick(0);
     drive = new DifferentialDrive(leftleader, rightleader);
+    //color = new AddressableLED(9);
 
     cs = new ColorSensorV3(I2C.Port.kOnboard);
-  
-    SmartDashboard.getNumber("Blue", cs.getBlue());
-    SmartDashboard.getNumber("Red", cs.getRed());
-    SmartDashboard.getString("Color", cs.getColor().toString());
   }
+    //SmartDashboard.getString("led", color.setRGB().toString());
 
     public boolean isCone(){
     boolean isCone = false;
@@ -62,6 +65,7 @@ public class Chassis extends SubsystemBase {
     }
     return isCone;
   }
+
   public boolean isCube(){
     boolean isCube = false;
     if(cs.getBlue()==4433 && cs.getRed()==8888 || cs.getColor().toString()=="#33507A"){
@@ -72,9 +76,7 @@ public class Chassis extends SubsystemBase {
     }
     return isCube;
   }
-
-  }
-
+  
 
     //TODO: Amina, add your logic here!!
    // boolean isCone = false;
@@ -101,18 +103,18 @@ public class Chassis extends SubsystemBase {
       isCube = false;
     }
     return isCone();
-  }
+  }*/
 
   @Override
-  public void periodic() {
+  public void periodic(){
     // This method will be called once per scheduler run
     drive.arcadeDrive(-stick.getX(), -stick.getY());
 
+    //color.start();
+
     SmartDashboard.putBoolean("Is Cone?", isCone());
     SmartDashboard.putString("Color", cs.getColor().toString());
+    SmartDashboard.getNumber("Blue", cs.getBlue());
+    SmartDashboard.getNumber("Red", cs.getRed());
   }
-  */
-
-
-
-  
+}
