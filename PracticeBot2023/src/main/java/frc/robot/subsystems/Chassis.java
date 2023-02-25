@@ -83,11 +83,7 @@ public class Chassis extends SubsystemBase {
   {
     double x = stick.getX(), y = -stick.getY();
 
-    if(state == ElevatorState.HIGH || elevatorState == ElevatorState.TRAVERSING_HIGH_FROM_MID || elevatorState == ElevatorState.TRAVERSING_DOWN_FROM_HIGH){
-      arcadeDrive(x/2, y/2);
-    }else{
-      arcadeDrive(x, y);
-    }
+    arcadeDrive(x, y);
   }
 
   // The 'periodic' function is called constantly, even when the robot is not enabled.

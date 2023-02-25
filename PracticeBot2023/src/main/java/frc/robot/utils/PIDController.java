@@ -6,10 +6,9 @@ package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.Timer;
 
-/** Add your docs here. */
-
 /* 
  * Use https://www.desmos.com/calculator/vcdedzbmag to input values and simulate the PID algorythm. This should prevent the need to eyeball values
+ * This class uses the basic concept of the PID algorythm to accurately bring the robot to a place where it should be
  */
 public class PIDController {
 

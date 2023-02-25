@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public static boolean TWO_DRIVER_MODE = false;
+  public static final boolean TWO_DRIVER_MODE = true;
 
   Chassis chassis = new Chassis();
   Elevator elevator = new Elevator();

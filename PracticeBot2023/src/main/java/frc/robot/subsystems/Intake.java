@@ -11,10 +11,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.RobotStates.IntakeStates;
 import frc.robot.RobotStates.WristStates;
 import frc.robot.utils.PIDController;
@@ -24,6 +26,7 @@ public class Intake extends SubsystemBase {
   CANSparkMax wristMotor1, wristMotor2,intakemotor1, intakemotor2;
   MotorControllerGroup wrist, intake;
   Joystick stick;
+  XboxController controller;
   Solenoid solenoid;
   PneumaticHub hub;
   PIDController wristController;
@@ -45,11 +48,12 @@ public class Intake extends SubsystemBase {
 
     intakemotor1 = new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless);
     intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
-    intakemotor2.setInverted(true);
+    //intakemotor2.setInverted(true);
 
     intake = new MotorControllerGroup(intakemotor1, intakemotor2);
 
     stick = new Joystick(0);
+    controller = new XboxController(1);
 
     hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
 
@@ -85,50 +89,94 @@ public class Intake extends SubsystemBase {
   public void teleopPeriodic() {
     hub.enableCompressorDigital();
 
-    if (stick.getRawButton(1)) {
-      pUnsqueeze();
+    if(!RobotContainer.TWO_DRIVER_MODE){
+      if (stick.getRawButton(1)) {
+        pUnsqueeze();
 
-    } else {
-      pSqueeze();
-    }
-
-    if (stick.getRawButton(2)){
-      iIn();
-      if(intakeState == IntakeStates.OUT){
-        intakeState = IntakeStates.OUT_AND_MOTORS_F;
-      }else{
-        intakeState = IntakeStates.MOTORS_RUNNING_F;
+      } else {
+        pSqueeze();
       }
-    } else if(stick.getRawButton(5)){ 
-      iOut();
-      if(intakeState == IntakeStates.OUT){
-        intakeState = IntakeStates.OUT_AND_MOTORS_R;
+
+      if (stick.getRawButton(2)){
+        //iIn();
+        intakemotor1.set(-INTAKE_SPEED);
+        intakemotor2.set(INTAKE_SPEED);
+        if(intakeState == IntakeStates.OUT){
+          intakeState = IntakeStates.OUT_AND_MOTORS_F;
+        }else{
+          intakeState = IntakeStates.MOTORS_RUNNING_F;
+        }
+      } else if(stick.getRawButton(5)){ 
+        intakemotor1.set(INTAKE_SPEED);
+        intakemotor2.set(-INTAKE_SPEED);
+        if(intakeState == IntakeStates.OUT){
+          intakeState = IntakeStates.OUT_AND_MOTORS_R;
+        } else{
+          intakeState = IntakeStates.MOTORS_RUNNING_F;
+        }
       } else{
-        intakeState = IntakeStates.MOTORS_RUNNING_F;
+        iStop();
+        if(intakeState == IntakeStates.OUT){
+          intakeState = IntakeStates.OUT_AND_MOTORS_S;
+        }
       }
-    } else{
-      iStop();
-      if(intakeState == IntakeStates.OUT){
-        intakeState = IntakeStates.OUT_AND_MOTORS_S;
+
+      if (stick.getPOV() == 0) {
+        wrist.set(-WRIST_SPEED);
+        wristState = WristStates.ROTATING_IN;
+      } else if (stick.getPOV() == 180) {
+        wrist.set(WRIST_SPEED);
+        wristState = WristStates.ROTATING_OUT;
+      } else {
+        wrist.set(0);
+        wristState = WristStates.MOTORS_STOPPED;
       }
-    }
 
-    if (stick.getPOV() == 0) {
-      wrist.set(-WRIST_SPEED);
-      wristState = WristStates.ROTATING_IN;
-    } else if (stick.getPOV() == 180) {
-      wrist.set(WRIST_SPEED);
-      wristState = WristStates.ROTATING_OUT;
-    } else {
-      wrist.set(0);
-      wristState = WristStates.MOTORS_STOPPED;
-    }
+      // TODO: This is a manual encoder reset. During initial development, we're doing this with
+      //       a manually pressed button, but in the future this should be done using a Limit Switch
+      //       (or, if a potentiometer is used, we don't need to do an encoder reset at all.)
+      if (stick.getRawButton(12)) {
+        resetEncoder(0);
+      }
+    }else{
+      if(controller.getRightTriggerAxis() > .05){
+        pUnsqueeze();
+      }else{
+        pSqueeze();
+      }
 
-    // TODO: This is a manual encoder reset. During initial development, we're doing this with
-    //       a manually pressed button, but in the future this should be done using a Limit Switch
-    //       (or, if a potentiometer is used, we don't need to do an encoder reset at all.)
-    if (stick.getRawButton(12)) {
-      resetEncoder(0);
+      if(controller.getRightBumper()){
+        intakemotor1.set(-INTAKE_SPEED);
+        intakemotor2.set(INTAKE_SPEED);
+        if(intakeState == IntakeStates.OUT){
+          intakeState = IntakeStates.OUT_AND_MOTORS_F;
+        }else{
+          intakeState = IntakeStates.MOTORS_RUNNING_F;
+        }
+      }else if(controller.getLeftBumper()){
+        intakemotor1.set(INTAKE_SPEED);
+        intakemotor2.set(-INTAKE_SPEED);
+        if(intakeState == IntakeStates.OUT){
+          intakeState = IntakeStates.OUT_AND_MOTORS_R;
+        } else{
+          intakeState = IntakeStates.MOTORS_RUNNING_F;
+        }
+      }else{
+        iStop();
+        if(intakeState == IntakeStates.OUT){
+          intakeState = IntakeStates.OUT_AND_MOTORS_S;
+        }
+      }
+      if (controller.getPOV() == 0) {
+        wrist.set(WRIST_SPEED);
+        wristState = WristStates.ROTATING_IN;
+      } else if (controller.getPOV() == 180) {
+        wrist.set(-WRIST_SPEED);
+        wristState = WristStates.ROTATING_OUT;
+      } else {
+        wrist.set(0);
+        wristState = WristStates.MOTORS_STOPPED;
+      }
     }
 
   }
