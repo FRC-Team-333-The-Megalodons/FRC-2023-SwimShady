@@ -45,6 +45,7 @@ public class Intake extends SubsystemBase {
 
     intakemotor1 = new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless);
     intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
+    intakemotor2.setInverted(true);
 
     intake = new MotorControllerGroup(intakemotor1, intakemotor2);
 
@@ -71,10 +72,10 @@ public class Intake extends SubsystemBase {
     intakeState = IntakeStates.OUT;
   }
   public void iIn(){
-    intake.set(INTAKE_SPEED);
+    intake.set(-INTAKE_SPEED);
   }
   public void iOut(){
-    intake.set(-INTAKE_SPEED);
+    intake.set(INTAKE_SPEED);
   }
   public void iStop(){
     intake.set(0);
@@ -92,16 +93,14 @@ public class Intake extends SubsystemBase {
     }
 
     if (stick.getRawButton(2)){
-      intakemotor1.set(.5);
-      intakemotor2.set(-.5);
+      iIn();
       if(intakeState == IntakeStates.OUT){
         intakeState = IntakeStates.OUT_AND_MOTORS_F;
       }else{
         intakeState = IntakeStates.MOTORS_RUNNING_F;
       }
     } else if(stick.getRawButton(5)){ 
-      intakemotor1.set(-.5);
-      intakemotor2.set(.5);
+      iOut();
       if(intakeState == IntakeStates.OUT){
         intakeState = IntakeStates.OUT_AND_MOTORS_R;
       } else{

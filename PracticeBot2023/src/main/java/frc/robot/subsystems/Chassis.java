@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotStates;
 import frc.robot.RobotStates.ChassisStates;
+import frc.robot.RobotStates.ElevatorState;
 
 public class Chassis extends SubsystemBase {
   /** Creates a new Chassis. */
@@ -36,6 +37,8 @@ public class Chassis extends SubsystemBase {
   RobotStates.ChassisStates chassisState;
   PneumaticHub hub;
   DoubleSolenoid solenoid;
+
+  ElevatorState elevatorState;
 
   public Chassis() {
     rightmotor1 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_LEADER, MotorType.kBrushless);
@@ -76,10 +79,15 @@ public class Chassis extends SubsystemBase {
     drive.arcadeDrive(x, y);
   }
 
-  public void teleopPeriodic()
+  public void teleopPeriodic(ElevatorState state)
   {
     double x = stick.getX(), y = -stick.getY();
-    arcadeDrive(x, y);
+
+    if(state == ElevatorState.HIGH || elevatorState == ElevatorState.TRAVERSING_HIGH_FROM_MID || elevatorState == ElevatorState.TRAVERSING_DOWN_FROM_HIGH){
+      arcadeDrive(x/2, y/2);
+    }else{
+      arcadeDrive(x, y);
+    }
   }
 
   // The 'periodic' function is called constantly, even when the robot is not enabled.

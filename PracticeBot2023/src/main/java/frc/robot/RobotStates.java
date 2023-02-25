@@ -16,14 +16,15 @@ public class RobotStates {
         LOW,
         MEDIUM,
         HIGH,
-        TRAVERSING_DOWN,
-        TRAVERSING_UP,
+        TRAVERSING_DOWN_FROM_HIGH,
+        TRAVERSING_DOWN_FROM_MID,
+        TRAVERSING_UP_FROM_LOW,
+        TRAVERSING_HIGH_FROM_MID,
         MOTORS_STOPPED
     }
 
     public static enum WristStates{
         RETRACTED,
-        AT_90_DEGREES,
         FULLY_STRAIGHT,
         ROTATING_OUT,
         ROTATING_IN,

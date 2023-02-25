@@ -13,7 +13,6 @@ public class DriveForwardMeters extends CommandBase {
 
   Chassis chassis;
   frc.robot.subsystems.Gyro gyro;
-  double degrees;
   frc.robot.utils.PIDController turnController, driveController;
   boolean encodersReset;
   
@@ -22,7 +21,6 @@ public class DriveForwardMeters extends CommandBase {
     addRequirements(chassis,gyro);
     this.chassis = chassis;
     this.gyro = gyro;
-    this.degrees = degrees;
     this.driveController = driveController;
     this.turnController = turnController;
     this.encodersReset = encodersReset;

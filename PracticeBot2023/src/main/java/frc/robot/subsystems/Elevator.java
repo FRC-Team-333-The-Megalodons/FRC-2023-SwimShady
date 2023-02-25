@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotStates;
+import frc.robot.RobotStates.ElevatorState;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
@@ -44,29 +45,47 @@ public class Elevator extends SubsystemBase {
     upperLimitSwitch = new DigitalInput(1);
   }
 
-  public void ePID_Up() {
-    leftmotor.set(ePidController.getOutput(leftmotor.getEncoder().getPosition()));
-    rightMotor.set(ePidController.getOutput(leftmotor.getEncoder().getPosition()));
-    elevatorState = RobotStates.ElevatorState.TRAVERSING_UP;
+  private void setState(double output){
+    if(output > 0){
+        if(-rightMotor.getEncoder().getPosition() > 52){
+          elevatorState = ElevatorState.TRAVERSING_HIGH_FROM_MID;
+        }else if(-rightMotor.getEncoder().getPosition() < 48){
+          elevatorState = ElevatorState.TRAVERSING_UP_FROM_LOW;
+        }
+    }else{
+      if(-rightMotor.getEncoder().getPosition() > 52){
+        elevatorState = ElevatorState.TRAVERSING_DOWN_FROM_HIGH;
+      }else if(-rightMotor.getEncoder().getPosition() < 48){
+        elevatorState = ElevatorState.TRAVERSING_DOWN_FROM_MID;
+      }
+    }
+
+    if(-rightMotor.getEncoder().getPosition() <= 52 || -rightMotor.getEncoder().getPosition() >= 48){
+      elevatorState = ElevatorState.MEDIUM;
+    }
+    if(rightMotor.getEncoder().getPosition() == 0){
+      elevatorState = ElevatorState.LOW;
+    }
   }
 
   public void eUp() {
     if(lowerLimitSwitch.get() == false){
       elevator.set(0);
+      elevatorState = ElevatorState.HIGH;
       return;
     }else{
       elevator.set(espeed);
-      elevatorState = RobotStates.ElevatorState.TRAVERSING_UP;
+      setState(espeed);
     }
   }
 
   public void e_Mid(){
     if(lowerLimitSwitch.get() == false){
-      elevator.set(0);
+      elevator.set(0);//acts as an emegency stop in case the pid fails
       return;
     }else{
       elevator.set(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
-      elevatorState = RobotStates.ElevatorState.TRAVERSING_UP;
+      setState(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
     }
   }
 
@@ -74,10 +93,11 @@ public class Elevator extends SubsystemBase {
     if(upperLimitSwitch.get() == false){
       elevator.set(0);
       rightMotor.getEncoder().setPosition(0);
+      elevatorState = RobotStates.ElevatorState.LOW;
       return;
     }else if(stick.getRawAxis(3) < 1){
       elevator.set(-espeed);
-      elevatorState = RobotStates.ElevatorState.TRAVERSING_DOWN;
+      setState(-espeed);
     }else{
       stop();
     }
@@ -97,25 +117,19 @@ public class Elevator extends SubsystemBase {
     return (leftmotor.getEncoder().getPosition() + rightMotor.getEncoder().getPosition()) / 2;
   }
 
+  public ElevatorState getState(){
+    return elevatorState;
+  }
+
   public void teleopPeriodic() {
 
     if (stick.getRawButton(4)) {
       eUp();
     } else if (stick.getRawButton(3)) {
-      ePID_Up();
+      e_Mid();
     } else {
       eDown();
     }
-
-    if (!lowerLimitSwitch.get()) {
-      //stop();
-      resetEncoders();
-    } 
-
-    if (!upperLimitSwitch.get()) {
-      //stop();
-    }
-
   }
 
 

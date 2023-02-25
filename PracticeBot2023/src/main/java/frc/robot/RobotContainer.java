@@ -78,7 +78,7 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    chassis.teleopPeriodic();
+    chassis.teleopPeriodic(elevator.getState());
     elevator.teleopPeriodic();;
     intake.teleopPeriodic();;
   }
