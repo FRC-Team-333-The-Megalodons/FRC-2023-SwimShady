@@ -9,6 +9,7 @@ import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LimeLight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -30,6 +31,7 @@ public class RobotContainer {
   Elevator elevator = new Elevator();
   Intake intake = new Intake();
   Gyro gyro = new Gyro();
+  LimeLight lLight = new LimeLight();
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -68,24 +70,26 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;//TODO test community auto
+    return null;// TODO test community auto
   }
 
-  public void periodic(){
+  public void periodic() {
     elevator.periodic();
     intake.periodic();
     gyro.periodic();
+    lLight.periodic();
   }
 
   public void teleopPeriodic() {
     chassis.teleopPeriodic(elevator.getState());
-    elevator.teleopPeriodic();;
-    intake.teleopPeriodic();;
+    elevator.teleopPeriodic();
+    ;
+    intake.teleopPeriodic();
+    ;
   }
 
-  public void resetEncoders(){
+  public void resetEncoders() {
     gyro.reset();
     chassis.resetEncoders();
   }
 }
-
