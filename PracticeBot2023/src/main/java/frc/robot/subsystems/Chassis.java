@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -16,6 +15,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.RobotStates;
 import frc.robot.RobotStates.ChassisStates;
 import frc.robot.RobotStates.ElevatorState;
@@ -83,6 +83,13 @@ public class Chassis extends SubsystemBase {
   {
     double x = stick.getX(), y = -stick.getY();
 
+    if(RobotContainer.TWO_DRIVER_MODE){
+      if(stick.getTrigger()){//slows down the chassis for lining up
+        x /= 2;
+        y /= 2;
+      }
+    }
+    
     arcadeDrive(x, y);
   }
 

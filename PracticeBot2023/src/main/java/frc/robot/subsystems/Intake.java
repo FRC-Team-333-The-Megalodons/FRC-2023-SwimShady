@@ -76,10 +76,12 @@ public class Intake extends SubsystemBase {
     intakeState = IntakeStates.OUT;
   }
   public void iIn(){
-    intake.set(-INTAKE_SPEED);
+    intakemotor1.set(-INTAKE_SPEED);
+    intakemotor2.set(INTAKE_SPEED);
   }
   public void iOut(){
-    intake.set(INTAKE_SPEED);
+    intakemotor1.set(INTAKE_SPEED);
+    intakemotor2.set(-INTAKE_SPEED);
   }
   public void iStop(){
     intake.set(0);
@@ -99,16 +101,14 @@ public class Intake extends SubsystemBase {
 
       if (stick.getRawButton(2)){
         //iIn();
-        intakemotor1.set(-INTAKE_SPEED);
-        intakemotor2.set(INTAKE_SPEED);
+        iIn();
         if(intakeState == IntakeStates.OUT){
           intakeState = IntakeStates.OUT_AND_MOTORS_F;
         }else{
           intakeState = IntakeStates.MOTORS_RUNNING_F;
         }
       } else if(stick.getRawButton(5)){ 
-        intakemotor1.set(INTAKE_SPEED);
-        intakemotor2.set(-INTAKE_SPEED);
+        iOut();
         if(intakeState == IntakeStates.OUT){
           intakeState = IntakeStates.OUT_AND_MOTORS_R;
         } else{
@@ -146,16 +146,14 @@ public class Intake extends SubsystemBase {
       }
 
       if(controller.getRightBumper()){
-        intakemotor1.set(-INTAKE_SPEED);
-        intakemotor2.set(INTAKE_SPEED);
+        iIn();
         if(intakeState == IntakeStates.OUT){
           intakeState = IntakeStates.OUT_AND_MOTORS_F;
         }else{
           intakeState = IntakeStates.MOTORS_RUNNING_F;
         }
       }else if(controller.getLeftBumper()){
-        intakemotor1.set(INTAKE_SPEED);
-        intakemotor2.set(-INTAKE_SPEED);
+        iOut();
         if(intakeState == IntakeStates.OUT){
           intakeState = IntakeStates.OUT_AND_MOTORS_R;
         } else{
