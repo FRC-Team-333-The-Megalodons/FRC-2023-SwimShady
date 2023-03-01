@@ -9,7 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,7 +23,7 @@ public class Elevator extends SubsystemBase {
   CANSparkMax rightMotor, leftmotor;
   MotorControllerGroup elevator;
   Joystick stick;
-  XboxController controller;
+  PS4Controller controller;
   double espeed = .3;
 
   frc.robot.utils.PIDController ePidController;
@@ -36,7 +36,7 @@ public class Elevator extends SubsystemBase {
     rightMotor = new CANSparkMax(Constants.RobotMap.ELEVATOR1, MotorType.kBrushless);
     leftmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
-    controller = new XboxController(1);
+    controller = new PS4Controller(1);
     ePidController = new frc.robot.utils.PIDController(.015, .008, 0, 30, 2, 2,85);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
@@ -165,9 +165,9 @@ public class Elevator extends SubsystemBase {
         }
       }
     }else{
-      if(controller.getYButton()){
+      if(controller.getTriangleButton()){
         manualUp();
-      }else if(controller.getAButton()){
+      }else if(controller.getCrossButton()){
         manualDown();
       }else{
         elevator.set(0);
