@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.roboAutos.CommunityAuto;
+import frc.robot.commands.roboAutos.Mobility;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public static final boolean TWO_DRIVER_MODE = true;
+  public static final boolean TWO_DRIVER_MODE = false;
 
   Chassis chassis = new Chassis();
   Elevator elevator = new Elevator();
@@ -70,7 +70,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;// TODO test community auto
+    return new Mobility(chassis, gyro);// TODO test community auto
   }
 
   public void periodic() {
@@ -83,9 +83,7 @@ public class RobotContainer {
   public void teleopPeriodic() {
     chassis.teleopPeriodic(elevator.getState());
     elevator.teleopPeriodic();
-    ;
     intake.teleopPeriodic();
-    ;
   }
 
   public void resetEncoders() {

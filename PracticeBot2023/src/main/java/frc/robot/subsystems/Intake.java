@@ -41,8 +41,8 @@ public class Intake extends SubsystemBase {
     wristMotor1.setInverted(true);
     wristMotor2 = new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless);
 
-    wristMotor1.setIdleMode(IdleMode.kBrake);
-    wristMotor2.setIdleMode(IdleMode.kBrake);
+    wristMotor1.setIdleMode(IdleMode.kCoast);
+    wristMotor2.setIdleMode(IdleMode.kCoast);
 
     wrist = new MotorControllerGroup(wristMotor1, wristMotor2);
 

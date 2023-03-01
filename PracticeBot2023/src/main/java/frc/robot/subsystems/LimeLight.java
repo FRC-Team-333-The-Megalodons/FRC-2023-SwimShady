@@ -48,7 +48,7 @@ public class LimeLight extends SubsystemBase {
 
     SmartDashboard.putNumber("LimelightXangle", x);
     SmartDashboard.putNumber("LimelightYangle", y);
-    SmartDashboard.putNumber("LimeLightDistance", targetDistance);
+    SmartDashboard.putNumber("LimeLightDistance", targetDistance);//distance in inches
     SmartDashboard.putBoolean("Is_In_Range", inRange);
 
   }

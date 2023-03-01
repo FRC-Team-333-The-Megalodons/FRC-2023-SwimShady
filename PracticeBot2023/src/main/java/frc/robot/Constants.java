@@ -101,6 +101,6 @@ public final class Constants {
 
     public static class Values{
         //values that can be used for autonomous.
-        public final static double TICKS_PER_METER = 80;
+        public final static double TICKS_PER_METER = 28;
     }
 }

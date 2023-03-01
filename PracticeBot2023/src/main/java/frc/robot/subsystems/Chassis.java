@@ -4,12 +4,15 @@
 
 package frc.robot.subsystems;
 
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator.Validity;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -59,10 +62,11 @@ public class Chassis extends SubsystemBase {
 
     stick = new Joystick(0);
     drive = new DifferentialDrive(leftleader, rightleader);
+    solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
   }
 
   public double getEncodersAverage(){
-    return rightLeaderEncoder.getPosition() + (-leftLeaderEncoder.getPosition())/2;
+    return (rightLeaderEncoder.getPosition() + (-leftLeaderEncoder.getPosition()))/2;
   }
 
   public void resetEncoders(){
@@ -88,6 +92,11 @@ public class Chassis extends SubsystemBase {
         x /= 2;
         y /= 2;
       }
+      if(stick.getRawButton(2)){
+        solenoid.set(Value.kForward);
+      }else{
+        solenoid.set(Value.kReverse);
+      }
     }
     
     arcadeDrive(x, y);
@@ -104,6 +113,7 @@ public class Chassis extends SubsystemBase {
     SmartDashboard.putNumber("left chassis encoder", leftLeaderEncoder.getPosition());
     SmartDashboard.putNumber("right chassis encoder", rightLeaderEncoder.getPosition());
     SmartDashboard.putNumber("Meters moved", getChassisMetersMoved());
+    SmartDashboard.putNumber("average chassis encoders", getEncodersAverage());
   }
 
   public ChassisStates evaluateState()

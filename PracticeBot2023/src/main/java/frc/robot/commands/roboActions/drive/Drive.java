@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
 import frc.robot.utils.PIDController;
 
-public class DriveForwardMeters extends CommandBase {
+public class Drive extends CommandBase {
   /** Creates a new DriveForwardMeters. */
 
   Chassis chassis;
@@ -16,7 +16,7 @@ public class DriveForwardMeters extends CommandBase {
   frc.robot.utils.PIDController turnController, driveController;
   boolean encodersReset;
   
-  public DriveForwardMeters(Chassis chassis, frc.robot.subsystems.Gyro gyro, double meters, frc.robot.utils.PIDController driveController, PIDController turnController, boolean encodersReset) {
+  public Drive(Chassis chassis, frc.robot.subsystems.Gyro gyro, frc.robot.utils.PIDController driveController, PIDController turnController, boolean encodersReset) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
     this.chassis = chassis;
@@ -37,7 +37,7 @@ public class DriveForwardMeters extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    chassis.arcadeDrive(turnController.getOutput(gyro.getAngle()), driveController.getOutput(chassis.getChassisMetersMoved()));
+    chassis.arcadeDrive(turnController.getOutput(gyro.getAngle()), driveController.getOutput(chassis.getEncodersAverage()));
   }
 
   // Called once the command ends or is interrupted.

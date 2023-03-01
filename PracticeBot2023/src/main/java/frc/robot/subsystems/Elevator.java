@@ -24,7 +24,7 @@ public class Elevator extends SubsystemBase {
   MotorControllerGroup elevator;
   Joystick stick;
   XboxController controller;
-  double espeed = 1;
+  double espeed = .3;
 
   frc.robot.utils.PIDController ePidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
@@ -37,7 +37,7 @@ public class Elevator extends SubsystemBase {
     leftmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
     controller = new XboxController(1);
-    ePidController = new frc.robot.utils.PIDController(.015, .005, 0, 10, 2, 2,50);
+    ePidController = new frc.robot.utils.PIDController(.015, .008, 0, 30, 2, 2,85);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
@@ -87,12 +87,9 @@ public class Elevator extends SubsystemBase {
     if(lowerLimitSwitch.get() == false){
       elevator.set(0);//acts as an emegency stop in case the pid fails
       return;
-    }else if(stick.getRawAxis(3) < 1){
+    }else{
       elevator.set(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
       setState(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
-    }else{
-      elevator.set(-espeed/2);
-      setState(-espeed);
     }
   }
 
@@ -102,11 +99,9 @@ public class Elevator extends SubsystemBase {
       rightMotor.getEncoder().setPosition(0);
       elevatorState = RobotStates.ElevatorState.LOW;
       return;
-    }else if(stick.getRawAxis(3) < 1){
+    }else {
       elevator.set(-espeed);
       setState(-espeed);
-    }else{
-      stop();
     }
   }
 
@@ -155,11 +150,19 @@ public class Elevator extends SubsystemBase {
 
     if(!RobotContainer.TWO_DRIVER_MODE){
       if (stick.getRawButton(4)) {
-        eUp();
+        manualUp();
       } else if (stick.getRawButton(3)) {
-        e_Mid();
-      } else {
-        eDown();
+        if(stick.getRawAxis(3) < .6){
+          e_Mid();
+        }else{
+          manualDown();
+        }
+      }else{
+        if(stick.getRawAxis(3) < .6){
+          eDown();
+        }else{
+          elevator.set(0);
+        }
       }
     }else{
       if(controller.getYButton()){

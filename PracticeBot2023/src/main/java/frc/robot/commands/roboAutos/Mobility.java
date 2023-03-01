@@ -5,7 +5,8 @@
 package frc.robot.commands.roboAutos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.roboActions.drive.DriveForwardMeters;
+import frc.robot.Constants;
+import frc.robot.commands.roboActions.drive.Drive;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
 import frc.robot.utils.PIDController;
@@ -13,16 +14,18 @@ import frc.robot.utils.PIDController;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CommunityAuto extends SequentialCommandGroup {
+public class Mobility extends SequentialCommandGroup {
   /** Creates a new CommunityAuto. */
-  public CommunityAuto(Chassis chassis, Gyro gyro) {
+  public Mobility(Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
     frc.robot.utils.PIDController driveController, straightHeadingController;
-    driveController = new PIDController(.06, .005, 0, 0, .3, .3, 5);
-    straightHeadingController = new PIDController(.5, .05, 0, .15, .2, .2, 0);
+    driveController = new PIDController(.015, .005, 0, 25, 5, 1, Constants.Values.TICKS_PER_METER*2);
+    straightHeadingController = new PIDController(.05, .005, 0, .15, .2, .2, 0);
 
-    addCommands(new DriveForwardMeters(chassis,gyro,3,driveController,straightHeadingController,true)); 
+    addCommands(
+      new Drive(chassis,gyro,driveController,straightHeadingController,true)
+    ); 
   }
 }

@@ -5,6 +5,7 @@
 package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /* 
  * Use https://www.desmos.com/calculator/vcdedzbmag to input values and simulate the PID algorythm. This should prevent the need to eyeball values
@@ -72,6 +73,9 @@ public class PIDController {
         lastError = error;
 
         isOnTarget = maxTarget >= sensorValue && minTarget <= sensorValue;
+        SmartDashboard.putBoolean("is on target", isOnTarget);
+        SmartDashboard.putNumber("error", error);
+        SmartDashboard.putNumber("error sum", errorSum);
 
         return (kP * error) + (kI * errorSum) + (kD * errorRate);//only PI for now
     }
@@ -89,7 +93,7 @@ public class PIDController {
     public double getD(){return kD;}
 
     public double getILimit(){return iLimit;}
-
+  
     public double getMaxTolerance(){return maxTolerance;}
     public double getMinTolerance(){return minTolerance;}
 
