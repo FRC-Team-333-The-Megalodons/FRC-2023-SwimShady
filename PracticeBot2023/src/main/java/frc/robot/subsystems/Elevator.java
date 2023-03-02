@@ -73,39 +73,6 @@ public class Elevator extends SubsystemBase {
     }
   }
 
-  public void eUp() {
-    if(lowerLimitSwitch.get() == false){
-      elevator.set(0);
-      elevatorState = ElevatorState.HIGH;
-      return;
-    }else{
-      elevator.set(espeed);
-      setState(espeed);
-    }
-  }
-
-  public void e_Mid(){
-    if(lowerLimitSwitch.get() == false ){
-      elevator.set(0);//acts as an emegency stop in case the pid fails
-      return;
-    }else{
-      elevator.set(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
-      setState(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
-    }
-  }
-
-  public void eDown() {
-    if(upperLimitSwitch.get() == false){
-      elevator.set(0);
-      rightMotor.getEncoder().setPosition(0);
-      elevatorState = RobotStates.ElevatorState.LOW;
-      return;
-    }else {
-      elevator.set(-espeed);
-      setState(-espeed);
-    }
-  }
-
   public void stop() {
     elevator.set(0);
     elevatorState = RobotStates.ElevatorState.MOTORS_STOPPED;
@@ -131,6 +98,16 @@ public class Elevator extends SubsystemBase {
     }else {
       elevator.set(-espeed);
       setState(-espeed);
+    }
+  }
+
+  public void e_Mid(){
+    if(lowerLimitSwitch.get() == false ){
+      elevator.set(0);//acts as an emegency stop in case the pid fails
+      return;
+    }else{
+      elevator.set(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
+      setState(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
     }
   }
 
@@ -177,7 +154,9 @@ public class Elevator extends SubsystemBase {
           manualDown();
         }
       }else{
-        if(stick.getRawAxis(3) > .6){
+        if(stick.getRawAxis(3) < .6){
+          manualDown();
+        }else{
           elevator.set(0);
         }
       }
