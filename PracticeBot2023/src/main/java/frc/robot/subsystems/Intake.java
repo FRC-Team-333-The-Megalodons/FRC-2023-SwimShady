@@ -9,9 +9,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
   CANSparkMax wristMotor1, wristMotor2,intakemotor1, intakemotor2;
   MotorControllerGroup wrist, intake;
   Joystick stick;
-  PS4Controller controller;
+  XboxController controller;
   Solenoid solenoid;
   PneumaticHub hub;
   PIDController wristController;
@@ -41,8 +41,8 @@ public class Intake extends SubsystemBase {
     wristMotor1.setInverted(true);
     wristMotor2 = new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless);
 
-    wristMotor1.setIdleMode(IdleMode.kCoast);
-    wristMotor2.setIdleMode(IdleMode.kCoast);
+    wristMotor1.setIdleMode(IdleMode.kBrake);
+    wristMotor2.setIdleMode(IdleMode.kBrake);
 
     wrist = new MotorControllerGroup(wristMotor1, wristMotor2);
 
@@ -53,7 +53,7 @@ public class Intake extends SubsystemBase {
     intake = new MotorControllerGroup(intakemotor1, intakemotor2);
 
     stick = new Joystick(0);
-    controller = new PS4Controller(1);
+    controller = new XboxController(1);
 
     hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
 
@@ -139,20 +139,20 @@ public class Intake extends SubsystemBase {
         resetEncoder(0);
       }
     }else{
-      if(controller.getR2Axis() > .05){
+      if(controller.getRightTriggerAxis() > .05){
         pUnsqueeze();
       }else{
         pSqueeze();
       }
 
-      if(controller.getR1Button()){
+      if(controller.getRightBumper()){
         iIn();
         if(intakeState == IntakeStates.OUT){
           intakeState = IntakeStates.OUT_AND_MOTORS_F;
         }else{
           intakeState = IntakeStates.MOTORS_RUNNING_F;
         }
-      }else if(controller.getL1Button()){
+      }else if(controller.getLeftBumper()){
         iOut();
         if(intakeState == IntakeStates.OUT){
           intakeState = IntakeStates.OUT_AND_MOTORS_R;

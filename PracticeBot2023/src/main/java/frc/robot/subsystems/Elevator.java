@@ -9,7 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,8 +23,8 @@ public class Elevator extends SubsystemBase {
   CANSparkMax rightMotor, leftmotor;
   MotorControllerGroup elevator;
   Joystick stick;
-  PS4Controller controller;
-  double espeed = .3;
+  XboxController controller;
+  double espeed = 1;
 
   frc.robot.utils.PIDController ePidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
@@ -36,8 +36,8 @@ public class Elevator extends SubsystemBase {
     rightMotor = new CANSparkMax(Constants.RobotMap.ELEVATOR1, MotorType.kBrushless);
     leftmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
-    controller = new PS4Controller(1);
-    ePidController = new frc.robot.utils.PIDController(.015, .008, 0, 30, 2, 2,85);
+    controller = new XboxController(1);
+    ePidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,95);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
@@ -49,17 +49,18 @@ public class Elevator extends SubsystemBase {
     upperLimitSwitch = new DigitalInput(1);
   }
 
+  //TODO REDO THIS
   private void setState(double output){
     if(output > 0){
-        if(-rightMotor.getEncoder().getPosition() > 52){
+        if(-rightMotor.getEncoder().getPosition() > 95){
           elevatorState = ElevatorState.TRAVERSING_HIGH_FROM_MID;
-        }else if(-rightMotor.getEncoder().getPosition() < 48){
+        }else if(-rightMotor.getEncoder().getPosition() < 83){
           elevatorState = ElevatorState.TRAVERSING_UP_FROM_LOW;
         }
     }else{
-      if(-rightMotor.getEncoder().getPosition() > 52){
+      if(-rightMotor.getEncoder().getPosition() > 95){
         elevatorState = ElevatorState.TRAVERSING_DOWN_FROM_HIGH;
-      }else if(-rightMotor.getEncoder().getPosition() < 48){
+      }else if(-rightMotor.getEncoder().getPosition() < 83){
         elevatorState = ElevatorState.TRAVERSING_DOWN_FROM_MID;
       }
     }
@@ -84,7 +85,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void e_Mid(){
-    if(lowerLimitSwitch.get() == false){
+    if(lowerLimitSwitch.get() == false ){
       elevator.set(0);//acts as an emegency stop in case the pid fails
       return;
     }else{
@@ -146,8 +147,10 @@ public class Elevator extends SubsystemBase {
     return elevatorState;
   }
 
-  public void teleopPeriodic() {
+  public boolean isAtMaxUp(){return !lowerLimitSwitch.get();}
+  public boolean isAtMaxDown(){return !upperLimitSwitch.get();}
 
+  public void teleopPeriodic() {
     if(!RobotContainer.TWO_DRIVER_MODE){
       if (stick.getRawButton(4)) {
         manualUp();
@@ -159,18 +162,24 @@ public class Elevator extends SubsystemBase {
         }
       }else{
         if(stick.getRawAxis(3) < .6){
-          eDown();
+          manualDown();
         }else{
           elevator.set(0);
         }
       }
     }else{
-      if(controller.getTriangleButton()){
+      if(controller.getYButton()){
         manualUp();
-      }else if(controller.getCrossButton()){
-        manualDown();
+      }else if(controller.getAButton()){
+        if(stick.getRawAxis(3) < .6){
+          e_Mid();
+        }else{
+          manualDown();
+        }
       }else{
-        elevator.set(0);
+        if(stick.getRawAxis(3) > .6){
+          elevator.set(0);
+        }
       }
     }
   }

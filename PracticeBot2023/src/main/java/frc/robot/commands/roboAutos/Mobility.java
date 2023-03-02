@@ -7,7 +7,9 @@ package frc.robot.commands.roboAutos;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.roboActions.drive.Drive;
+import frc.robot.commands.roboActions.elevator.GoHigh;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
 import frc.robot.utils.PIDController;
 
@@ -16,7 +18,7 @@ import frc.robot.utils.PIDController;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Mobility extends SequentialCommandGroup {
   /** Creates a new CommunityAuto. */
-  public Mobility(Chassis chassis, Gyro gyro) {
+  public Mobility(Chassis chassis, Gyro gyro, Elevator elevator) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
@@ -25,7 +27,8 @@ public class Mobility extends SequentialCommandGroup {
     straightHeadingController = new PIDController(.05, .005, 0, .15, .2, .2, 0);
 
     addCommands(
-      new Drive(chassis,gyro,driveController,straightHeadingController,true)
+      new Drive(chassis,gyro,driveController,straightHeadingController,true),
+      new GoHigh(elevator)
     ); 
   }
 }

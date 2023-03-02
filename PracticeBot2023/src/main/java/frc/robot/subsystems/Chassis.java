@@ -96,6 +96,11 @@ public class Chassis extends SubsystemBase {
       }else{
         solenoid.set(Value.kReverse);
       }
+    }else{
+      if(stick.getRawButton(7)){
+        x /= 2;
+        y /= 2;
+      }
     }
     
     arcadeDrive(x, y);
