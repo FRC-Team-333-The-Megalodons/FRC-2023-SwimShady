@@ -111,6 +111,10 @@ public class Elevator extends SubsystemBase {
     }
   }
 
+  public boolean isControllerOnTarget(){
+    return ePidController.isOnTarget();
+  }
+
   public void resetEncoders() {
     leftmotor.getEncoder().setPosition(0);
     rightMotor.getEncoder().setPosition(0);

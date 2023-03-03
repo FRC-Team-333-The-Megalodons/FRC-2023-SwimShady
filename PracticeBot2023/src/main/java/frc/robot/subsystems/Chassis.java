@@ -42,7 +42,7 @@ public class Chassis extends SubsystemBase {
 
   ElevatorState elevatorState;
 
-  public Chassis() {
+  public Chassis(PneumaticHub hub) {
     rightmotor1 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_LEADER, MotorType.kBrushless);
     rightmotor2 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER1, MotorType.kBrushless);
     rightmotor3 = new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER2, MotorType.kBrushless);
@@ -61,7 +61,8 @@ public class Chassis extends SubsystemBase {
 
     stick = new Joystick(0);
     drive = new DifferentialDrive(leftleader, rightleader);
-    solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+    this.hub = hub;
+    solenoid = hub.makeDoubleSolenoid(0, 1);
   }
 
   public double getEncodersAverage(){

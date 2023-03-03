@@ -33,12 +33,12 @@ public class Intake extends SubsystemBase {
   IntakeStates intakeState;
   WristStates wristState;
 
-  public double INTAKE_SPEED = 0.55;
+  public double INTAKE_SPEED = .7;
   public double WRIST_SPEED = 0.5;
 
-  public Intake() {
+  public Intake(PneumaticHub hub) {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
-    wristMotor1.setInverted(true);
+    wristMotor1.setInverted(false);
     wristMotor2 = new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless);
 
     wristMotor1.setIdleMode(IdleMode.kBrake);
@@ -48,6 +48,8 @@ public class Intake extends SubsystemBase {
 
     intakemotor1 = new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless);
     intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
+    intakemotor1.setIdleMode(IdleMode.kBrake);
+    intakemotor2.setIdleMode(IdleMode.kBrake);
     //intakemotor2.setInverted(true);
 
     intake = new MotorControllerGroup(intakemotor1, intakemotor2);
@@ -55,7 +57,7 @@ public class Intake extends SubsystemBase {
     stick = new Joystick(0);
     controller = new XboxController(1);
 
-    hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
+    this.hub = hub;
 
     solenoid = hub.makeSolenoid(Constants.RobotMap.INTAKE_SQUEEZE);
 
@@ -80,8 +82,8 @@ public class Intake extends SubsystemBase {
     intakemotor2.set(INTAKE_SPEED);
   }
   public void iOut(){
-    intakemotor1.set(INTAKE_SPEED);
-    intakemotor2.set(-INTAKE_SPEED);
+    intakemotor1.set(.3);
+    intakemotor2.set(-.3);
   }
   public void iStop(){
     intake.set(0);
@@ -122,10 +124,10 @@ public class Intake extends SubsystemBase {
       }
 
       if (stick.getPOV() == 0) {
-        wrist.set(-WRIST_SPEED);
+        wrist.set(WRIST_SPEED);
         wristState = WristStates.ROTATING_IN;
       } else if (stick.getPOV() == 180) {
-        wrist.set(WRIST_SPEED);
+        wrist.set(-WRIST_SPEED);
         wristState = WristStates.ROTATING_OUT;
       } else {
         wrist.set(0);
@@ -166,10 +168,10 @@ public class Intake extends SubsystemBase {
         }
       }
       if (controller.getPOV() == 0) {
-        wrist.set(WRIST_SPEED);
+        wrist.set(-WRIST_SPEED);
         wristState = WristStates.ROTATING_IN;
       } else if (controller.getPOV() == 180) {
-        wrist.set(-WRIST_SPEED);
+        wrist.set(WRIST_SPEED);
         wristState = WristStates.ROTATING_OUT;
       } else {
         wrist.set(0);

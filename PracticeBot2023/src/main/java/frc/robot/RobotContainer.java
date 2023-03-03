@@ -10,6 +10,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,9 +28,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final boolean TWO_DRIVER_MODE = true;
 
-  Chassis chassis = new Chassis();
+  PneumaticHub hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
+  Chassis chassis = new Chassis(hub);
   Elevator elevator = new Elevator();
-  Intake intake = new Intake();
+  Intake intake = new Intake(hub);
   Gyro gyro = new Gyro();
   LimeLight lLight = new LimeLight();
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -70,7 +72,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;// TODO test community auto
+    return TWO_DRIVER_MODE ? null : new Mobility(chassis, gyro, elevator);// TODO test community auto
   }
 
   public void periodic() {
