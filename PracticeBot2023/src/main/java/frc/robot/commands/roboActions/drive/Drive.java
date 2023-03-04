@@ -15,7 +15,7 @@ public class Drive extends CommandBase {
   frc.robot.subsystems.Gyro gyro;
   frc.robot.utils.PIDController turnController, driveController;
   boolean encodersReset;
-  
+
   public Drive(Chassis chassis, frc.robot.subsystems.Gyro gyro, frc.robot.utils.PIDController driveController, PIDController turnController, boolean encodersReset) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
@@ -24,6 +24,17 @@ public class Drive extends CommandBase {
     this.driveController = driveController;
     this.turnController = turnController;
     this.encodersReset = encodersReset;
+  }
+  
+  public Drive(Chassis chassis, frc.robot.subsystems.Gyro gyro, frc.robot.utils.PIDController controller, PIDController turnController, boolean encodersReset, double meters) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(chassis,gyro);
+    this.chassis = chassis;
+    this.gyro = gyro;
+    this.driveController = controller;
+    this.turnController = turnController;
+    this.encodersReset = encodersReset;
+    controller.setTarget(controller.getMinTolerance(), controller.getMaxTolerance(), meters);
   }
 
   // Called when the command is initially scheduled.
