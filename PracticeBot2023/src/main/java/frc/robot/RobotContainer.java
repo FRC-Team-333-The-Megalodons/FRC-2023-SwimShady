@@ -28,12 +28,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final boolean TWO_DRIVER_MODE = true;
 
-  PneumaticHub hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
-  Chassis chassis = new Chassis(hub);
-  Elevator elevator = new Elevator();
-  Intake intake = new Intake(hub);
-  Gyro gyro = new Gyro();
-  LimeLight lLight = new LimeLight();
+  PneumaticHub m_hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
+  Chassis m_chassis = new Chassis(m_hub);
+  Intake m_intake = new Intake(m_hub);
+  Elevator m_elevator = new Elevator(m_intake);
+  Gyro m_gyro = new Gyro();
+  LimeLight m_lLight = new LimeLight();
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -72,32 +72,32 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new Mobility(chassis, gyro, elevator);// TODO test community auto
+    return new Mobility(m_chassis, m_gyro, m_elevator);// TODO test community auto
   }
 
   public void periodic() {
-    elevator.periodic();
-    intake.periodic();
-    gyro.periodic();
-    lLight.periodic();
+    m_elevator.periodic();
+    m_intake.periodic();
+    m_gyro.periodic();
+    m_lLight.periodic();
   }
 
   public void teleopPeriodic() {
-    chassis.teleopPeriodic(elevator.getState());
-    elevator.teleopPeriodic();
-    intake.teleopPeriodic();
+    m_chassis.teleopPeriodic(m_elevator.getState());
+    m_elevator.teleopPeriodic();
+    m_intake.teleopPeriodic();
   }
 
   public void resetEncoders() {
-    gyro.reset();
-    chassis.resetEncoders();
+    m_gyro.reset();
+    m_chassis.resetEncoders();
   }
 
   public void setChassisCoast(){
-    chassis.setCoast();
+    m_chassis.setCoast();
   }
 
   public void setChassisBreak(){
-    chassis.setBreak();
+    m_chassis.setBreak();
   }
 }

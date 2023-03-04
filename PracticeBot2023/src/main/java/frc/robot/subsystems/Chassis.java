@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -139,6 +140,13 @@ public class Chassis extends SubsystemBase {
     SmartDashboard.putNumber("right chassis encoder", m_rightEncoders.getAveragePosition());
     SmartDashboard.putNumber("Meters moved", getChassisMetersMoved());
     SmartDashboard.putNumber("average chassis encoders", getEncodersAverage());
+    
+    // TODO: Test if this actually works. 
+    // If we're in anything other-than teleop-periodic-mode, always set the speed controllers to Brake
+    //  (this should include Autonomous and post-match)
+    if (!DriverStation.isTeleopEnabled()) {
+        setBreak();
+    }
   }
 
   public ChassisStates evaluateState()
