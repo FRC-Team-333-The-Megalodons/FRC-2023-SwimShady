@@ -17,24 +17,23 @@ import frc.robot.utils.PIDController;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Mobility extends SequentialCommandGroup {
-  /** Creates a new CommunityAuto. */
-  public Mobility(Chassis chassis, Gyro gyro, Elevator elevator) {
+public class RunMeInFinals3 extends SequentialCommandGroup {
+  /** Creates a new RunMeInFinals3. */
+  public RunMeInFinals3(Chassis chassis, Gyro gyro, Elevator elevator) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-
     frc.robot.utils.PIDController driveBackController,driveForwardController, straightHeadingController, turnController;
-    driveBackController = new PIDController(.012, .008, 0, 25, 5, 1, -Constants.Values.TICKS_PER_METER*2.1);
-    driveForwardController = new PIDController(.012, .008, 0, 25, 5, 1, Constants.Values.TICKS_PER_METER*2);
-    straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
-    turnController = new PIDController(.0065, .005, 0, .15, .2, .2, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
+    driveBackController = new PIDController(500, 1000, 0, 5, 5, 1, -700);//drives back a bit to score hybrid
+    driveForwardController = new PIDController(.015, .005, 0, 25, 5, 1, Constants.Values.TICKS_PER_METER*800);
+    straightHeadingController = new PIDController(.05, .005, 0, .15, .2, .2, 800);
+    turnController = new PIDController(.05, .005, 0, .15, .2, .2, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
 
     addCommands(
       new Drive(chassis,gyro,driveForwardController,straightHeadingController,true),
       new WaitCommand(1),
       new Drive(chassis, gyro, driveBackController, straightHeadingController, true),
       new WaitCommand(.5),
-      new Turn(chassis, gyro, 170, turnController,true),
+      new Turn(chassis, gyro, 180, turnController,true),
       new WaitCommand(.5)
     ); 
   }

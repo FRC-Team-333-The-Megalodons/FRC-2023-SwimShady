@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
 import frc.robot.utils.PIDController;
 
-public class TurnLeftDegrees extends CommandBase {
+public class Turn extends CommandBase {
   /** Creates a new TurnLeftDegrees. */
 
   Chassis chassis;
@@ -17,7 +17,7 @@ public class TurnLeftDegrees extends CommandBase {
   PIDController controller;
   boolean encodersReset;
 
-  public TurnLeftDegrees(Chassis chassis, frc.robot.subsystems.Gyro gyro, double degrees, PIDController controller, boolean encodersReset) {
+  public Turn(Chassis chassis, frc.robot.subsystems.Gyro gyro, double degrees, PIDController controller, boolean encodersReset) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
     this.chassis = chassis;
@@ -25,6 +25,7 @@ public class TurnLeftDegrees extends CommandBase {
     this.degrees = degrees;
     this.controller = controller;
     this.encodersReset = encodersReset;
+    controller.setTarget(controller.getMinTolerance(), controller.getMaxTolerance(), degrees);
   }
 
   // Called when the command is initially scheduled.

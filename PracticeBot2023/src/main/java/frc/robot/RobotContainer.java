@@ -72,7 +72,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return TWO_DRIVER_MODE ? null : new Mobility(chassis, gyro, elevator);// TODO test community auto
+    return new Mobility(chassis, gyro, elevator);// TODO test community auto
   }
 
   public void periodic() {
@@ -91,5 +91,13 @@ public class RobotContainer {
   public void resetEncoders() {
     gyro.reset();
     chassis.resetEncoders();
+  }
+
+  public void setChassisCoast(){
+    chassis.setCoast();
+  }
+
+  public void setChassisBreak(){
+    chassis.setBreak();
   }
 }

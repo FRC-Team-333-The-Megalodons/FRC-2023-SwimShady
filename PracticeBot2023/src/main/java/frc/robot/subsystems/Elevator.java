@@ -24,7 +24,7 @@ public class Elevator extends SubsystemBase {
   MotorControllerGroup elevator;
   Joystick stick;
   XboxController controller;
-  double espeed = 1;
+  final double espeed = 1;
 
   frc.robot.utils.PIDController ePidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
@@ -65,7 +65,7 @@ public class Elevator extends SubsystemBase {
       }
     }
 
-    if(-rightMotor.getEncoder().getPosition() <= 52 || -rightMotor.getEncoder().getPosition() >= 48){
+    if(-rightMotor.getEncoder().getPosition() <= 95 || -rightMotor.getEncoder().getPosition() >= 90){
       elevatorState = ElevatorState.MEDIUM;
     }
     if(rightMotor.getEncoder().getPosition() == 0){
@@ -96,8 +96,8 @@ public class Elevator extends SubsystemBase {
       elevatorState = RobotStates.ElevatorState.LOW;
       return;
     }else {
-      elevator.set(-espeed);
-      setState(-espeed);
+      elevator.set(-(espeed-.2));
+      setState(-(espeed-.2));
     }
   }
 
@@ -151,14 +151,14 @@ public class Elevator extends SubsystemBase {
     }else{
       if(controller.getYButton()){
         manualUp();
-      }else if(controller.getAButton()){
+      }else if(controller.getAButton() && controller.getLeftTriggerAxis() < .5){
         if(stick.getRawAxis(3) < .6){
           e_Mid();
         }else{
           manualDown();
         }
       }else{
-        if(stick.getRawAxis(3) < .6){
+        if(stick.getRawAxis(3) < .6 && controller.getLeftTriggerAxis() < .5){
           manualDown();
         }else{
           elevator.set(0);
