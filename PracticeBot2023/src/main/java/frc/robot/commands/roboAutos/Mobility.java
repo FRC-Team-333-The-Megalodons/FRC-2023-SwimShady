@@ -23,11 +23,12 @@ public class Mobility extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    frc.robot.utils.PIDController driveBackController,driveForwardController, straightHeadingController, turnController;
-    driveBackController = new PIDController(.012, .008, 0, 25, 5, 1, -Constants.Values.TICKS_PER_METER*2.1);
+    frc.robot.utils.PIDController driveBackController,driveForwardController, straightHeadingController, turnController, driveToLineUp;
+    driveBackController = new PIDController(.012, .008, 0, 25, 5, 1, -Constants.Values.TICKS_PER_METER*2.5);
     driveForwardController = new PIDController(.012, .008, 0, 25, 5, 1, Constants.Values.TICKS_PER_METER*2);
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
-    turnController = new PIDController(.0065, .005, 0, .15, .2, .2, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
+    turnController = new PIDController(.008, .007, 0, 90, .2, .2, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
+    driveToLineUp = new PIDController(.012, .008, 0, 25, 5, 1, -Constants.Values.TICKS_PER_METER*.2);
 
     addCommands(
       new Drive(chassis,gyro,driveForwardController,straightHeadingController,true),
@@ -35,7 +36,8 @@ public class Mobility extends SequentialCommandGroup {
       new Drive(chassis, gyro, driveBackController, straightHeadingController, true),
       new WaitCommand(.5),
       new Turn(chassis, gyro, 170, turnController,true),
-      new WaitCommand(.5)
+      new WaitCommand(.5),
+      new Drive(chassis, gyro,driveToLineUp, straightHeadingController, true)
     ); 
   }
 }
