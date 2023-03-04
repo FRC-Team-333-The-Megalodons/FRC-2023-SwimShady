@@ -5,9 +5,12 @@
 
 package frc.robot.subsystems;
 
+import java.text.DecimalFormat;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -21,6 +24,7 @@ import frc.robot.RobotStates.IntakeStates;
 import frc.robot.RobotStates.WristStates;
 import frc.robot.utils.PIDController;
 
+
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   CANSparkMax wristMotor1, wristMotor2,intakemotor1, intakemotor2;
@@ -29,12 +33,19 @@ public class Intake extends SubsystemBase {
   XboxController controller;
   Solenoid solenoid;
   PneumaticHub hub;
-  PIDController wristController;
+  PIDController wristOriginController;
   IntakeStates intakeState;
   WristStates wristState;
+  DutyCycleEncoder wristEncoder;
 
   public double INTAKE_SPEED = .7;
-  public double WRIST_SPEED = 0.5;
+  public double WRIST_SPEED = 0.65;
+
+  double wristValue;
+  DecimalFormat df1 = new DecimalFormat("0.##");
+  final double wristOrigin = 0;
+  final double wrist90 = 0;
+  final double wristLimit = 0;
 
   public Intake(PneumaticHub hub) {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
@@ -50,7 +61,6 @@ public class Intake extends SubsystemBase {
     intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
     intakemotor1.setIdleMode(IdleMode.kBrake);
     intakemotor2.setIdleMode(IdleMode.kBrake);
-    //intakemotor2.setInverted(true);
 
     intake = new MotorControllerGroup(intakemotor1, intakemotor2);
 
@@ -61,7 +71,10 @@ public class Intake extends SubsystemBase {
 
     solenoid = hub.makeSolenoid(Constants.RobotMap.INTAKE_SQUEEZE);
 
-    wristController = new PIDController(0, 0, 0, 0, 0, 0,0);
+    wristEncoder = new DutyCycleEncoder(9);
+    wristEncoder.setConnectedFrequencyThreshold(900);
+    wristEncoder.reset();
+    wristOriginController = new PIDController(0.04, 0.002, 0, 5, .5, .5,0);
   }
 
   public void resetEncoder(int val) {
@@ -82,13 +95,20 @@ public class Intake extends SubsystemBase {
     intakemotor2.set(INTAKE_SPEED);
   }
   public void iOut(){
-    intakemotor1.set(.3);
-    intakemotor2.set(-.3);
+    intakemotor1.set(.2);
+    intakemotor2.set(-.2);
   }
   public void iStop(){
     intake.set(0);
   }
 
+  public void resetWrist(){
+    wrist.set(wristOriginController.getOutput(wristValue));
+  }
+
+  public boolean wristAtOrigin(){
+    return wristOriginController.isOnTarget();
+  }
 
   public void teleopPeriodic() {
     hub.enableCompressorDigital();
@@ -129,16 +149,11 @@ public class Intake extends SubsystemBase {
       } else if (stick.getPOV() == 180) {
         wrist.set(-WRIST_SPEED);
         wristState = WristStates.ROTATING_OUT;
-      } else {
+      } else if(stick.getPOV() == 90){
+        resetWrist();
+      }else {
         wrist.set(0);
         wristState = WristStates.MOTORS_STOPPED;
-      }
-
-      // TODO: This is a manual encoder reset. During initial development, we're doing this with
-      //       a manually pressed button, but in the future this should be done using a Limit Switch
-      //       (or, if a potentiometer is used, we don't need to do an encoder reset at all.)
-      if (stick.getRawButton(12)) {
-        resetEncoder(0);
       }
     }else{
       if(controller.getRightTriggerAxis() > .05){
@@ -173,7 +188,9 @@ public class Intake extends SubsystemBase {
       } else if (controller.getPOV() == 180) {
         wrist.set(WRIST_SPEED);
         wristState = WristStates.ROTATING_OUT;
-      } else {
+      } else if(stick.getPOV() == 90){
+        resetWrist();
+      }else {
         wrist.set(0);
         wristState = WristStates.MOTORS_STOPPED;
       }
@@ -184,10 +201,11 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    SmartDashboard.putNumber("wrist", wristMotor1.getEncoder().getPosition());
+    wristValue = (Double.valueOf(df1.format(wristEncoder.getAbsolutePosition())) * 100)-78;
     SmartDashboard.putString("Wrist State", wristState+"");
     SmartDashboard.putString("Intake State", intakeState+"");
+    SmartDashboard.putNumber("WristEncoder", wristValue);
+    SmartDashboard.putBoolean("WristAtOrigin", wristAtOrigin());
   }
 
   /* Wrist encoder vals

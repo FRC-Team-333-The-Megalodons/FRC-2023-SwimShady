@@ -6,11 +6,11 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -30,7 +30,7 @@ public class Chassis extends SubsystemBase {
   RelativeEncoder rightLeaderEncoder, leftLeaderEncoder;
 
   MotorControllerGroup rightleader;
-  MotorControllerGroup leftleader;
+  MotorControllerGroup leftLeader;
 
   Joystick stick;
 
@@ -57,12 +57,30 @@ public class Chassis extends SubsystemBase {
 
     leftLeaderEncoder = leftmotor1.getEncoder();
 
-    leftleader = new MotorControllerGroup(leftmotor1, leftmotor2, leftmotor3);
+    leftLeader = new MotorControllerGroup(leftmotor1, leftmotor2, leftmotor3);
 
     stick = new Joystick(0);
-    drive = new DifferentialDrive(leftleader, rightleader);
+    drive = new DifferentialDrive(leftLeader, rightleader);
     this.hub = hub;
     solenoid = hub.makeDoubleSolenoid(0, 1);
+  }
+
+  public void setBreak(){
+    rightmotor1.setIdleMode(IdleMode.kBrake);
+    rightmotor2.setIdleMode(IdleMode.kBrake);
+    rightmotor3.setIdleMode(IdleMode.kBrake);
+    leftmotor1.setIdleMode(IdleMode.kBrake);
+    leftmotor2.setIdleMode(IdleMode.kBrake);
+    leftmotor3.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void setCoast(){
+    rightmotor1.setIdleMode(IdleMode.kCoast);
+    rightmotor2.setIdleMode(IdleMode.kCoast);
+    rightmotor3.setIdleMode(IdleMode.kCoast);
+    leftmotor1.setIdleMode(IdleMode.kCoast);
+    leftmotor2.setIdleMode(IdleMode.kCoast);
+    leftmotor3.setIdleMode(IdleMode.kCoast);
   }
 
   public double getEncodersAverage(){
@@ -89,18 +107,23 @@ public class Chassis extends SubsystemBase {
 
     if(RobotContainer.TWO_DRIVER_MODE){
       if(stick.getTrigger()){//slows down the chassis for lining up
-        x /= 2;
-        y /= 2;
+        x /= 1.7;
+        y /= 2.5;
+        setBreak();
+      }else{
+        setCoast();
       }
       if(stick.getRawButton(2)){
         solenoid.set(Value.kForward);
+        setBreak();
       }else{
         solenoid.set(Value.kReverse);
+        setCoast();
       }
     }else{
       if(stick.getRawButton(7)){
-        x /= 2;
-        y /= 2;
+        x /= 1.7;
+        y /= 2.5;
       }
     }
     
