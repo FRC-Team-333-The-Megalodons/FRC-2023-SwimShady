@@ -26,15 +26,13 @@ public class Drive extends CommandBase {
     this.encodersReset = encodersReset;
   }
   
-  public Drive(Chassis chassis, frc.robot.subsystems.Gyro gyro, frc.robot.utils.PIDController controller, PIDController turnController, boolean encodersReset, double meters) {
+  public Drive(Chassis chassis, frc.robot.subsystems.Gyro gyro, frc.robot.utils.PIDController controller, boolean encodersReset) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
     this.chassis = chassis;
     this.gyro = gyro;
     this.driveController = controller;
-    this.turnController = turnController;
     this.encodersReset = encodersReset;
-    controller.setTarget(controller.getMinTolerance(), controller.getMaxTolerance(), meters);
   }
 
   // Called when the command is initially scheduled.
@@ -48,7 +46,7 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    chassis.arcadeDrive(turnController.getOutput(gyro.getAngle()), driveController.getOutput(chassis.getEncodersAverage()));
+    chassis.arcadeDrive(turnController != null ? turnController.getOutput(gyro.getAngle()) : 0, driveController.getOutput(chassis.getEncodersAverage()));
   }
 
   // Called once the command ends or is interrupted.

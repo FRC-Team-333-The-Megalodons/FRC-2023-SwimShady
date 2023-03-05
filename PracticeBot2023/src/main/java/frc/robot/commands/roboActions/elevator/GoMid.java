@@ -37,6 +37,6 @@ public class GoMid extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isAtMaxUp() || elevator.isControllerOnTarget();
+    return elevator.isAtUpperLimit() || elevator.isControllerOnTarget();
   }
 }

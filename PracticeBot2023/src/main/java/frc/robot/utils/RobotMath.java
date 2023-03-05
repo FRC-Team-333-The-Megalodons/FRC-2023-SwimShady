@@ -11,4 +11,9 @@ public class RobotMath {
         double delta = Math.abs(a-b);
         return delta <= epsilon;
     }
+
+    public static boolean inRange(double x, double lower, double upper)
+    {
+        return x > lower && x < upper;
+    }
 }

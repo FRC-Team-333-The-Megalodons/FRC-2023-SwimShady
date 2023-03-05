@@ -101,6 +101,7 @@ public class Chassis extends SubsystemBase {
 
   public void teleopPeriodic(ElevatorState state)
   {
+    m_hub.enableCompressorDigital();
     double x = m_stick.getX(), y = -m_stick.getY();
 
     if(RobotContainer.TWO_DRIVER_MODE){

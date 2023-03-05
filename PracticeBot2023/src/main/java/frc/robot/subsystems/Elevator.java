@@ -42,8 +42,7 @@ public class Elevator extends SubsystemBase {
   RobotStates.ElevatorState m_elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
 
 
-  DigitalInput m_lowerLimitSwitch;
-  DigitalInput m_upperLimitSwitch;
+  DigitalInput m_lowerLimitSwitch, m_upperLimitSwitch;
 
   public Elevator(Intake intake) {
     m_intake = intake;
@@ -59,57 +58,66 @@ public class Elevator extends SubsystemBase {
     m_leftEncoder = m_leftSpark.getEncoder();
     m_rightEncoder = m_rightSpark.getEncoder();
     
-    m_lowerLimitSwitch = new DigitalInput(0);
-    m_upperLimitSwitch = new DigitalInput(1);
+    m_lowerLimitSwitch = new DigitalInput(1);
+    m_upperLimitSwitch = new DigitalInput(0);
 
     m_stick = new Joystick(0);
     m_controller = new XboxController(1);
     m_pidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,95);
   }
 
-  private ElevatorState calculateStateFromSensors()
+  private ElevatorState calculateElevatorStateFromSensors()
   {
     double wristAngle = m_intake.getWristEncoder().get();
     double elevatorHeight = m_rightEncoder.getPosition();
   
     // The "HOME" state is defined by being at the Lower Limit Switch.
-    if (m_lowerLimitSwitch.get())
+    if (isAtLowerLimit())
     {
       // If the limit switch is pressed, reset the encoder.
-      m_rightEncoder.setPosition(HEIGHT_MIN_LIMIT);
-      if (wristAngle <= Intake.ANGLE_WRIST_IN)
+      tareEncoders(HEIGHT_MIN_LIMIT);
+      if (RobotMath.isApprox(wristAngle, Intake.ANGLE_WRIST_HOME))
       {
         return ElevatorState.ELEVATOR_DOWN_WRIST_IN__HOME;
       }
 
-      if (wristAngle >= Intake.ANGLE_WRIST_INTAKE)
+      if (RobotMath.isApprox(wristAngle, Intake.ANGLE_WRIST_SAFE))
+      {
+        return ElevatorState.ELEVATOR_DOWN_WRIST_SAFE;
+      }
+
+      if (RobotMath.inRange(wristAngle, Intake.ANGLE_WRIST_HOME, Intake.ANGLE_WRIST_SAFE))
+      {
+        return ElevatorState.ELEVATOR_DOWN_WRIST_BETWEEN_HOME_AND_SAFE;
+      }
+
+      if (RobotMath.isApprox(wristAngle, Intake.ANGLE_WRIST_INTAKE))
       {
         return ElevatorState.ELEVATOR_DOWN_WRIST_DOWN__INTAKE;
       }
-
-      if (wristAngle >= Intake.ANGLE_WRIST_SAFE)
+      
+      if (RobotMath.inRange(wristAngle, Intake.ANGLE_WRIST_SAFE, Intake.ANGLE_WRIST_INTAKE))
       {
-        return ElevatorState.ELEVATOR_DOWN_WRIST_OUT_SAFE;
+        return ElevatorState.ELEVATOR_DOWN_WRIST_BETWEEN_SAFE_AND_INTAKE;
       }
 
-      return ElevatorState.ELEVATOR_DOWN_WRIST_TRAVERSING_IN_TO_SAFE;
+      // If we made it here, we're in some sort of scary unexpected state. Bail on automatic/sensor-driven motion before we hurt ourselves!
+      return ElevatorState.ELEVATOR_UNKNOWN;
     }
 
-    if (m_upperLimitSwitch.get())
+    if (isAtUpperLimit())
     {
-      m_rightEncoder.setPosition(HEIGHT_MAX_LIMIT);
-      if (wristAngle >= Intake.ANGLE_WRIST_PLACE)
+      // If the limit switch is pressed, reset the encoder.
+      tareEncoders(HEIGHT_MAX_LIMIT);
+      if (RobotMath.isApprox(wristAngle, Intake.ANGLE_WRIST_PLACE))
       {
-        return ElevatorState.ELEVATOR_HIGH_WRIST_OUT__HIGHGOAL_PLACE;
+        return ElevatorState.ELEVATOR_AND_WRIST_ARRIVED_TO_GOAL;
       }
 
-      if (wristAngle >= Intake.ANGLE_WRIST_SHOOT)
-      {
-        return ElevatorState.ELEVATOR_HIGH_WRIST_OUT__HIGHGOAL_SHOOT;
-      }
-
-      return ElevatorState.ELEVATOR_HIGH_WRIST_IN;
+      return ElevatorState.ELEVATOR_ARRIVED_WRIST_TRAVERSING_TO_GOAL;
     }
+
+    /* TODO: Finish this up later
 
     if (RobotMath.isApprox(elevatorHeight, HEIGHT_MID_SHOT)) {
       if (RobotMath.isApprox(wristAngle, Intake.ANGLE_WRIST_SHOOT)) {
@@ -140,6 +148,8 @@ public class Elevator extends SubsystemBase {
     {
       return ElevatorState.ELEVATOR_TRAVERSING_MID_TO_HIGH;
     }
+
+    */
 
     // If we don't recognize anything about where we are, or there's some gap in this logic,
     //  it's better to return a known "unknown" variable. In this case, only manual controls
@@ -179,46 +189,77 @@ public class Elevator extends SubsystemBase {
   }
   */
 
+  public boolean isAtLowerLimit()
+  {
+    // These Limit Switches return `false` when Activated, because fml.
+    return !m_lowerLimitSwitch.get();
+  }
+
+  public boolean isAtUpperLimit()
+  {
+    // These Limit Switches return `false` when Activated, because fml.
+    return !m_upperLimitSwitch.get();
+  }
+
   public void stop() {
     m_motors.set(0);
+  }
+
+  // Tare (i.e. reset) Encoders to the provided Position
+  public void tareEncoders(double pos)
+  {
+    m_leftEncoder.setPosition(pos);
+    m_rightEncoder.setPosition(pos);
   }
 
   public void moveElevator(double speed)
   {
     // This function allows us to feed direct input into the elevator, but safely (i.e. respects limit switches)
-    if (m_lowerLimitSwitch.get() || m_lowerLimitSwitch.get()) { return; }
+    // The CalculateElevatorState function that's called by the regular `periodic` function will also Tare the encoders,
+    //  but doing it again here won't hurt :)
+    
+    if (isAtLowerLimit()) {
+      tareEncoders(HEIGHT_MIN_LIMIT);
+      if (speed < 0) {
+        m_motors.set(0);
+        return;
+      }
+    }
+
+    if (isAtUpperLimit()) {
+      tareEncoders(HEIGHT_MAX_LIMIT);
+      if (speed > 0) {
+        m_motors.set(0);
+        return;
+      }
+    }
 
     m_motors.set(speed);
   }
 
-  
-
   public void manualUp(){
-    if(m_lowerLimitSwitch.get() == false){
+    if(isAtUpperLimit()){
       m_motors.set(0);
       return;
     }
 
     m_motors.set(ESPEED);
+    // TODO: Move this to moveElevator(ESPEED) once limit switch stuff works right
   }
 
   public void manualDown(){
-    if(m_upperLimitSwitch.get() == false){
+    if(isAtLowerLimit()){
       m_motors.set(0);
       m_rightSpark.getEncoder().setPosition(0);
       return;
     }else {
       m_motors.set(-(ESPEED-.2));
     }
+    // TODO: Move this to moveElevator(-(ESPEED-.2));
   }
 
   public void e_Mid(){
-    if(m_lowerLimitSwitch.get() == false ){
-      m_motors.set(0);//acts as an emegency stop in case the pid fails
-      return;
-    }else{
-      m_motors.set(m_pidController.getOutput(-m_rightSpark.getEncoder().getPosition()));
-    }
+    moveElevator(m_pidController.getOutput(-m_rightSpark.getEncoder().getPosition()));
   }
 
   public boolean isControllerOnTarget(){
@@ -238,10 +279,30 @@ public class Elevator extends SubsystemBase {
     return m_elevatorState;
   }
 
-  public boolean isAtMaxUp(){return !m_lowerLimitSwitch.get();}
-  public boolean isAtMaxDown(){return !m_upperLimitSwitch.get();}
+  // TODO: Make an actual enum
+  final int HOME = 1;
+  final int LOW_GOAL = 2;
+  final int HIGH_GOAL = 3;
+
+/*
+
+  public boolean autoGoToPosition(int position)
+  {
+    
+
+
+    // Returns True when at position.
+
+    if (m_elevatorState == ElevatorState.ELEVATOR_HIGH_WRIST_OUT__HIGHGOAL_SHOOT) { return true; }
+
+    // TODO: Check approximately a bazillion different states and decide what motors to power. 
+
+    return false;
+  }
+  */
 
   public void teleopPeriodic() {
+    /** Commenting out the one-driver mode for now
     if(!RobotContainer.TWO_DRIVER_MODE){
       if (m_stick.getRawButton(4)) {
         manualUp();
@@ -261,6 +322,7 @@ public class Elevator extends SubsystemBase {
 
       return;
     }
+    */
     
     // Josh & Eman from 2023-02-04 -- The control design here is as follows:
     // A button - hold for home
@@ -296,7 +358,7 @@ public class Elevator extends SubsystemBase {
     } else {
       // None of the automatic buttons were pressed, so we can respect both manual joysticks.
       if (Math.abs(m_controller.getRightY()) > JOYSTICK_THRESHOLD) {
-        moveElevator(m_controller.getRightY());
+        moveElevator(-m_controller.getRightY());
       }
       if (Math.abs(m_controller.getLeftY()) > JOYSTICK_THRESHOLD) {
         m_intake.moveWrist(m_controller.getLeftY());
@@ -339,12 +401,13 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    m_elevatorState = calculateElevatorStateFromSensors();
     SmartDashboard.putNumber("Left Elevatator Encoder", m_leftSpark.getEncoder().getPosition());
     SmartDashboard.putNumber("Right Elevatator Encoder", -m_rightSpark.getEncoder().getPosition());
     SmartDashboard.putNumber("Average Encoder Distance", averageEncoderDistance());
     SmartDashboard.putString("Elevator State", m_elevatorState+"");
-    SmartDashboard.putBoolean("Lower Switch", m_lowerLimitSwitch.get());
-    SmartDashboard.putBoolean("Upper Switch", m_upperLimitSwitch.get());
+    SmartDashboard.putBoolean("Lower Switch", isAtLowerLimit());
+    SmartDashboard.putBoolean("Upper Switch", isAtUpperLimit());
     SmartDashboard.putNumber("Stick lever", m_stick.getRawAxis(3));
   }
 }

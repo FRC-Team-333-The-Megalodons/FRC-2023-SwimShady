@@ -31,7 +31,7 @@ public class Intake extends SubsystemBase {
   
   // TODO: These wrist angle values are all made up,
   //       need to measure the actual reading for each.
-  public final static double ANGLE_WRIST_IN = 10.0;
+  public final static double ANGLE_WRIST_HOME = 10.0;
   public final static double ANGLE_WRIST_SAFE = 20.0; // This is the minimum angle so the wrist can move past the elevator top
   public final static double ANGLE_WRIST_SHOOT = 70.0;
   public final static double ANGLE_WRIST_PLACE = 90.0;
@@ -101,9 +101,17 @@ public class Intake extends SubsystemBase {
 
   public void moveWrist(double speed)
   {
+    // We need to scale down the speed to a max of 0.3 in either direction.
+    speed *= 0.3;
+
     double wristAngle = getWristEncoder().get();
     // This function allows us to feed direct input into the elevator, but safely (i.e. respects potentiometer)
-    if (wristAngle < ANGLE_WRIST_IN || wristAngle > ANGLE_WRIST_INTAKE) { return; }
+    if ((wristAngle <= ANGLE_WRIST_HOME && speed < 0) ||
+        (wristAngle >= ANGLE_WRIST_INTAKE && speed > 0))
+    {
+      m_intakeMotors.set(0);
+      return;
+    }
 
     m_intakeMotors.set(speed);
   }
@@ -144,8 +152,10 @@ public class Intake extends SubsystemBase {
   }
 
   public void teleopPeriodic() {
-    m_hub.enableCompressorDigital();
 
+    
+    /* This is handled in the Elevator now. */
+    /*
     if(!RobotContainer.TWO_DRIVER_MODE){
       if (m_stick.getRawButton(1)) {
         pUnsqueeze();
@@ -228,6 +238,7 @@ public class Intake extends SubsystemBase {
         m_wristState = WristStates.MOTORS_STOPPED;
       }
     }
+    */
 
   }
 
