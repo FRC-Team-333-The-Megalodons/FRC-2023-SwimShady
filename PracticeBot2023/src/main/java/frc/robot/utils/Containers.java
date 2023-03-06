@@ -21,6 +21,10 @@ public static class Multi_CANSparkMax
         }
     }
 
+    public CANSparkMax getLeader(){
+        return m_sparkMaxArray.get(0);
+    }
+
     public void setIdleMode(IdleMode idleMode)
     {
         for (CANSparkMax sparkMax : m_sparkMaxArray) 

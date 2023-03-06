@@ -4,13 +4,12 @@
 
 package frc.robot;
 
-import frc.robot.commands.roboAutos.HybridPlusHigh;
 import frc.robot.commands.roboAutos.ScoreHighTwice;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -73,8 +72,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new Mobility(m_chassis, m_gyro, m_elevator);// TODO test community auto
-   // return new ScoreHighTwice(chassis, gyro, elevator);// TODO test community auto
+    return new ScoreHighTwice(m_chassis, m_gyro, m_elevator);
   }
 
   public void periodic() {
@@ -99,7 +97,7 @@ public class RobotContainer {
     m_chassis.setCoast();
   }
 
-  public void setChassisBreak(){
-    m_chassis.setBreak();
+  public void setChassisBrake(){
+    m_chassis.setBrake();
   }
 }

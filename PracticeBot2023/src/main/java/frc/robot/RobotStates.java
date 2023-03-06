@@ -13,6 +13,7 @@ public class RobotStates {
      */
 
     public static enum ElevatorState{
+        //I think these states are not vert descpritive or specific enough to help with fail safes.
         ELEVATOR_DOWN_WRIST_IN__HOME,
         ELEVATOR_DOWN_WRIST_BETWEEN_HOME_AND_SAFE,
         ELEVATOR_DOWN_WRIST_SAFE,

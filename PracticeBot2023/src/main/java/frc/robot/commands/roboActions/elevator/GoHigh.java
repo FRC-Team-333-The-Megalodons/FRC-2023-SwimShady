@@ -39,6 +39,6 @@ public class GoHigh extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isAtUpperLimit();
+    return elevator.isAtMaxUp();
   }
 }

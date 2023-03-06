@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    m_robotContainer.setChassisBreak();
+    m_robotContainer.setChassisBrake();
   }
 
   @Override
@@ -125,7 +125,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
     m_robotContainer.resetEncoders();
-    m_robotContainer.setChassisBreak();
+    m_robotContainer.setChassisBrake();
   }
 
   /** This function is called periodically during autonomous. */

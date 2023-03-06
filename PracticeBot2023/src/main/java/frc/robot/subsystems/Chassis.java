@@ -9,7 +9,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -22,105 +21,94 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotStates;
 import frc.robot.RobotStates.ChassisStates;
 import frc.robot.RobotStates.ElevatorState;
-import frc.robot.utils.Containers.*;
+import frc.robot.utils.Containers.Multi_CANSparkMax;
 
 public class Chassis extends SubsystemBase {
-  Multi_CANSparkMax m_leftSparks, m_rightSparks;
-  Multi_RelativeEncoder m_leftEncoders, m_rightEncoders;
-  MotorControllerGroup m_leftMotors, m_rightMotors;
+  /** Creates a new Chassis. */
+  Multi_CANSparkMax leftMotors, rightMotors;
+  RelativeEncoder rightLeaderEncoder, leftLeaderEncoder;
+  MotorControllerGroup rightleader, leftLeader;
+  Joystick stick;
+  DifferentialDrive drive;
+  RobotStates.ChassisStates chassisState;
+  PneumaticHub hub;
+  DoubleSolenoid solenoid;
 
-  Joystick m_stick;
-
-  DifferentialDrive m_drive;
-
-  RobotStates.ChassisStates m_chassisState;
-  PneumaticHub m_hub;
-  DoubleSolenoid m_solenoid;
-
-  ElevatorState m_elevatorState;
+  ElevatorState elevatorState;
 
   public Chassis(PneumaticHub hub) {
-    m_leftSparks = new Multi_CANSparkMax(
+    leftMotors = new Multi_CANSparkMax(
         new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_LEADER, MotorType.kBrushless),
         new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_FOLLOWER1, MotorType.kBrushless),
         new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_FOLLOWER2, MotorType.kBrushless)
     );
-    m_rightSparks = new Multi_CANSparkMax(
+    rightMotors = new Multi_CANSparkMax(
         new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_LEADER, MotorType.kBrushless),
         new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER1, MotorType.kBrushless),
         new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER2, MotorType.kBrushless)
     );
 
-    m_leftEncoders = m_leftSparks.getMultiEncoder();
-    m_rightEncoders = m_rightSparks.getMultiEncoder();
+    leftLeaderEncoder = leftMotors.getLeader().getEncoder();
+    rightLeaderEncoder = rightMotors.getLeader().getEncoder();
 
-    m_leftMotors = m_leftSparks.getMotorControllerGroup();
-    m_rightMotors = m_rightSparks.getMotorControllerGroup();
+    leftLeader = leftMotors.getMotorControllerGroup();
+    rightleader = rightMotors.getMotorControllerGroup();
 
-    m_stick = new Joystick(0);
-    m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
-    this.m_hub = hub;
-    m_solenoid = hub.makeDoubleSolenoid(0, 1);
+    stick = new Joystick(0);
+
+    drive = new DifferentialDrive(leftLeader, rightleader);
+
+    this.hub = hub;
+    solenoid = hub.makeDoubleSolenoid(0, 1);
   }
 
-  public void setBreak()
-  {
-    setIdleMode(IdleMode.kBrake);
+  public void setBrake(){
+    leftMotors.setIdleMode(IdleMode.kBrake);
+    rightMotors.setIdleMode(IdleMode.kBrake);
   }
 
-  public void setCoast()
-  {
-    setIdleMode(IdleMode.kCoast);
-  }
-
-  private void setIdleMode(IdleMode idleMode)
-  {
-    m_leftSparks.setIdleMode(idleMode);
-    m_rightSparks.setIdleMode(idleMode);
+  public void setCoast(){
+    leftMotors.setIdleMode(IdleMode.kCoast);
+    rightMotors.setIdleMode(IdleMode.kCoast);
   }
 
   public double getEncodersAverage(){
-    return (-m_leftEncoders.getAveragePosition() +
-            m_rightEncoders.getAveragePosition()
-           ) / 2;
+    return (rightLeaderEncoder.getPosition() + (-leftLeaderEncoder.getPosition()))/2;
   }
 
   public void resetEncoders(){
-    m_leftEncoders.setPosition(0);
-    m_rightEncoders.setPosition(0);
+    rightLeaderEncoder.setPosition(0);
+    leftLeaderEncoder.setPosition(0);
   }
 
   public double getChassisMetersMoved(){
     return getEncodersAverage()/Constants.Values.TICKS_PER_METER;
   }
 
-  public void arcadeDrive(double x, double y)
-  {
-    m_drive.arcadeDrive(x, y);
+  public void arcadeDrive(double x, double y) {
+    drive.arcadeDrive(x, y);
   }
 
-  public void teleopPeriodic(ElevatorState state)
-  {
-    m_hub.enableCompressorDigital();
-    double x = m_stick.getX(), y = -m_stick.getY();
+  public void teleopPeriodic(ElevatorState state){
+    double x = stick.getX(), y = -stick.getY();
 
     if(RobotContainer.TWO_DRIVER_MODE){
-      if(m_stick.getTrigger()){//slows down the chassis for lining up
+      if(stick.getTrigger()){//slows down the chassis for lining up
         x /= 1.7;
         y /= 2.5;
-        setBreak();
+        setBrake();
       }else{
         setCoast();
       }
-      if(m_stick.getRawButton(2)){
-        m_solenoid.set(Value.kForward);
-        setBreak();
+      if(stick.getRawButton(2)){
+        solenoid.set(Value.kForward);
+        setBrake();
       }else{
-        m_solenoid.set(Value.kReverse);
+        solenoid.set(Value.kReverse);
         setCoast();
       }
     }else{
-      if(m_stick.getRawButton(7)){
+      if(stick.getRawButton(7)){
         x /= 1.7;
         y /= 2.5;
       }
@@ -135,25 +123,18 @@ public class Chassis extends SubsystemBase {
   // any Global Variables related to State.
   @Override
   public void periodic() {
-    m_chassisState = evaluateState();
-    SmartDashboard.putString("chassis State", m_chassisState+"");
-    SmartDashboard.putNumber("left chassis encoder", m_leftEncoders.getAveragePosition());
-    SmartDashboard.putNumber("right chassis encoder", m_rightEncoders.getAveragePosition());
+    chassisState = evaluateState();
+    SmartDashboard.putString("chassis State", chassisState+"");
+    SmartDashboard.putNumber("left chassis encoder", leftLeaderEncoder.getPosition());
+    SmartDashboard.putNumber("right chassis encoder", rightLeaderEncoder.getPosition());
     SmartDashboard.putNumber("Meters moved", getChassisMetersMoved());
     SmartDashboard.putNumber("average chassis encoders", getEncodersAverage());
-    
-    // TODO: Test if this actually works. 
-    // If we're in anything other-than teleop-periodic-mode, always set the speed controllers to Brake
-    //  (this should include Autonomous and post-match)
-    if (!DriverStation.isTeleopEnabled()) {
-        setBreak();
-    }
   }
 
   public ChassisStates evaluateState()
   {
     // TODO: Should we do this evaluation based on actual Drivetrain Encoders, rather than indirectly by the joystick inputs?
-    double x = m_stick.getX(), y = m_stick.getY();
+    double x = stick.getX(), y = stick.getY();
     if(y > 0.05){
       return ChassisStates.MOVING_FORWARD;
     }
