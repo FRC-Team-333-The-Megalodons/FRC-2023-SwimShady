@@ -17,6 +17,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotStates;
 import frc.robot.RobotStates.ElevatorState;
+import frc.robot.utils.PIDController;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
@@ -26,7 +27,7 @@ public class Elevator extends SubsystemBase {
   XboxController controller;
   final double espeed = 1;
 
-  frc.robot.utils.PIDController ePidController;
+  frc.robot.utils.PIDController eMidPidController, eGroundPidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
 
   DigitalInput lowerLimitSwitch;
@@ -39,7 +40,8 @@ public class Elevator extends SubsystemBase {
     leftmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
     controller = new XboxController(1);
-    ePidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,95);
+    eMidPidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,95);
+    eGroundPidController = new PIDController(.05, .005, 0, 80, 4, 5,10);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
@@ -84,12 +86,21 @@ public class Elevator extends SubsystemBase {
       elevator.set(0);//acts as an emegency stop in case the pid fails
       return;
     }else{
-      elevator.set(ePidController.getOutput(-rightMotor.getEncoder().getPosition()));
+      elevator.set(eMidPidController.getOutput(-rightMotor.getEncoder().getPosition()));
+    }
+  }
+
+  public void e_GroundPosition(){
+    if(lowerLimitSwitch.get() == false ){
+      elevator.set(0);//acts as an emegency stop in case the pid fails
+      return;
+    }else{
+      elevator.set(eGroundPidController.getOutput(-rightMotor.getEncoder().getPosition()));
     }
   }
 
   public boolean isControllerOnTarget(){
-    return ePidController.isOnTarget();
+    return eMidPidController.isOnTarget();
   }
 
   public void resetEncoders() {
@@ -122,19 +133,20 @@ public class Elevator extends SubsystemBase {
         }
       }
     }else{
-      if(controller.getYButton()){
-        manualUp();
-      }else if(controller.getAButton() && controller.getLeftTriggerAxis() < .5){
-        if(stick.getRawAxis(3) < .6){
-          e_Mid();
-        }else{
-          manualDown();
-        }
+
+      if(controller.getRightY() >= .05 || controller.getRightY() <= -.05){
+        elevator.set(controller.getRightY());
       }else{
-        if(stick.getRawAxis(3) < .6 && controller.getLeftTriggerAxis() < .5){
+        if(controller.getAButton()){
           manualDown();
-        }else{
-          elevator.set(0);
+        }else if(controller.getXButton()){
+          e_Mid();
+        }else if(controller.getBButton()){
+          e_GroundPosition();
+        }else if(controller.getYButton()){
+          manualUp();
+        }else {
+          stop();
         }
       }
     }

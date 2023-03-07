@@ -312,7 +312,7 @@ public class Elevator extends SubsystemBase {
     // A button - hold for home
     // X button & B button - hold for mid-height
     // Y button - hold for hight
-    // Down on DPAD - Go to intake from floor ( auto spin the intake? )
+    // Down on DPAD - Go to intake from floor ( auto spin the intake? ) <---- maybe make b ground isntead?? - yesi
     // Left Stick - wrist
     // Right Stick - elevator 
     // Left on DPAD - yellow LED
