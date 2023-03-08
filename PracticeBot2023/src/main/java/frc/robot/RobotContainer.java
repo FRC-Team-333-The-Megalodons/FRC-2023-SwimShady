@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,6 +28,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   Chassis chassis1 = new Chassis();
   LimeLight limeLight = new LimeLight();
+  ColorSensor colorSensor = new ColorSensor();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -78,6 +80,7 @@ public class RobotContainer {
 
   public void teleopp() {
     chassis1.periodic();
+    colorSensor.periodic();
     //limeLight.periodic();
   }
 }

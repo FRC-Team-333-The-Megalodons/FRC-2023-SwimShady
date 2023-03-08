@@ -28,9 +28,6 @@ public class Chassis extends SubsystemBase {
   MotorControllerGroup leftleader;
   Joystick stick;
   DifferentialDrive drive;
-  AddressableLED color;
-
-  ColorSensorV3 cs;
 
   public Chassis() {
     rightmotor1  = new CANSparkMax(1, MotorType.kBrushless);
@@ -49,72 +46,11 @@ public class Chassis extends SubsystemBase {
 
     stick = new Joystick(0);
     drive = new DifferentialDrive(leftleader, rightleader);
-    //color = new AddressableLED(9);
-
-    cs = new ColorSensorV3(I2C.Port.kOnboard);
   }
-    //SmartDashboard.getString("led", color.setRGB().toString());
-
-    public boolean isCone(){
-    boolean isCone = false;
-    if(cs.getBlue()==4444 && cs.getRed()==7777 || cs.getColor().toString()=="#5F900F"){
-        isCone = true;
-        System.out.println("workin cone");
-    } else{
-      isCone = false;
-    }
-    return isCone;
-  }
-
-  public boolean isCube(){
-    boolean isCube = false;
-    if(cs.getBlue()==4433 && cs.getRed()==8888 || cs.getColor().toString()=="#33507A"){
-      isCube = true;
-      System.out.println("workin cube");
-    } else{
-      isCube = false;
-    }
-    return isCube;
-  }
-  
-
-    //TODO: Amina, add your logic here!!
-   // boolean isCone = false;
-
-   /*  if( 
-      cs.getColor().toString()=="#5F900F") {
-      isCone = true;
-      System.out.println("oui")
-    } else {
-     isCone = false;
-    }
-
-   return isCone;
-  }
-
-  public boolean isCube() {
-
-    //TODO: Amina, add your logic here!!
-
-    boolean isCube;   
-   if( cs.getColor().toString()=="#33507A") {
-      isCube = true;
-    } else {
-      isCube = false;
-    }
-    return isCone();
-  }*/
 
   @Override
   public void periodic(){
     // This method will be called once per scheduler run
     drive.arcadeDrive(-stick.getX(), -stick.getY());
-
-    //color.start();
-
-    SmartDashboard.putBoolean("Is Cone?", isCone());
-    SmartDashboard.putString("Color", cs.getColor().toString());
-    SmartDashboard.getNumber("Blue", cs.getBlue());
-    SmartDashboard.getNumber("Red", cs.getRed());
   }
 }
