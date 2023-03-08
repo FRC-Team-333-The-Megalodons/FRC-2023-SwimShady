@@ -109,7 +109,7 @@ public class ColorSensor {
     if (isCone()) {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
         //ledBuffer.setRGB(i, 255, 255, 0);
-        ledBuffer.setRGB(i, 0, 255, 0);
+        ledBuffer.setRGB(i, 100, 100, 5);
       }
     } else if (isCube()) {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
@@ -117,7 +117,7 @@ public class ColorSensor {
       }
     } else {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
-        ledBuffer.setRGB(i, 0, 0, 255);
+        ledBuffer.setRGB(i, 100,46 , 60);
       }
     }
     LED.setData(ledBuffer);
