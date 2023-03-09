@@ -107,6 +107,7 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.teleopp();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -151,7 +152,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotContainer.teleopp();
+    
   }
 
   @Override

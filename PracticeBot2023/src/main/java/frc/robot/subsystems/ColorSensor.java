@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 // the WPILib BSD license file in the root directory of this project.
 
 import edu.wpi.first.wpilibj.I2C;
-
-import java.lang.ModuleLayer.Controller;
+import edu.wpi.first.wpilibj.Joystick;
 
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,14 +18,15 @@ public class ColorSensor {
   ColorSensorV3 cs;
   AddressableLED LED;
   AddressableLEDBuffer ledBuffer;
-  Controller controller;
+  Joystick joy;
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
   private int m_rainbowFirstPixelHue;
 
   public ColorSensor(){
-       cs = new ColorSensorV3(i2cPort);
-    LED = new AddressableLED(0);
+    cs = new ColorSensorV3(i2cPort);
+    LED = new AddressableLED(6);
+    joy = new Joystick(1);
     ledBuffer = new AddressableLEDBuffer(2000);
     LED.setLength(ledBuffer.getLength());
 
@@ -42,6 +42,19 @@ public class ColorSensor {
    
     LED.setData(ledBuffer);
     return false;
+  }
+
+  public void blink(int r, int g, int b, int run, int run2){
+    if(run2 <= 50){
+    for(var i = 0; i < ledBuffer.getLength(); i++){
+      ledBuffer.setRGB(i, (run <= 5 ? r : 0) , (run <= 5 ? g : 0), 0);
+    }
+    }else{
+      for(var i = 0; i < ledBuffer.getLength(); i++){
+        ledBuffer.setRGB(i, r,g,b);
+      }
+    }
+    System.out.println(run);
   }
 
   private void rainbow() {
@@ -68,7 +81,7 @@ public class ColorSensor {
     }
     return isCone;
   }*/
-  
+   
   public boolean isCube(){
     boolean isCube = false;
     if((cs.getBlue() > 6000 && cs.getBlue() < 8888) && (cs.getRed() > 2000  && cs.getRed() < 3000)
@@ -91,7 +104,9 @@ public class ColorSensor {
     return isCone;
   }
   
+ 
 
+  int run1, run2;
   public void periodic(){
     SmartDashboard.putBoolean("Is Cone?", isCone());
     SmartDashboard.putBoolean("Is Cube?", isCube());
@@ -99,29 +114,25 @@ public class ColorSensor {
     SmartDashboard.putNumber("Blue", cs.getBlue());
     SmartDashboard.putNumber("Red", cs.getRed());
 
+    
     // Set the data
-    /*for (var i = 0; i < ledBuffer.getLength(); i++) {
-     
-
-      ledBuffer.setRGB(i, 200, 0, 122);
-    }
    
-    LED.setData(ledBuffer);
-    //LED.start();*/
     //rainbow();
 
     if (isCone()) {
-      for (var i = 0; i < ledBuffer.getLength(); i++) {
-        //ledBuffer.setRGB(i, 255, 255, 0);
-        ledBuffer.setRGB(i, 100, 79, 0);
-      }
-    } else if (isCube()) {
-      for (var i = 0; i < ledBuffer.getLength(); i++) {
-        ledBuffer.setRGB(i, 200, 0, 122);
+      blink(255, 43, 0, run1, run2);
+      run1++;
+      run2++;
+      if(run1 == 10){
+        run1 = 0;
       }
     } else {
+      run2 = 0;
       for (var i = 0; i < ledBuffer.getLength(); i++) {
-        ledBuffer.setRGB(i, 0,0 , 100);
+        
+          ledBuffer.setRGB(i, 0, 0, 255);
+        
+        
       }
     }
     LED.setData(ledBuffer);
