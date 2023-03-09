@@ -61,7 +61,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void manualUp(){
-    if(upperLimitSwitch.get() == false){
+    if(isAtMaxUp()){
       elevator.set(0);
       //elevatorState = ElevatorState.HIGH;
       return;
@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void manualDown(){
-    if(lowerLimitSwitch.get() == false){
+    if(isAtMaxDown()){
       elevator.set(0);
       rightMotor.getEncoder().setPosition(0);
       //elevatorState = RobotStates.ElevatorState.LOW;
@@ -82,7 +82,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void e_Mid(){
-    if(upperLimitSwitch.get() == false ){
+    if(isAtMaxUp()){
       elevator.set(0);//acts as an emegency stop in case the pid fails
       return;
     }else{
@@ -91,7 +91,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void e_GroundPosition(){
-    if(lowerLimitSwitch.get() == false ){
+    if(isAtMaxDown()){
       elevator.set(0);//acts as an emegency stop in case the pid fails
       return;
     }else{
@@ -133,7 +133,6 @@ public class Elevator extends SubsystemBase {
         }
       }
     }else{
-
       if(controller.getRightY() >= .05 || controller.getRightY() <= -.05){
         elevator.set(controller.getRightY());
       }else{
