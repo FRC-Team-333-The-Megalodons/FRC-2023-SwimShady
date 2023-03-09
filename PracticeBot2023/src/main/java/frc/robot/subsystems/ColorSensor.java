@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 // the WPILib BSD license file in the root directory of this project.
 
 import edu.wpi.first.wpilibj.I2C;
+
+import java.lang.ModuleLayer.Controller;
+
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,12 +19,13 @@ public class ColorSensor {
   ColorSensorV3 cs;
   AddressableLED LED;
   AddressableLEDBuffer ledBuffer;
+  Controller controller;
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
   private int m_rainbowFirstPixelHue;
 
   public ColorSensor(){
-    cs = new ColorSensorV3(i2cPort);
+       cs = new ColorSensorV3(i2cPort);
     LED = new AddressableLED(0);
     ledBuffer = new AddressableLEDBuffer(2000);
     LED.setLength(ledBuffer.getLength());
@@ -109,7 +113,7 @@ public class ColorSensor {
     if (isCone()) {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
         //ledBuffer.setRGB(i, 255, 255, 0);
-        ledBuffer.setRGB(i, 100, 100, 5);
+        ledBuffer.setRGB(i, 100, 79, 0);
       }
     } else if (isCube()) {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
@@ -117,7 +121,7 @@ public class ColorSensor {
       }
     } else {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
-        ledBuffer.setRGB(i, 100,46 , 60);
+        ledBuffer.setRGB(i, 0,0 , 100);
       }
     }
     LED.setData(ledBuffer);
