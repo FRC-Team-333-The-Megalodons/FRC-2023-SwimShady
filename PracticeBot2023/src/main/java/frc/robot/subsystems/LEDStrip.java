@@ -29,7 +29,7 @@ public class LEDStrip extends SubsystemBase {
     //default vals for blinking
     blinkRange = 5;
     blinkMax = 10;
-    durationMax = 50;
+    durationMax = 110;
   }
 
   public LEDStrip(int port, int buffer, int blinkRange, int blinkMax, int durationMax) {

@@ -19,7 +19,7 @@ public class ColorSensor {
   ColorSensorV3 cs;
   Joystick joy;
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  LEDStrip strip = new LEDStrip(6, 120);
+  LEDStrip strip = new LEDStrip(6, 540);
 
   public ColorSensor(){
     cs = new ColorSensorV3(i2cPort);
