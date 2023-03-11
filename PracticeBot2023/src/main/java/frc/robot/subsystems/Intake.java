@@ -41,13 +41,16 @@ public class Intake extends SubsystemBase {
   ColorSensor m_colorSensor;
 
   public double INTAKE_SPEED = .7;
-  public double WRIST_SPEED = 0.65;
+  public double WRIST_UP_SPEED = -0.65;
+  public double WRIST_UP_SLOW_SPEED = -0.3;
+  public double WRIST_DOWN_SPEED = 0.4;
 
   double wristValue;
   DecimalFormat df1 = new DecimalFormat("0.##");
   final double wristOrigin = 0;
-  final double wrist90 = 0;
-  final double wristLimit = 0;
+  
+  final double WRIST_MAX = 1.0;
+  final double WRIST_MIN = 0.74;
 
   public Intake(PneumaticHub hub, ColorSensor colorSensor) {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
@@ -116,99 +119,146 @@ public class Intake extends SubsystemBase {
 
   public void teleopPeriodic() {
     hub.enableCompressorDigital();
-
     if(!RobotContainer.TWO_DRIVER_MODE){
-      if (stick.getRawButton(1)) {
-        pUnsqueeze();
+      oneDriverModeTeleopPeriodic();
+      return;
+    }
 
-      } else {
-        pSqueeze();
+    // Actual game Periodic controls below this point
+
+    // Claw Grip (default to "squeeze", open if right trigger held)
+    if(controller.getRightTriggerAxis() > .05){
+      pUnsqueeze();
+    }else{
+      pSqueeze();
+    }
+
+    // Claw Wheel Spinners (default to "stopped"; take in if Right Bumper; spit out if Left Bumper)
+    //    (also updates IntakeState, might need more work on that)
+    if(controller.getRightBumper()){
+      iIn();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_F;
+      }else{
+        intakeState = IntakeStates.MOTORS_RUNNING_F;
       }
-
-      if (stick.getRawButton(2)){
-        //iIn();
-        iIn();
-        if(intakeState == IntakeStates.OUT){
-          intakeState = IntakeStates.OUT_AND_MOTORS_F;
-        }else{
-          intakeState = IntakeStates.MOTORS_RUNNING_F;
-        }
-      } else if(stick.getRawButton(5)){ 
-        iOut();
-        if(intakeState == IntakeStates.OUT){
-          intakeState = IntakeStates.OUT_AND_MOTORS_R;
-        } else{
-          intakeState = IntakeStates.MOTORS_RUNNING_F;
-        }
+    }else if(controller.getLeftBumper()){
+      iOut();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_R;
       } else{
-        iStop();
-        if(intakeState == IntakeStates.OUT){
-          intakeState = IntakeStates.OUT_AND_MOTORS_S;
-        }
-      }
-
-      if (stick.getPOV() == 0) {
-        wrist.set(WRIST_SPEED);
-        wristState = WristStates.ROTATING_IN;
-      } else if (stick.getPOV() == 180) {
-        wrist.set(-WRIST_SPEED);
-        wristState = WristStates.ROTATING_OUT;
-      } else if(stick.getPOV() == 90){
-        resetWrist();
-      }else {
-        wrist.set(0);
-        wristState = WristStates.MOTORS_STOPPED;
+        intakeState = IntakeStates.MOTORS_RUNNING_F;
       }
     }else{
-      if(controller.getRightTriggerAxis() > .05){
-        pUnsqueeze();
-      }else{
-        pSqueeze();
-      }
-
-      if(controller.getRightBumper()){
-        iIn();
-        if(intakeState == IntakeStates.OUT){
-          intakeState = IntakeStates.OUT_AND_MOTORS_F;
-        }else{
-          intakeState = IntakeStates.MOTORS_RUNNING_F;
-        }
-      }else if(controller.getLeftBumper()){
-        iOut();
-        if(intakeState == IntakeStates.OUT){
-          intakeState = IntakeStates.OUT_AND_MOTORS_R;
-        } else{
-          intakeState = IntakeStates.MOTORS_RUNNING_F;
-        }
-      }else{
-        iStop();
-        if(intakeState == IntakeStates.OUT){
-          intakeState = IntakeStates.OUT_AND_MOTORS_S;
-        }
-      }
-      if (controller.getPOV() == 0) {
-        wrist.set(-WRIST_SPEED);
-        wristState = WristStates.ROTATING_IN;
-      } else if (controller.getPOV() == 180) {
-        wrist.set(WRIST_SPEED);
-        wristState = WristStates.ROTATING_OUT;
-      } else if(stick.getPOV() == 90){
-        resetWrist();
-      }else {
-        wrist.set(0);
-        wristState = WristStates.MOTORS_STOPPED;
+      iStop();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_S;
       }
     }
 
+    // Wrist Angle (default to "stopped"; DPAD Up is wrist up, DPAD down is wrist down)
+    if (controller.getPOV() == 0 && !isAtMaxUp()) {
+      //double speed = WRIST_UP_SPEED;
+      //if (isCloseToMaxUp()) { speed = WRIST_UP_SLOW_SPEED; }
+      double speed = WRIST_UP_SLOW_SPEED;
+      wrist.set(speed);
+      wristState = WristStates.ROTATING_IN;
+    } else if (controller.getPOV() == 180 && !isAtMaxDown()) {
+      double speed = WRIST_DOWN_SPEED;
+      //if (isCloseToMaxDown()) { speed /= 2.0; }
+      wrist.set(speed);
+      wristState = WristStates.ROTATING_OUT;
+    //} else if(stick.getPOV() == 90){
+    //  resetWrist();
+    }else {
+      wrist.set(0);
+      wristState = WristStates.MOTORS_STOPPED;
+    }
   }
+
+  public void oneDriverModeTeleopPeriodic()
+  {
+    if (stick.getRawButton(1)) {
+      pUnsqueeze();
+
+    } else {
+      pSqueeze();
+    }
+
+    if (stick.getRawButton(2)){
+      //iIn();
+      iIn();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_F;
+      }else{
+        intakeState = IntakeStates.MOTORS_RUNNING_F;
+      }
+    } else if(stick.getRawButton(5)){ 
+      iOut();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_R;
+      } else{
+        intakeState = IntakeStates.MOTORS_RUNNING_F;
+      }
+    } else{
+      iStop();
+      if(intakeState == IntakeStates.OUT){
+        intakeState = IntakeStates.OUT_AND_MOTORS_S;
+      }
+    }
+
+    if (stick.getPOV() == 0) {
+      wrist.set(WRIST_UP_SPEED);
+      wristState = WristStates.ROTATING_IN;
+    } else if (stick.getPOV() == 180) {
+      wrist.set(WRIST_DOWN_SPEED);
+      wristState = WristStates.ROTATING_OUT;
+    } else if(stick.getPOV() == 90){
+      resetWrist();
+    }else {
+      wrist.set(0);
+      wristState = WristStates.MOTORS_STOPPED;
+    }
+  }
+
+  public double getRealWristPosition()
+  {
+    // It turns out that the `getDistance()` function on the potentiometer
+    //  is relative to the point it started, which is not what we need.
+    // The `getAbsolutePosiion()` function gets the real absolute point
+    //  on the potentiometer, BUT doesn't consider "rollovers" (i.e. when
+    //  it goes past 1.00, it goes back to 0.01).
+    // The only "saving grace" is that We don't actually need the full rotation
+    //  of the wrist to work; it only realistically rotates between 0.7 and 1.05.
+    // So, that means if the wrist is somewhere in the "no-mans-land" zone (i.e.
+    //  [0,0.4) ), given the hardware of this robot, we can assume it's actually
+    //  just a rollover.
+    double value = wristEncoder.getAbsolutePosition();
+    if (value < 0.4) {
+      return 1.0+value;
+    }
+    return value;
+  }
+
+  final double WRIST_CLOSE_THRESHOLD = 0.07;
+  public boolean isAtMaxUp(){return getRealWristPosition() >= WRIST_MAX;}
+  public boolean isCloseToMaxUp() { return Math.abs(getRealWristPosition()-WRIST_MAX) < WRIST_CLOSE_THRESHOLD; }
+  public boolean isAtMaxDown(){return getRealWristPosition() <= WRIST_MIN;}
+  public boolean isCloseToMaxDown() { return Math.abs(getRealWristPosition()-WRIST_MIN) < WRIST_CLOSE_THRESHOLD; }
+
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    wristValue = (Double.valueOf(df1.format(wristEncoder.getAbsolutePosition())));
+    double wristPos = getRealWristPosition();
+    wristValue = (Double.valueOf(df1.format(wristPos)));
+    SmartDashboard.putBoolean("Wrist MIN", isAtMaxDown());
+    SmartDashboard.putBoolean("Wrist MAX", isAtMaxUp());
     SmartDashboard.putString("Wrist State", wristState+"");
     SmartDashboard.putString("Intake State", intakeState+"");
     SmartDashboard.putNumber("WristEncoder", wristValue);
+    //SmartDashboard.putNumber("WristDistance", wristEncoder.getDistance());
+    //SmartDashboard.putNumber("WristGet", wristEncoder.get());
     SmartDashboard.putBoolean("WristAtOrigin", wristAtOrigin());
   }
 

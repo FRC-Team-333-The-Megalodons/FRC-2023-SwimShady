@@ -5,6 +5,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
+
+import com.revrobotics.CIEColor;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.LEDStrip.FancyLED;
@@ -19,7 +21,7 @@ public class ColorSensor {
   public ColorSensor(){
     try {
       cs = new ColorSensorV3(i2cPort);
-      strip = new LEDStrip(6, 400);
+      strip = new LEDStrip(6, 85);
     } catch (Exception e) {
       // Failed to instantiate color sensor, that shouldn't be fatal though.
       // Just do null checks everywhere in the code so that we don't actually
@@ -49,6 +51,8 @@ public class ColorSensor {
 
   public boolean isCone(){
     if (!isSensorValid()) { return false; }
+
+    
 
     boolean isCone = false;
     if ((cs.getBlue() > 540 && cs.getBlue() < 3100) && (cs.getRed() > 270 && cs.getRed() < 12700)

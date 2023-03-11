@@ -127,9 +127,9 @@ public class LEDStrip extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    blinkRun++;
-    durationRun++;
-    if(blinkRun == blinkMax){
+    ++blinkRun;
+    ++durationRun;
+    if(blinkRun >= blinkMax){
       blinkRun = 0;
     }
     LED.setData(ledBuffer);

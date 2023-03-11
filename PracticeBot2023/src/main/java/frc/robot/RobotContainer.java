@@ -75,7 +75,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new ScoreHighTwice(m_chassis, m_gyro, m_elevator);
+    return null;
   }
 
   public void periodic() {
@@ -83,7 +83,11 @@ public class RobotContainer {
     m_intake.periodic();
     m_gyro.periodic();
     m_lLight.periodic();
-    m_colorSensor.periodic();
+    try {
+      m_colorSensor.periodic();
+    } catch (Exception e) {
+      // Don't die if the colorsensor dies.
+    }
   }
 
   public void teleopPeriodic() {
