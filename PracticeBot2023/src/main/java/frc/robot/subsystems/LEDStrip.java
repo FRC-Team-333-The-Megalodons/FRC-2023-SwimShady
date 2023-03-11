@@ -12,12 +12,12 @@ public class LEDStrip extends SubsystemBase {
   /** Creates a new LEDStrip. */
   AddressableLED LED;
   AddressableLEDBuffer ledBuffer;
-  int blinkRun, durationRun;
-  int blinkRange, blinkMax, durationMax;
+  long blinkRun, durationRun;
+  long blinkRange, blinkMax, durationMax;
 
-  public LEDStrip(int port, int buffer) {
+  public LEDStrip(int port, int numberOfLeds) {
     LED = new AddressableLED(port);//default is 6
-    ledBuffer = new AddressableLEDBuffer(buffer);//default is 120
+    ledBuffer = new AddressableLEDBuffer(numberOfLeds);//default is 120
     LED.setLength(ledBuffer.getLength());
 
     LED.setData(ledBuffer);
@@ -32,9 +32,9 @@ public class LEDStrip extends SubsystemBase {
     durationMax = 110;
   }
 
-  public LEDStrip(int port, int buffer, int blinkRange, int blinkMax, int durationMax) {
+  public LEDStrip(int port, int numberOfLeds, int blinkRange, int blinkMax, int durationMax) {
     LED = new AddressableLED(port);//default is 6
-    ledBuffer = new AddressableLEDBuffer(buffer);//default is 120
+    ledBuffer = new AddressableLEDBuffer(numberOfLeds);//default is 120
     LED.setLength(ledBuffer.getLength());
 
     LED.setData(ledBuffer);
@@ -51,22 +51,23 @@ public class LEDStrip extends SubsystemBase {
 
   public void blink(int r, int g, int b){
     if(durationRun <= durationMax){
-      for(var i = 0; i < ledBuffer.getLength(); i++){
+      for(int i = 0; i < ledBuffer.getLength(); ++i){
         ledBuffer.setRGB(i, (blinkRun <= blinkRange ? r : 0) , (blinkRun <= blinkRange ? g : 0), (blinkRun <= blinkRange ? b : 0));
       }
     }else{
-      for(var i = 0; i < ledBuffer.getLength(); i++){
+      for(int i = 0; i < ledBuffer.getLength(); ++i){
         ledBuffer.setRGB(i, r,g,b);
       }
     }
   }
 
   public void set(int r, int g, int b){
-    for(var i = 0; i < ledBuffer.getLength(); i++){
+    for(int i = 0; i < ledBuffer.getLength(); ++i){
       ledBuffer.setRGB(i, r, g, b);
     }
   }
 
+  /* NOT CURRENTLY USED
   public void setFancy(FancyLED ledMode, int r, int g, int b){
     if(ledMode == FancyLED.ONE_ON_ONE){
       for(var i = 0; i < ledBuffer.getLength(); i++){
@@ -80,12 +81,28 @@ public class LEDStrip extends SubsystemBase {
 
     }
   }
+  */
 
   int lastI = 0;
   int pulseRun = 0, pulseRange = 50, pulseMax = 100;
+
+  FancyLED m_prev_ledMode;
+  int m_prev_r, m_prev_g, m_prev_b, m_prev_r2, m_prev_g2, m_prev_b2;
+  boolean m_didLedBufferChange;
   public void setFancyDualLayer(FancyLED ledMode, int r, int g, int b, int r2, int g2, int b2){
+    if (m_prev_ledMode == ledMode &&
+        m_prev_r == r && m_prev_g == g && m_prev_b == b && 
+        m_prev_r2 == r2 && m_prev_g2 == g2 && m_prev_b2 == b2)
+    {
+      m_didLedBufferChange = false;
+      return;
+    }
+
+    m_didLedBufferChange = true;
+
+
     if(ledMode == FancyLED.ONE_ON_ONE){
-      for(var i = 0; i < ledBuffer.getLength(); i++){
+      for(int i = 0; i < ledBuffer.getLength(); ++i){
         if(i % 2 == 0){
           ledBuffer.setRGB(i, r, g, b);
         }else{
@@ -93,22 +110,22 @@ public class LEDStrip extends SubsystemBase {
         }
       }
     }else if(ledMode == FancyLED.KNIGHT_RIDER){
-      for(var i = 0; i < ledBuffer.getLength(); i++){
+      for(int i = 0; i < ledBuffer.getLength(); ++i){
         ledBuffer.setRGB(i, r2, g2,b2);
       }
       if(lastI == 140){
         lastI = 0;
       }
-      lastI++;
-      for(int i = lastI; i < lastI+40; i++){
+      ++lastI;
+      for(int i = lastI; i < lastI+40; ++i){
         ledBuffer.setRGB(i, r,g,b);
       }
     }else if(ledMode == FancyLED.PULSE){
-      for(var i = 0; i < ledBuffer.getLength(); i++){
+      for(int i = 0; i < ledBuffer.getLength(); ++i){
         ledBuffer.setRGB(i, (pulseRun <= pulseRange ? r : 0) , (pulseRun <= pulseRange ? g : 0), (pulseRun <= pulseRange ? b : 0));
       }
 
-      pulseRun++;
+      ++pulseRun;
       if(pulseRun == pulseMax){
         pulseRun = 0;
       }
@@ -132,7 +149,9 @@ public class LEDStrip extends SubsystemBase {
     if(blinkRun >= blinkMax){
       blinkRun = 0;
     }
-    LED.setData(ledBuffer);
+    if (m_didLedBufferChange) {
+      LED.setData(ledBuffer);
+    }
   }
 
   public static enum FancyLED{
