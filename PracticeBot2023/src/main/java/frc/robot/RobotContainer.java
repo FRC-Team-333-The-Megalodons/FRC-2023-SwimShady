@@ -5,6 +5,8 @@
 package frc.robot;
 
 import frc.robot.RobotStates.ElevatorState;
+import frc.robot.commands.roboAutos.HybridPlusHigh;
+import frc.robot.commands.roboAutos.MobilityOnly;
 import frc.robot.commands.roboAutos.ScoreHighTwice;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ColorSensor;
@@ -74,9 +76,15 @@ public class RobotContainer {
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
-  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand(String selectedAuto) {
     // An example command will be run in autonomous
-    return null;
+    switch (selectedAuto) {
+      case Robot.kNoAuto: return null;
+      case Robot.kMobilityAuto: return new MobilityOnly(m_chassis, m_gyro);
+      case Robot.kHybridPlusHighAuto: return new HybridPlusHigh(m_chassis, m_gyro, m_elevator);
+      case Robot.kScoreHighTwiceAuto: return new ScoreHighTwice(m_chassis, m_gyro, m_elevator);
+      default: return null;
+    }
   }
 
   public void periodic() {

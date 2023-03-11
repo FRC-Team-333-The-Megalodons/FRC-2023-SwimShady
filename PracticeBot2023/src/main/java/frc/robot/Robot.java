@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.roboAutos.MobilityOnly;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
@@ -27,6 +29,11 @@ import org.opencv.imgproc.Imgproc;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static final String kNoAuto = "AUTO_NONE";
+  public static final String kMobilityAuto = "AUTO_MOBILITY";
+  public static final String kHybridPlusHighAuto = "AUTO_HYBRID_PLUS_HIGH";
+  public static final String kScoreHighTwiceAuto = "AUTO_SCORE_HIGH_TWICE";
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private Command m_autonomousCommand;
   Thread m_visionThread;
 
@@ -39,6 +46,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    m_chooser.setDefaultOption("No Auto", kNoAuto);
+    m_chooser.addOption("Mobility-Only Auto", kMobilityAuto);
+    m_chooser.addOption("Hybrid + High", kHybridPlusHighAuto);
+    m_chooser.addOption("Score High Twice Auto", kScoreHighTwiceAuto);
+    SmartDashboard.putData("Auto Modes:", m_chooser);
+
         m_visionThread = new Thread(
         () -> {
           // Get the UsbCamera from CameraServer
@@ -79,6 +92,8 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    
   }
 
   /**
@@ -122,7 +137,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    String selectedAuto = m_chooser.getSelected();
+    System.out.println("Auto selected: " + selectedAuto);
+
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(selectedAuto);
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
