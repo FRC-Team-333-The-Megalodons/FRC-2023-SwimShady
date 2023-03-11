@@ -38,6 +38,7 @@ public class Intake extends SubsystemBase {
   IntakeStates intakeState;
   WristStates wristState;
   DutyCycleEncoder wristEncoder;
+  ColorSensor m_colorSensor;
 
   public double INTAKE_SPEED = .7;
   public double WRIST_SPEED = 0.65;
@@ -48,7 +49,7 @@ public class Intake extends SubsystemBase {
   final double wrist90 = 0;
   final double wristLimit = 0;
 
-  public Intake(PneumaticHub hub) {
+  public Intake(PneumaticHub hub, ColorSensor colorSensor) {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
     wristMotor1.setInverted(false);
     wristMotor2 = new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless);
@@ -72,6 +73,7 @@ public class Intake extends SubsystemBase {
     this.hub = hub;
 
     solenoid = hub.makeDoubleSolenoid(2, 3);
+    m_colorSensor = colorSensor;
 
     wristEncoder = new DutyCycleEncoder(9);
     wristEncoder.setConnectedFrequencyThreshold(900);
@@ -203,7 +205,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    wristValue = (Double.valueOf(df1.format(wristEncoder.getAbsolutePosition())) * 100)-78;
+    wristValue = (Double.valueOf(df1.format(wristEncoder.getAbsolutePosition())));
     SmartDashboard.putString("Wrist State", wristState+"");
     SmartDashboard.putString("Intake State", intakeState+"");
     SmartDashboard.putNumber("WristEncoder", wristValue);

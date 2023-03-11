@@ -157,8 +157,8 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Left Elevatator Encoder", leftmotor.getEncoder().getPosition());
     SmartDashboard.putNumber("Right Elevatator Encoder", -rightMotor.getEncoder().getPosition());
     SmartDashboard.putString("Elevator State", elevatorState+"");
-    SmartDashboard.putBoolean("Lower Switch", lowerLimitSwitch.get());
-    SmartDashboard.putBoolean("Upper Switch", upperLimitSwitch.get());
+    SmartDashboard.putBoolean("Lower Switch", isAtMaxDown());
+    SmartDashboard.putBoolean("Upper Switch", isAtMaxUp());
     SmartDashboard.putNumber("Stick lever", stick.getRawAxis(3));
   }
 }

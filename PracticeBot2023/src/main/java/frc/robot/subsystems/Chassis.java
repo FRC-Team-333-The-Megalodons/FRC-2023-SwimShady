@@ -115,9 +115,9 @@ public class Chassis extends SubsystemBase {
     }
 
     //creates dead zone. Maybe it benefits driving experience
-    if(!(x > .06 || x < .06)){
-      x = 0;
-    }
+    //if(!(x > .06 || x < .06)){
+    //  x = 0;
+    //}
     
     arcadeDrive(x, y);
   }

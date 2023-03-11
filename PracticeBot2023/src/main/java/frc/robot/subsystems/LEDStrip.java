@@ -52,7 +52,7 @@ public class LEDStrip extends SubsystemBase {
   public void blink(int r, int g, int b){
     if(durationRun <= durationMax){
       for(var i = 0; i < ledBuffer.getLength(); i++){
-        ledBuffer.setRGB(i, (blinkRun <= blinkRange ? r : 0) , (blinkRun <= blinkRange ? g : 0), 0);
+        ledBuffer.setRGB(i, (blinkRun <= blinkRange ? r : 0) , (blinkRun <= blinkRange ? g : 0), (blinkRun <= blinkRange ? b : 0));
       }
     }else{
       for(var i = 0; i < ledBuffer.getLength(); i++){
@@ -96,8 +96,8 @@ public class LEDStrip extends SubsystemBase {
       for(var i = 0; i < ledBuffer.getLength(); i++){
         ledBuffer.setRGB(i, r2, g2,b2);
       }
-      if(lastI == 120){
-        lastI = -39;
+      if(lastI == 140){
+        lastI = 0;
       }
       lastI++;
       for(int i = lastI; i < lastI+40; i++){

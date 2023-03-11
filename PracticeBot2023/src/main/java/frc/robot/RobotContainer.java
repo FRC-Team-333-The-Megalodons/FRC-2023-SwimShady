@@ -12,6 +12,7 @@ import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -30,12 +31,12 @@ public class RobotContainer {
   public static final boolean TWO_DRIVER_MODE = true;
 
   PneumaticHub m_hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
+  ColorSensor m_colorSensor = new ColorSensor();
   Chassis m_chassis = new Chassis(m_hub);
-  Intake m_intake = new Intake(m_hub);
+  Intake m_intake = new Intake(m_hub, m_colorSensor);
   Elevator m_elevator = new Elevator(m_intake);
   Gyro m_gyro = new Gyro();
   LimeLight m_lLight = new LimeLight();
-  ColorSensor sensor = new ColorSensor();
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -82,7 +83,7 @@ public class RobotContainer {
     m_intake.periodic();
     m_gyro.periodic();
     m_lLight.periodic();
-    sensor.periodic();
+    m_colorSensor.periodic();
   }
 
   public void teleopPeriodic() {
