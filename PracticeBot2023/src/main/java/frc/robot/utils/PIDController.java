@@ -45,11 +45,12 @@ public class PIDController {
         this.maxTolerance = maxTolerance;
         this.minTolerance = minTolerance;
         this.target = target;
-        minTarget = target- minTolerance;
+        minTarget = target - minTolerance;
         maxTarget = target + maxTolerance;
     }
 
     public double getOutput(double sensorValue){
+        SmartDashboard.putNumber("Target", target);
         currentTime = Timer.getFPGATimestamp() - lastTimeStamp;
         if(sensorValue > maxTarget){
             error = maxTarget - sensorValue;

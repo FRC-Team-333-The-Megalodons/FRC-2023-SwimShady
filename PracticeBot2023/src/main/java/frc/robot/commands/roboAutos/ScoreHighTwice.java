@@ -26,16 +26,16 @@ public class ScoreHighTwice extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    driveBackController = new PIDController(.013, .01, 0, 35, 5, 1, -Constants.Values.TICKS_PER_METER*2.8);
+    driveBackController = new PIDController(.013, .01, 0, 35, 5, 1, -Constants.Values.TICKS_PER_METER * 2.8);
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
     turnController = new PIDController(.005, .007, 0, 90, .2, .2, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
     addCommands(
-      new GoHigh(elevator),
+      //new GoHigh(elevator),
       new WaitCommand(.2),
-      new GoLow(elevator),
+     // new GoLow(elevator),
       new Drive(chassis,gyro,driveBackController,straightHeadingController,true),
       new WaitCommand(.2),
-      new Turn(chassis, gyro, 165, driveBackController, isFinished())
+      new Turn(chassis, gyro, 165, turnController, true)
     );
   }
 }
