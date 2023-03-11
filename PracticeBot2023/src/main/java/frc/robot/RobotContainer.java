@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.RobotStates.ElevatorState;
 import frc.robot.commands.roboAutos.ScoreHighTwice;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ColorSensor;
@@ -79,21 +80,37 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    m_elevator.periodic();
-    m_intake.periodic();
-    m_gyro.periodic();
-    m_lLight.periodic();
+    try {
+      m_elevator.periodic();
+    } catch (Exception e) { /* Don't die if the elevator dies */}
+    try {
+      m_intake.periodic();
+    } catch (Exception e) { /* Don't die if the intake dies */}
+    try {
+      m_gyro.periodic();
+    } catch (Exception e) { /* Don't die if the gyro dies */}
+    try {
+      m_lLight.periodic();
+    } catch (Exception e) { /* Don't die if the limelight dies */ }
     try {
       m_colorSensor.periodic();
-    } catch (Exception e) {
-      // Don't die if the colorsensor dies.
-    }
+    } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
   }
 
   public void teleopPeriodic() {
-    m_chassis.teleopPeriodic(m_elevator.getState());
-    m_elevator.teleopPeriodic();
-    m_intake.teleopPeriodic();
+    ElevatorState elevatorState = RobotStates.ElevatorState.ELEVATOR_UNKNOWN;
+    try {
+      elevatorState = m_elevator.getState();
+    } catch (Exception e) { /* Don't die if we fail to evaluate the elevator state */}
+    try {
+      m_chassis.teleopPeriodic(elevatorState);
+    } catch (Exception e) { /* Don't die if we fail to run the chassis */}
+    try {
+      m_elevator.teleopPeriodic();
+    } catch (Exception e) { /* Don't die if we fail to run the elevator */}
+    try {
+      m_intake.teleopPeriodic();
+    } catch (Exception e) { /* Don't die if we fail to run the intake */}
   }
 
   public void resetEncoders() {
