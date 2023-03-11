@@ -9,11 +9,13 @@ import java.text.DecimalFormat;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,7 +32,7 @@ public class Intake extends SubsystemBase {
   MotorControllerGroup wrist, intake;
   Joystick stick;
   XboxController controller;
-  Solenoid solenoid;
+  DoubleSolenoid solenoid;
   PneumaticHub hub;
   PIDController wristOriginController;
   IntakeStates intakeState;
@@ -69,7 +71,7 @@ public class Intake extends SubsystemBase {
 
     this.hub = hub;
 
-    solenoid = hub.makeSolenoid(Constants.RobotMap.INTAKE_SQUEEZE);
+    solenoid = hub.makeDoubleSolenoid(2, 3);
 
     wristEncoder = new DutyCycleEncoder(9);
     wristEncoder.setConnectedFrequencyThreshold(900);
@@ -82,12 +84,12 @@ public class Intake extends SubsystemBase {
   }
 
   public void pSqueeze() {
-    solenoid.set(true);
+    solenoid.set(Value.kForward);
     intakeState = IntakeStates.IN;
   }
 
   public void pUnsqueeze() {
-    solenoid.set(false);
+    solenoid.set(Value.kReverse);
     intakeState = IntakeStates.OUT;
   }
   public void iIn(){

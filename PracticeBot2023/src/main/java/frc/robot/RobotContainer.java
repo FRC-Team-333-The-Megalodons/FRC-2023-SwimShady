@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.roboAutos.ScoreHighTwice;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
@@ -34,6 +35,7 @@ public class RobotContainer {
   Elevator m_elevator = new Elevator(m_intake);
   Gyro m_gyro = new Gyro();
   LimeLight m_lLight = new LimeLight();
+  ColorSensor sensor = new ColorSensor();
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -80,6 +82,7 @@ public class RobotContainer {
     m_intake.periodic();
     m_gyro.periodic();
     m_lLight.periodic();
+    sensor.periodic();
   }
 
   public void teleopPeriodic() {
