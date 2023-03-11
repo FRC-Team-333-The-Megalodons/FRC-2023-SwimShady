@@ -109,9 +109,14 @@ public class Chassis extends SubsystemBase {
       }
     }else{
       if(stick.getRawButton(7)){
-        x /= 1.7;
+        x /= 1.5;
         y /= 2.5;
       }
+    }
+
+    //creates dead zone. Maybe it benefits driving experience
+    if(!(x > .06 || x < .06)){
+      x = 0;
     }
     
     arcadeDrive(x, y);

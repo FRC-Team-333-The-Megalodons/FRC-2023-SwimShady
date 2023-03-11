@@ -77,7 +77,7 @@ public class Elevator extends SubsystemBase {
       //elevatorState = RobotStates.ElevatorState.LOW;
       return;
     }else {
-      elevator.set(-(espeed-.2));
+      elevator.set(-espeed);
     }
   }
 
@@ -112,8 +112,8 @@ public class Elevator extends SubsystemBase {
     return elevatorState;
   }
 
-  public boolean isAtMaxUp(){return !upperLimitSwitch.get();}
-  public boolean isAtMaxDown(){return !lowerLimitSwitch.get();}
+  public boolean isAtMaxUp(){return upperLimitSwitch.get() == false;}
+  public boolean isAtMaxDown(){return lowerLimitSwitch.get() == false;}
 
   public void teleopPeriodic() {
     if(!RobotContainer.TWO_DRIVER_MODE){

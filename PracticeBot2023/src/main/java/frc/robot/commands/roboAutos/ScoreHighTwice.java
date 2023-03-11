@@ -31,7 +31,7 @@ public class ScoreHighTwice extends SequentialCommandGroup {
     turnController = new PIDController(.005, .007, 0, 90, .2, .2, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
     addCommands(
       new GoHigh(elevator),
-      new WaitCommand(2),
+      new WaitCommand(.2),
       new GoLow(elevator),
       new Drive(chassis,gyro,driveBackController,straightHeadingController,true),
       new WaitCommand(.2),
