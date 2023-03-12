@@ -43,9 +43,9 @@ public class Elevator extends SubsystemBase {
   public Elevator(Intake intake) {
     m_intake = intake;
 
-    m_leftSpark = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
+    m_leftSpark = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR2, MotorType.kBrushless);
     m_leftSpark.setInverted(true);
-    m_rightSpark = new CANSparkMax(Constants.RobotMap.ELEVATOR1, MotorType.kBrushless);
+    m_rightSpark = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR1, MotorType.kBrushless);
 
     setIdleMode(IdleMode.kBrake);
     m_motors = new MotorControllerGroup(m_rightSpark, m_leftSpark);
@@ -386,8 +386,8 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     m_elevatorState = calculateElevatorStateFromSensors();
-    SmartDashboard.putNumber("Left Elevatator Encoder", m_leftSpark.getEncoder().getPosition());
-    SmartDashboard.putNumber("Right Elevatator Encoder", -m_rightSpark.getEncoder().getPosition());
+    SmartDashboard.putNumber("Left Elevator Encoder", m_leftSpark.getEncoder().getPosition());
+    SmartDashboard.putNumber("Right Elevator Encoder", -m_rightSpark.getEncoder().getPosition());
     SmartDashboard.putNumber("Average Encoder Distance", averageEncoderDistance());
     SmartDashboard.putString("Elevator State", m_elevatorState+"");
     SmartDashboard.putBoolean("Lower Switch", isAtLowerLimit());

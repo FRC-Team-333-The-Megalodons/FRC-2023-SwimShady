@@ -34,16 +34,28 @@ public class Intake extends SubsystemBase {
   XboxController controller;
   DoubleSolenoid solenoid;
   PneumaticHub hub;
-  PIDController wristOriginController;
+  PIDController wristStraightController;
   IntakeStates intakeState;
   WristStates wristState;
   DutyCycleEncoder wristEncoder;
   ColorSensor m_colorSensor;
+  Elevator m_elevator;
 
   public double INTAKE_SPEED = .7;
   public double WRIST_UP_SPEED = -0.65;
   public double WRIST_UP_SLOW_SPEED = -0.3;
   public double WRIST_DOWN_SPEED = 0.4;
+
+  public int DPAD_UP = 0;
+  public int DPAD_UP_RIGHT = 45;
+  public int DPAD_RIGHT = 90;
+  public int DPAD_DOWN_RIGHT = 135;
+  public int DPAD_DOWN = 180;
+  public int DPAD_DOWN_LEFT = 225;
+  public int DPAD_LEFT = 270;
+  public int DPAD_UP_LEFT = 315;
+
+
 
   double wristValue;
   DecimalFormat df1 = new DecimalFormat("0.##");
@@ -51,20 +63,24 @@ public class Intake extends SubsystemBase {
   
   final double WRIST_MAX = 1.02;
   final double WRIST_MIN = 0.74;
-  final double WRIST_STRAIGHT = 0.78;
+  final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.82;
+  final double WRIST_STRAIGHT = 0.8;
+  final double WRIST_GROUND_INTAKE = 0.74;
+
+  final double WRIST_ENCODER_MULTIPLIER = 20;
 
   public Intake(PneumaticHub hub, ColorSensor colorSensor) {
-    wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
+    wristMotor1 = new CANSparkMax(Constants.RobotMap.PORT_WRIST1, MotorType.kBrushless);
     wristMotor1.setInverted(false);
-    wristMotor2 = new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless);
+    wristMotor2 = new CANSparkMax(Constants.RobotMap.PORT_WRIST2, MotorType.kBrushless);
 
     wristMotor1.setIdleMode(IdleMode.kBrake);
     wristMotor2.setIdleMode(IdleMode.kBrake);
 
     wrist = new MotorControllerGroup(wristMotor1, wristMotor2);
 
-    intakemotor1 = new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless);
-    intakemotor2 = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
+    intakemotor1 = new CANSparkMax(Constants.RobotMap.PORT_INTAKE1, MotorType.kBrushless);
+    intakemotor2 = new CANSparkMax(Constants.RobotMap.PORT_INTAKE2, MotorType.kBrushless);
     
     intakemotor1.setIdleMode(IdleMode.kBrake);
     intakemotor2.setIdleMode(IdleMode.kBrake);
@@ -82,7 +98,15 @@ public class Intake extends SubsystemBase {
     wristEncoder = new DutyCycleEncoder(9);
     wristEncoder.setConnectedFrequencyThreshold(900);
     wristEncoder.reset();
-    wristOriginController = new PIDController(0.04, 0.002, 0, 5, .5, .5,0);
+    wristStraightController = new PIDController(0.8, 0.05, 0, 2, 
+                                                0.002*WRIST_ENCODER_MULTIPLIER,
+                                                0.001*WRIST_ENCODER_MULTIPLIER,
+                                                WRIST_STRAIGHT*WRIST_ENCODER_MULTIPLIER);
+  }
+
+  public void setElevator(Elevator elevator)
+  {
+    m_elevator = elevator;
   }
 
   public void resetEncoder(int val) {
@@ -110,12 +134,12 @@ public class Intake extends SubsystemBase {
     intake.set(0);
   }
 
-  public void resetWrist(){
-    wrist.set(wristOriginController.getOutput(wristValue));
+  public void setWristStaight(){
+    moveWrist(-wristStraightController.getOutput(wristValue*WRIST_ENCODER_MULTIPLIER));
   }
 
-  public boolean wristAtOrigin(){
-    return wristOriginController.isOnTarget();
+  public boolean wristStraight(){
+    return wristStraightController.isOnTarget();
   }
 
   public void teleopPeriodic() {
@@ -158,23 +182,43 @@ public class Intake extends SubsystemBase {
     }
 
     // Wrist Angle (default to "stopped"; DPAD Up is wrist up, DPAD down is wrist down)
-    if (controller.getPOV() == 0 && !isAtMaxUp()) {
-      //double speed = WRIST_UP_SPEED;
-      //if (isCloseToMaxUp()) { speed = WRIST_UP_SLOW_SPEED; }
-      double speed = WRIST_UP_SLOW_SPEED;
-      wrist.set(speed);
+    if (controller.getPOV() == DPAD_UP) {
+      moveWrist(WRIST_UP_SLOW_SPEED);
       wristState = WristStates.ROTATING_IN;
-    } else if (controller.getPOV() == 180 && !isAtMaxDown()) {
-      double speed = WRIST_DOWN_SPEED;
-      //if (isCloseToMaxDown()) { speed /= 2.0; }
-      wrist.set(speed);
+    } else if (controller.getPOV() == DPAD_DOWN) {
+      moveWrist(WRIST_DOWN_SPEED);
       wristState = WristStates.ROTATING_OUT;
-    //} else if(stick.getPOV() == 90){
-    //  resetWrist();
+    }else if(controller.getPOV() >= DPAD_UP_RIGHT && controller.getPOV() <= DPAD_DOWN_RIGHT){
+      setWristStaight();
     }else {
-      wrist.set(0);
+      stop();
       wristState = WristStates.MOTORS_STOPPED;
     }
+  }
+
+  public void stop()
+  {
+    wrist.set(0);
+  }
+
+  public void moveWrist(double speed)
+  {
+    if (speed < 0) { // Less than Zero means "wrist up"
+      if (isAtMaxUp()) {
+        stop();
+        return;
+      }
+      // Make sure we don't go faster that WRIST_UP_SLOW_SPEED!
+      speed = Math.max(speed, WRIST_UP_SLOW_SPEED);
+    } else { // Greater than Zero means "wrist down"
+      if (isAtMaxDown()) {
+        stop();
+        return;
+      }
+      // Make sure we don't go faster than WRIST_DOWN_SPEED!
+      speed = Math.min(speed, WRIST_DOWN_SPEED);
+    }
+    wrist.set(speed);
   }
 
   public void oneDriverModeTeleopPeriodic()
@@ -209,15 +253,15 @@ public class Intake extends SubsystemBase {
     }
 
     if (stick.getPOV() == 0) {
-      wrist.set(WRIST_UP_SPEED);
+      moveWrist(WRIST_UP_SPEED);
       wristState = WristStates.ROTATING_IN;
     } else if (stick.getPOV() == 180) {
-      wrist.set(WRIST_DOWN_SPEED);
+      moveWrist(WRIST_DOWN_SPEED);
       wristState = WristStates.ROTATING_OUT;
     } else if(stick.getPOV() == 90){
-      resetWrist();
+      setWristStaight();
     }else {
-      wrist.set(0);
+      stop();
       wristState = WristStates.MOTORS_STOPPED;
     }
   }
@@ -244,7 +288,14 @@ public class Intake extends SubsystemBase {
   final double WRIST_CLOSE_THRESHOLD = 0.07;
   public boolean isAtMaxUp(){return getRealWristPosition() >= WRIST_MAX;}
   public boolean isCloseToMaxUp() { return Math.abs(getRealWristPosition()-WRIST_MAX) < WRIST_CLOSE_THRESHOLD; }
-  public boolean isAtMaxDown(){return getRealWristPosition() <= WRIST_MIN;}
+  public boolean isAtMaxDown(){
+    double limit = WRIST_MIN;
+    if (m_elevator.isAtMaxDown()) {
+      limit = WRIST_MIN_WHEN_ELEVATOR_DOWN;
+    }
+    
+    return getRealWristPosition() <= limit;
+  }
   public boolean isCloseToMaxDown() { return Math.abs(getRealWristPosition()-WRIST_MIN) < WRIST_CLOSE_THRESHOLD; }
 
 
@@ -260,7 +311,7 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("WristEncoder", wristValue);
     //SmartDashboard.putNumber("WristDistance", wristEncoder.getDistance());
     //SmartDashboard.putNumber("WristGet", wristEncoder.get());
-    SmartDashboard.putBoolean("WristAtOrigin", wristAtOrigin());
+    SmartDashboard.putBoolean("Wrist straight?", wristStraight());
   }
 
   /* Wrist encoder vals

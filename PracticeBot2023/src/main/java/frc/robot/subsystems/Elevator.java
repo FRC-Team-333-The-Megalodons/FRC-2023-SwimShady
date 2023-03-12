@@ -28,6 +28,7 @@ public class Elevator extends SubsystemBase {
   final double MAX_ESPEED = 1;
 
   final double ELEVATOR_BOTTOM = 0;
+  final double ELEVATOR_GROUND_INTAKE = 25;
   final double ELEVATOR_TOP = 215;
 
   frc.robot.utils.PIDController eMidPidController, eGroundPidController;
@@ -39,8 +40,8 @@ public class Elevator extends SubsystemBase {
   Intake intake;
 
   public Elevator(Intake intake) {
-    rightMotor = new CANSparkMax(Constants.RobotMap.ELEVATOR1, MotorType.kBrushless);
-    leftmotor = new CANSparkMax(Constants.RobotMap.ELEVATOR2, MotorType.kBrushless);
+    rightMotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR1, MotorType.kBrushless);
+    leftmotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
     controller = new XboxController(1);
     eMidPidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,95);
@@ -56,6 +57,7 @@ public class Elevator extends SubsystemBase {
     upperLimitSwitch = new DigitalInput(0);
 
     this.intake = intake;
+    intake.setElevator(this);
   }
 
   public void stop() {
@@ -183,8 +185,8 @@ public class Elevator extends SubsystemBase {
       rightMotor.getEncoder().setPosition(-ELEVATOR_TOP);
     }
 
-    SmartDashboard.putNumber("Left Elevatator Encoder", leftmotor.getEncoder().getPosition());
-    SmartDashboard.putNumber("Right Elevatator Encoder", getRightPosition());
+    SmartDashboard.putNumber("Left Elevator Encoder", leftmotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("Right Elevator Encoder", getRightPosition());
     SmartDashboard.putString("Elevator State", elevatorState+"");
     SmartDashboard.putBoolean("Lower Switch", isAtMaxDown());
     SmartDashboard.putBoolean("Upper Switch", isAtMaxUp());

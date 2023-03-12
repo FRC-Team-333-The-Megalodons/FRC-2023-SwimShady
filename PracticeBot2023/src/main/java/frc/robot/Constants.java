@@ -69,22 +69,22 @@ public final class Constants {
         /*
          * Motor IDS
          */
-        public static final int DRIVE_TRAIN_L_LEADER = 4;
-        public static final int DRIVE_TRAIN_L_FOLLOWER1 = 5;
-        public static final int DRIVE_TRAIN_L_FOLLOWER2 = 6;
+        public static final int PORT_DRIVE_TRAIN_L_LEADER = 4;
+        public static final int PORT_DRIVE_TRAIN_L_FOLLOWER1 = 5;
+        public static final int PORT_DRIVE_TRAIN_L_FOLLOWER2 = 6;
 
-        public static final int DRIVE_TRAIN_R_LEADER = 1;
-        public static final int DRIVE_TRAIN_R_FOLLOWER1 = 2;
-        public static final int DRIVE_TRAIN_R_FOLLOWER2 = 3;
+        public static final int PORT_DRIVE_TRAIN_R_LEADER = 1;
+        public static final int PORT_DRIVE_TRAIN_R_FOLLOWER1 = 2;
+        public static final int PORT_DRIVE_TRAIN_R_FOLLOWER2 = 3;
 
-        public static final int ELEVATOR1 = 7;
-        public static final int ELEVATOR2 = 8;
+        public static final int PORT_ELEVATOR1 = 7;
+        public static final int PORT_ELEVATOR2 = 8;
 
-        public static final int WRIST1 = 9;
-        public static final int WRIST2 = 10;
+        public static final int PORT_WRIST1 = 9;
+        public static final int PORT_WRIST2 = 10;
 
-        public static final int INTAKE1 = 11;
-        public static final int INTAKE2 = 12;
+        public static final int PORT_INTAKE1 = 11;
+        public static final int PORT_INTAKE2 = 12;
 
         /*
          * Solenoid IDS
@@ -95,8 +95,8 @@ public final class Constants {
         public static final int SHIFT_HIGH = 0;
         public static final int SHIFT_LOW = 0;
         
-        public static final int INTAKE_SQUEEZE = 2;
-        public static final int INTAKE_UNSQUEEZE = 3;
+        public static final int PORT_INTAKE_SQUEEZE = 2;
+        public static final int PORT_INTAKE_UNSQUEEZE = 3;
     }
 
     public static class Values{

@@ -38,14 +38,14 @@ public class Chassis extends SubsystemBase {
 
   public Chassis(PneumaticHub hub) {
     leftMotors = new Multi_CANSparkMax(
-        new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_LEADER, MotorType.kBrushless),
-        new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_FOLLOWER1, MotorType.kBrushless),
-        new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_L_FOLLOWER2, MotorType.kBrushless)
+        new CANSparkMax(Constants.RobotMap.PORT_DRIVE_TRAIN_L_LEADER, MotorType.kBrushless),
+        new CANSparkMax(Constants.RobotMap.PORT_DRIVE_TRAIN_L_FOLLOWER1, MotorType.kBrushless),
+        new CANSparkMax(Constants.RobotMap.PORT_DRIVE_TRAIN_L_FOLLOWER2, MotorType.kBrushless)
     );
     rightMotors = new Multi_CANSparkMax(
-        new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_LEADER, MotorType.kBrushless),
-        new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER1, MotorType.kBrushless),
-        new CANSparkMax(Constants.RobotMap.DRIVE_TRAIN_R_FOLLOWER2, MotorType.kBrushless)
+        new CANSparkMax(Constants.RobotMap.PORT_DRIVE_TRAIN_R_LEADER, MotorType.kBrushless),
+        new CANSparkMax(Constants.RobotMap.PORT_DRIVE_TRAIN_R_FOLLOWER1, MotorType.kBrushless),
+        new CANSparkMax(Constants.RobotMap.PORT_DRIVE_TRAIN_R_FOLLOWER2, MotorType.kBrushless)
     );
 
     leftLeaderEncoder = leftMotors.getLeader().getEncoder();

@@ -63,15 +63,15 @@ public class Intake extends SubsystemBase {
 
   public Intake(PneumaticHub hub) {
     m_wristSparks = new Multi_CANSparkMax(
-      new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless),
-      new CANSparkMax(Constants.RobotMap.WRIST2, MotorType.kBrushless)
+      new CANSparkMax(Constants.RobotMap.PORT_WRIST1, MotorType.kBrushless),
+      new CANSparkMax(Constants.RobotMap.PORT_WRIST2, MotorType.kBrushless)
     );
     m_wristSparks.setIdleMode(IdleMode.kBrake);
 
-    CANSparkMax invertedIntakeSpark = new CANSparkMax(Constants.RobotMap.INTAKE2, MotorType.kBrushless);
+    CANSparkMax invertedIntakeSpark = new CANSparkMax(Constants.RobotMap.PORT_INTAKE2, MotorType.kBrushless);
     invertedIntakeSpark.setInverted(true);
     m_intakeSparks = new Multi_CANSparkMax(
-      new CANSparkMax(Constants.RobotMap.INTAKE1, MotorType.kBrushless),
+      new CANSparkMax(Constants.RobotMap.PORT_INTAKE1, MotorType.kBrushless),
       invertedIntakeSpark
     );
     m_intakeSparks.setIdleMode(IdleMode.kBrake);
@@ -85,7 +85,7 @@ public class Intake extends SubsystemBase {
 
     m_hub = hub;
 
-    m_solenoid = hub.makeSolenoid(Constants.RobotMap.INTAKE_SQUEEZE);
+    m_solenoid = hub.makeSolenoid(Constants.RobotMap.PORT_INTAKE_SQUEEZE);
 
     m_wristEncoder = new DutyCycleEncoder(9);
     m_wristEncoder.setConnectedFrequencyThreshold(900);
