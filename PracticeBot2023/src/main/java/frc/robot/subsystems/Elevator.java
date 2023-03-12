@@ -27,9 +27,7 @@ public class Elevator extends SubsystemBase {
   XboxController controller;
   final double MAX_ESPEED = 1;
 
-  final double ELEVATOR_BOTTOM = 0;
-  final double ELEVATOR_GROUND_INTAKE = 25;
-  final double ELEVATOR_TOP = 215;
+
 
   frc.robot.utils.PIDController eMidPidController, eGroundPidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
@@ -106,8 +104,8 @@ public class Elevator extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    leftmotor.getEncoder().setPosition(0);
-    rightMotor.getEncoder().setPosition(0);
+    leftmotor.getEncoder().setPosition(Constants.Elevator.ELEVATOR_POS_BOTTOM);
+    rightMotor.getEncoder().setPosition(Constants.Elevator.ELEVATOR_POS_BOTTOM);
   }
 
   public ElevatorState getState(){
@@ -118,7 +116,7 @@ public class Elevator extends SubsystemBase {
     if (upperLimitSwitch.get() == false) {
       return true;
     }
-    if (getRightPosition() >= ELEVATOR_TOP) {
+    if (getRightPosition() >= Constants.Elevator.ELEVATOR_POS_TOP) {
       return true;
     }
     return false;
@@ -182,7 +180,7 @@ public class Elevator extends SubsystemBase {
       resetEncoders();
     } else if (isAtMaxUp()) {
       // Note that this motor is "inverted", so setting position here should be negative.
-      rightMotor.getEncoder().setPosition(-ELEVATOR_TOP);
+      rightMotor.getEncoder().setPosition(-Constants.Elevator.ELEVATOR_POS_TOP);
     }
 
     SmartDashboard.putNumber("Left Elevator Encoder", leftmotor.getEncoder().getPosition());

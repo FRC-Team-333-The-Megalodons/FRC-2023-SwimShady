@@ -42,9 +42,6 @@ public class Intake extends SubsystemBase {
   Elevator m_elevator;
 
   public double INTAKE_SPEED = .7;
-  public double WRIST_UP_SPEED = -0.65;
-  public double WRIST_UP_SLOW_SPEED = -0.3;
-  public double WRIST_DOWN_SPEED = 0.4;
 
   public int DPAD_UP = 0;
   public int DPAD_UP_RIGHT = 45;
@@ -61,14 +58,6 @@ public class Intake extends SubsystemBase {
   DecimalFormat df1 = new DecimalFormat("0.##");
   final double wristOrigin = 0;
   
-  final double WRIST_MAX = 1.02;
-  final double WRIST_MIN = 0.74;
-  final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.82;
-  final double WRIST_STRAIGHT = 0.8;
-  final double WRIST_GROUND_INTAKE = 0.74;
-
-  final double WRIST_ENCODER_MULTIPLIER = 20;
-
   public Intake(PneumaticHub hub, ColorSensor colorSensor) {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.PORT_WRIST1, MotorType.kBrushless);
     wristMotor1.setInverted(false);
@@ -99,9 +88,9 @@ public class Intake extends SubsystemBase {
     wristEncoder.setConnectedFrequencyThreshold(900);
     wristEncoder.reset();
     wristStraightController = new PIDController(0.8, 0.05, 0, 2, 
-                                                0.002*WRIST_ENCODER_MULTIPLIER,
-                                                0.001*WRIST_ENCODER_MULTIPLIER,
-                                                WRIST_STRAIGHT*WRIST_ENCODER_MULTIPLIER);
+                                                0.002*Constants.Wrist.WRIST_ENCODER_MULTIPLIER,
+                                                0.001*Constants.Wrist.WRIST_ENCODER_MULTIPLIER,
+                                                Constants.Wrist.WRIST_STRAIGHT*Constants.Wrist.WRIST_ENCODER_MULTIPLIER);
   }
 
   public void setElevator(Elevator elevator)
@@ -135,7 +124,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void setWristStaight(){
-    moveWrist(-wristStraightController.getOutput(wristValue*WRIST_ENCODER_MULTIPLIER));
+    moveWrist(-wristStraightController.getOutput(wristValue*Constants.Wrist.WRIST_ENCODER_MULTIPLIER));
   }
 
   public boolean wristStraight(){
@@ -183,10 +172,10 @@ public class Intake extends SubsystemBase {
 
     // Wrist Angle (default to "stopped"; DPAD Up is wrist up, DPAD down is wrist down)
     if (controller.getPOV() == DPAD_UP) {
-      moveWrist(WRIST_UP_SLOW_SPEED);
+      moveWrist(Constants.Wrist.WRIST_UP_SLOW_SPEED);
       wristState = WristStates.ROTATING_IN;
     } else if (controller.getPOV() == DPAD_DOWN) {
-      moveWrist(WRIST_DOWN_SPEED);
+      moveWrist(Constants.Wrist.WRIST_DOWN_SPEED);
       wristState = WristStates.ROTATING_OUT;
     }else if(controller.getPOV() >= DPAD_UP_RIGHT && controller.getPOV() <= DPAD_DOWN_RIGHT){
       setWristStaight();
@@ -209,14 +198,14 @@ public class Intake extends SubsystemBase {
         return;
       }
       // Make sure we don't go faster that WRIST_UP_SLOW_SPEED!
-      speed = Math.max(speed, WRIST_UP_SLOW_SPEED);
+      speed = Math.max(speed, Constants.Wrist.WRIST_UP_SLOW_SPEED);
     } else { // Greater than Zero means "wrist down"
       if (isAtMaxDown()) {
         stop();
         return;
       }
       // Make sure we don't go faster than WRIST_DOWN_SPEED!
-      speed = Math.min(speed, WRIST_DOWN_SPEED);
+      speed = Math.min(speed, Constants.Wrist.WRIST_DOWN_SPEED);
     }
     wrist.set(speed);
   }
@@ -253,10 +242,10 @@ public class Intake extends SubsystemBase {
     }
 
     if (stick.getPOV() == 0) {
-      moveWrist(WRIST_UP_SPEED);
+      moveWrist(Constants.Wrist.WRIST_UP_SPEED);
       wristState = WristStates.ROTATING_IN;
     } else if (stick.getPOV() == 180) {
-      moveWrist(WRIST_DOWN_SPEED);
+      moveWrist(Constants.Wrist.WRIST_DOWN_SPEED);
       wristState = WristStates.ROTATING_OUT;
     } else if(stick.getPOV() == 90){
       setWristStaight();
@@ -285,18 +274,18 @@ public class Intake extends SubsystemBase {
     return value;
   }
 
-  final double WRIST_CLOSE_THRESHOLD = 0.07;
-  public boolean isAtMaxUp(){return getRealWristPosition() >= WRIST_MAX;}
-  public boolean isCloseToMaxUp() { return Math.abs(getRealWristPosition()-WRIST_MAX) < WRIST_CLOSE_THRESHOLD; }
+  final double WRIST_APPROX_THRESHOLD = 0.07;
+  public boolean isAtMaxUp(){return getRealWristPosition() >= Constants.Wrist.WRIST_MAX;}
+  public boolean isCloseToMaxUp() { return Math.abs(getRealWristPosition()-Constants.Wrist.WRIST_MAX) < Constants.Wrist.WRIST_APPROX_THRESHOLD; }
   public boolean isAtMaxDown(){
-    double limit = WRIST_MIN;
+    double limit = Constants.Wrist.WRIST_MIN;
     if (m_elevator.isAtMaxDown()) {
-      limit = WRIST_MIN_WHEN_ELEVATOR_DOWN;
+      limit = Constants.Wrist.WRIST_MIN_WHEN_ELEVATOR_DOWN;
     }
     
     return getRealWristPosition() <= limit;
   }
-  public boolean isCloseToMaxDown() { return Math.abs(getRealWristPosition()-WRIST_MIN) < WRIST_CLOSE_THRESHOLD; }
+  public boolean isCloseToMaxDown() { return Math.abs(getRealWristPosition()-Constants.Wrist.WRIST_MIN) < Constants.Wrist.WRIST_APPROX_THRESHOLD; }
 
 
   @Override
