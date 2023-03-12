@@ -96,37 +96,68 @@ public class RobotContainer {
   }
 
   public void periodic() {
+    Timer timer = new Timer();
+    timer.start();
     try {
       m_elevator.periodic();
     } catch (Exception e) { /* Don't die if the elevator dies */}
+    double elevator_elapsed = timer.get();
+    timer.reset();
     try {
       m_intake.periodic();
     } catch (Exception e) { /* Don't die if the intake dies */}
+    double intake_elapsed = timer.get();
+    timer.reset();
     try {
       m_gyro.periodic();
     } catch (Exception e) { /* Don't die if the gyro dies */}
+    double gyro_elapsed = timer.get();
+    timer.reset();
     try {
       m_lLight.periodic();
     } catch (Exception e) { /* Don't die if the limelight dies */ }
+    double limelight_elapsed = timer.get();
+    timer.reset();
     try {
       m_colorSensor.periodic();
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
+    double colorsensor_elapsed = timer.get();
+
+    System.out.println("\tElevator   (P): "+elevator_elapsed+
+                       "\tIntake     (P): "+intake_elapsed+
+                       "\tGyro       (P): "+gyro_elapsed+
+                       "\tLimelight  (P):"+limelight_elapsed+
+                       "\tColorSensor(P):"+colorsensor_elapsed+"\n");
   }
 
   public void teleopPeriodic() {
+    Timer timer = new Timer();
+    timer.start();
     ElevatorState elevatorState = RobotStates.ElevatorState.ELEVATOR_UNKNOWN;
     try {
       elevatorState = m_elevator.getState();
     } catch (Exception e) { /* Don't die if we fail to evaluate the elevator state */}
+    double elevatorstate_elapsed = timer.get();
+    timer.reset();
     try {
       m_chassis.teleopPeriodic(elevatorState);
     } catch (Exception e) { /* Don't die if we fail to run the chassis */}
+    double chassis_elapsed = timer.get();
+    timer.reset();
     try {
       m_elevator.teleopPeriodic();
     } catch (Exception e) { /* Don't die if we fail to run the elevator */}
+    double elevator_elapsed = timer.get();
+    timer.reset();
     try {
       m_intake.teleopPeriodic();
     } catch (Exception e) { /* Don't die if we fail to run the intake */}
+    double intake_elapsed = timer.get();
+    
+    System.out.println("\tElevState (T): "+elevatorstate_elapsed+
+                       "\tChassis   (T): "+chassis_elapsed+
+                       "\tElevator  (T): "+elevator_elapsed+  
+                       "\tIntake    (T): "+intake_elapsed+"\n");
   }
 
   public void resetEncoders() {
