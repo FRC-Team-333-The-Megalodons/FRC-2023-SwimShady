@@ -55,7 +55,6 @@ public class Elevator extends SubsystemBase {
     upperLimitSwitch = new DigitalInput(0);
 
     this.intake = intake;
-    intake.setElevator(this);
   }
 
   public void stop() {

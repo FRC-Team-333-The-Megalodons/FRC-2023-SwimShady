@@ -52,6 +52,7 @@ public class RobotContainer {
     m_chassis = new Chassis(m_hub);
     m_intake = new Intake(m_hub, m_colorSensor);
     m_elevator = new Elevator(m_intake);
+    m_intake.setElevator(m_elevator);
     m_gyro = new Gyro();
     m_lLight = new LimeLight();
     // Configure the trigger bindings

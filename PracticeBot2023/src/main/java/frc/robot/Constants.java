@@ -80,6 +80,10 @@ public final class Constants {
         public static final double WRIST_GROUND_INTAKE = 0.74;
         public static final double WRIST_APPROX_THRESHOLD = 0.07;
         public static final double WRIST_ENCODER_MULTIPLIER = 20;
+        
+        public static final double WRIST_UP_SPEED = -0.65;
+        public static final double WRIST_UP_SLOW_SPEED = -0.3;
+        public static final double WRIST_DOWN_SPEED = 0.4;
     }
 
     public static class RobotMap{
