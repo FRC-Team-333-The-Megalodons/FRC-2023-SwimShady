@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    
+    CommandScheduler.getInstance().run();
   }
 
   /**
@@ -115,7 +115,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
     m_robotContainer.periodic();
     SmartDashboard.updateValues();
   }
@@ -147,11 +146,13 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.resetEncoders();
     m_robotContainer.setChassisBrake();
+    CommandScheduler.getInstance().run();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -163,6 +164,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    // Cancels all running commands at the start of teleopmode.
+    CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().disable();
+
     m_robotContainer.resetEncoders();
     m_robotContainer.setChassisCoast();
   }

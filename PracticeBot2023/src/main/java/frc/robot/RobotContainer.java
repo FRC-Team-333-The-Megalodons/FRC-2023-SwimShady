@@ -15,6 +15,7 @@ import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,19 +34,26 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final boolean TWO_DRIVER_MODE = true;
 
-  PneumaticHub m_hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
-  ColorSensor m_colorSensor = new ColorSensor();
-  Chassis m_chassis = new Chassis(m_hub);
-  Intake m_intake = new Intake(m_hub, m_colorSensor);
-  Elevator m_elevator = new Elevator(m_intake);
-  Gyro m_gyro = new Gyro();
-  LimeLight m_lLight = new LimeLight();
+  PneumaticHub m_hub;
+  ColorSensor m_colorSensor;
+  Chassis m_chassis;
+  Intake m_intake;
+  Elevator m_elevator;
+  Gyro m_gyro;
+  LimeLight m_lLight;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
+    //m_colorSensor = new ColorSensor();
+    m_chassis = new Chassis(m_hub);
+    m_intake = new Intake(m_hub, m_colorSensor);
+    m_elevator = new Elevator(m_intake);
+    m_gyro = new Gyro();
+    m_lLight = new LimeLight();
     // Configure the trigger bindings
     configureBindings();
   }

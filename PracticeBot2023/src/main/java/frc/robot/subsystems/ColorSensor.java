@@ -5,6 +5,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -42,7 +43,7 @@ public class ColorSensor {
     }
     
     try {
-      strip = new LEDStrip(6, NUMBER_OF_LEDS);
+      //strip = new LEDStrip(6, NUMBER_OF_LEDS);
     } catch (Exception e) {
       // Failed to instantiate LED Strip, but it's not fatal for the robot.
       // Just do null checks everywhere in the code so that we don't actually
@@ -126,10 +127,13 @@ public class ColorSensor {
   
 
   public void periodic(){
+    //Timer timer = new Timer();
+    //timer.start();
     SmartDashboard.putBoolean("Is Cone?", isCone());
     SmartDashboard.putBoolean("Is Cube?", isCube());
     SmartDashboard.putString("Color", getDisplayColor());
-    
+    //timer.stop();
+    //System.out.println("COLOR SENSOR TIME"+timer.get());
     // Stop here if LED isn't valid
     if (strip == null) { return; }
 

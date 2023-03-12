@@ -49,8 +49,9 @@ public class Intake extends SubsystemBase {
   DecimalFormat df1 = new DecimalFormat("0.##");
   final double wristOrigin = 0;
   
-  final double WRIST_MAX = 1.0;
+  final double WRIST_MAX = 1.02;
   final double WRIST_MIN = 0.74;
+  final double WRIST_STRAIGHT = 0.78;
 
   public Intake(PneumaticHub hub, ColorSensor colorSensor) {
     wristMotor1 = new CANSparkMax(Constants.RobotMap.WRIST1, MotorType.kBrushless);
@@ -127,10 +128,10 @@ public class Intake extends SubsystemBase {
     // Actual game Periodic controls below this point
 
     // Claw Grip (default to "squeeze", open if right trigger held)
-    if(controller.getRightTriggerAxis() > .05){
-      pUnsqueeze();
-    }else{
+    if(controller.getRightTriggerAxis() > 0.1){
       pSqueeze();
+    } else if (controller.getLeftTriggerAxis() > 0.1) {
+      pUnsqueeze();
     }
 
     // Claw Wheel Spinners (default to "stopped"; take in if Right Bumper; spit out if Left Bumper)
