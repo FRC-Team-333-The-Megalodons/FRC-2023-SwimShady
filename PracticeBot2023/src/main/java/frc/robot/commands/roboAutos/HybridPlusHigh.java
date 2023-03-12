@@ -29,17 +29,17 @@ public class HybridPlusHigh extends SequentialCommandGroup {
     driveForwardController = new PIDController(.013, .01, 0, 35, 5, 1, Constants.Values.TICKS_PER_METER*2);
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
     turnController = new PIDController(.005, .007, 0, 90, .2, .2, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
-    driveToLineUp = new PIDController(.008, .008, 0, 35, 5, 1, Constants.Values.TICKS_PER_METER*.32);
+    driveToLineUp = new PIDController(.008, .008, 0, 35, 5, 1, Constants.Values.TICKS_PER_METER*.22);
 
     addCommands(
-      new Drive(chassis,gyro,driveForwardController,straightHeadingController,true),
-      new WaitCommand(.2),
-      new Drive(chassis, gyro, driveBackController, straightHeadingController, true),
-      new WaitCommand(.2),
-      new Turn(chassis, gyro, 170, turnController,true),
-      new WaitCommand(.2),
-      new Drive(chassis, gyro,driveToLineUp, true),
-      new GoHigh(elevator)
+      new Drive(chassis,gyro,driveForwardController,straightHeadingController,true)
+      ,new WaitCommand(.2)
+      ,new Drive(chassis, gyro, driveBackController, straightHeadingController, true)
+      ,new WaitCommand(.2)
+      ,new Turn(chassis, gyro, 170, turnController,true)
+      ,new WaitCommand(.2)
+      ,new Drive(chassis, gyro,driveToLineUp, true)
+      //,new GoHigh(elevator)
     ); 
   }
 }

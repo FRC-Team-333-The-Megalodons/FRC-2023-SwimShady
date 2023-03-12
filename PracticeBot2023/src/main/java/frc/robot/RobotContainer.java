@@ -123,11 +123,13 @@ public class RobotContainer {
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
     double colorsensor_elapsed = timer.get();
 
+    /*
     System.out.println("\tElevator   (P): "+elevator_elapsed+
                        "\tIntake     (P): "+intake_elapsed+
                        "\tGyro       (P): "+gyro_elapsed+
                        "\tLimelight  (P):"+limelight_elapsed+
                        "\tColorSensor(P):"+colorsensor_elapsed+"\n");
+                       */
   }
 
   public void teleopPeriodic() {
@@ -154,10 +156,12 @@ public class RobotContainer {
     } catch (Exception e) { /* Don't die if we fail to run the intake */}
     double intake_elapsed = timer.get();
     
+    /*
     System.out.println("\tElevState (T): "+elevatorstate_elapsed+
                        "\tChassis   (T): "+chassis_elapsed+
                        "\tElevator  (T): "+elevator_elapsed+  
                        "\tIntake    (T): "+intake_elapsed+"\n");
+                       */
   }
 
   public void resetEncoders() {

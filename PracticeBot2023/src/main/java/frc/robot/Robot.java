@@ -39,6 +39,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -51,6 +53,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Hybrid + High", kHybridPlusHighAuto);
     m_chooser.addOption("Score High Twice Auto", kScoreHighTwiceAuto);
     SmartDashboard.putData("Auto Modes:", m_chooser);
+
 
         m_visionThread = new Thread(
         () -> {
@@ -115,7 +118,10 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
+    
+   
     m_robotContainer.periodic();
+    SmartDashboard.putString("Selected Auto:", m_chooser.getSelected());
     SmartDashboard.updateValues();
   }
 
