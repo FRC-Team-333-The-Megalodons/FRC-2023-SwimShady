@@ -25,7 +25,10 @@ public class Elevator extends SubsystemBase {
   MotorControllerGroup elevator;
   Joystick stick;
   XboxController controller;
-  final double espeed = 1;
+  final double MAX_ESPEED = 1;
+
+  final double ELEVATOR_BOTTOM = 0;
+  final double ELEVATOR_TOP = 215;
 
   frc.robot.utils.PIDController eMidPidController, eGroundPidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
@@ -60,43 +63,40 @@ public class Elevator extends SubsystemBase {
     //elevatorState = RobotStates.ElevatorState.MOTORS_STOPPED;
   }
 
-  public void manualUp(){
-    if(isAtMaxUp()){
-      elevator.set(0);
-      //elevatorState = ElevatorState.HIGH;
-      return;
-    }else{
-      elevator.set(espeed);
-    }
+  public void manualUp()
+  {
+    manualMove(MAX_ESPEED);
   }
 
   public void manualDown(){
-    if(isAtMaxDown()){
-      elevator.set(0);
-      rightMotor.getEncoder().setPosition(0);
-      //elevatorState = RobotStates.ElevatorState.LOW;
-      return;
-    }else {
-      elevator.set(-espeed);
+    manualMove(-MAX_ESPEED);
+  }
+
+  public void manualMove(double speed)
+  {
+    // Negative speed means down, Positive speed means up.
+    // That means that if it's positive, we have to respect isAtMaxUp,
+    //  and if negative, we have to respect isAtMaxDown.
+    if (speed > 0 && isAtMaxUp()) {
+      stop();
+    } else if (speed < 0 && isAtMaxDown()) {
+      stop();
+    } else {
+      elevator.set(speed);
     }
   }
 
   public void e_Mid(){
-    if(isAtMaxUp()){
-      elevator.set(0);//acts as an emegency stop in case the pid fails
-      return;
-    }else{
-      elevator.set(eMidPidController.getOutput(-rightMotor.getEncoder().getPosition()));
-    }
+    manualMove(eMidPidController.getOutput(getRightPosition()));
+  }
+
+  public double getRightPosition()
+  {
+    return -rightMotor.getEncoder().getPosition();
   }
 
   public void e_GroundPosition(){
-    if(isAtMaxDown()){
-      elevator.set(0);//acts as an emegency stop in case the pid fails
-      return;
-    }else{
-      elevator.set(eGroundPidController.getOutput(-rightMotor.getEncoder().getPosition()));
-    }
+    manualMove(eGroundPidController.getOutput(getRightPosition()));
   }
 
   public boolean isControllerOnTarget(){
@@ -112,10 +112,48 @@ public class Elevator extends SubsystemBase {
     return elevatorState;
   }
 
-  public boolean isAtMaxUp(){return upperLimitSwitch.get() == false;}
-  public boolean isAtMaxDown(){return lowerLimitSwitch.get() == false;}
+  public boolean isAtMaxUp(){
+    if (upperLimitSwitch.get() == false) {
+      return true;
+    }
+    if (getRightPosition() >= ELEVATOR_TOP) {
+      return true;
+    }
+    return false;
+  }
+  public boolean isAtMaxDown(){
+    if (lowerLimitSwitch.get() == false) {
+      return true;
+    }
+    // We intentionally don't check getPosition at ELEVATOR_DOWN 
+    //  as we'd have no way to get a reset position if not.
+    return false;
+  }
 
-  public void teleopPeriodic() {
+  public void teleopPeriodic()
+  {
+      // "Dead zone" check for Right Joystick
+      if(Math.abs(controller.getRightY()) > 0.05) {
+        manualMove(-controller.getRightY());
+      }else{
+        if(controller.getAButton()){
+          // TODO: make an e_Home (that handles the wrist)
+          manualDown();
+        }else if(controller.getXButton()){
+          e_Mid();
+        }else if(controller.getBButton()){
+          e_GroundPosition();
+        }else if(controller.getYButton()){
+          // TODO: make an e_High (that handles the wrist)
+          manualUp();
+        }else {
+          stop();
+        }
+      }
+  }
+
+  public void oneDriverModeTeleopPeriodic()
+  {
     if(!RobotContainer.TWO_DRIVER_MODE){
       if (stick.getRawButton(4)) {
         manualUp();
@@ -132,30 +170,21 @@ public class Elevator extends SubsystemBase {
           elevator.set(0);
         }
       }
-    }else{
-      if(controller.getRightY() >= .05 || controller.getRightY() <= -.05){
-        elevator.set(controller.getRightY());
-      }else{
-        if(controller.getAButton()){
-          manualDown();
-        }else if(controller.getXButton()){
-          e_Mid();
-        }else if(controller.getBButton()){
-          e_GroundPosition();
-        }else if(controller.getYButton()){
-          manualUp();
-        }else {
-          stop();
-        }
-      }
     }
   }
 
 
   @Override
   public void periodic() {
+    if (isAtMaxDown()) {
+      resetEncoders();
+    } else if (isAtMaxUp()) {
+      // Note that this motor is "inverted", so setting position here should be negative.
+      rightMotor.getEncoder().setPosition(-ELEVATOR_TOP);
+    }
+
     SmartDashboard.putNumber("Left Elevatator Encoder", leftmotor.getEncoder().getPosition());
-    SmartDashboard.putNumber("Right Elevatator Encoder", -rightMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("Right Elevatator Encoder", getRightPosition());
     SmartDashboard.putString("Elevator State", elevatorState+"");
     SmartDashboard.putBoolean("Lower Switch", isAtMaxDown());
     SmartDashboard.putBoolean("Upper Switch", isAtMaxUp());
