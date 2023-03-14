@@ -42,8 +42,8 @@ public class Elevator extends SubsystemBase {
     leftmotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
     controller = new XboxController(1);
-    eMidPidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,95);
-    eGroundPidController = new PIDController(.05, .005, 0, 80, 4, 5,10);
+    eMidPidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,Constants.Elevator.ELEVATOR_POS_MID);
+    eGroundPidController = new PIDController(.05, .008, 0, 25, 1.5, 2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
@@ -71,8 +71,7 @@ public class Elevator extends SubsystemBase {
     manualMove(-MAX_ESPEED);
   }
 
-  public void manualMove(double speed)
-  {
+  public void manualMove(double speed){
     // Negative speed means down, Positive speed means up.
     // That means that if it's positive, we have to respect isAtMaxUp,
     //  and if negative, we have to respect isAtMaxDown.
@@ -86,20 +85,23 @@ public class Elevator extends SubsystemBase {
   }
 
   public void e_Mid(){
-    manualMove(eMidPidController.getOutput(getRightPosition()));
-  }
-
-  public double getRightPosition()
-  {
-    return -rightMotor.getEncoder().getPosition();
+    manualMove(eMidPidController.getOutput(-getRightPosition()));
   }
 
   public void e_GroundPosition(){
-    manualMove(eGroundPidController.getOutput(getRightPosition()));
+    manualMove(eGroundPidController.getOutput(-getRightPosition()));
   }
 
-  public boolean isControllerOnTarget(){
+  public double getRightPosition(){
+    return rightMotor.getEncoder().getPosition();
+  }
+
+  public boolean isMidControllerOnTarget(){
     return eMidPidController.isOnTarget();
+  }
+
+  public boolean isGroungControllerOnTarget(){
+    return eGroundPidController.isOnTarget();
   }
 
   public void resetEncoders() {
@@ -129,8 +131,7 @@ public class Elevator extends SubsystemBase {
     return false;
   }
 
-  public void teleopPeriodic()
-  {
+  public void teleopPeriodic(){
       // "Dead zone" check for Right Joystick
       if(Math.abs(controller.getRightY()) > 0.05) {
         manualMove(-controller.getRightY());
@@ -151,8 +152,7 @@ public class Elevator extends SubsystemBase {
       }
   }
 
-  public void oneDriverModeTeleopPeriodic()
-  {
+  public void oneDriverModeTeleopPeriodic(){
     if(!RobotContainer.TWO_DRIVER_MODE){
       if (stick.getRawButton(4)) {
         manualUp();
@@ -179,21 +179,14 @@ public class Elevator extends SubsystemBase {
       resetEncoders();
     } else if (isAtMaxUp()) {
       // Note that this motor is "inverted", so setting position here should be negative.
-      rightMotor.getEncoder().setPosition(-Constants.Elevator.ELEVATOR_POS_TOP);
+      //rightMotor.getEncoder().setPosition(-Constants.Elevator.ELEVATOR_POS_TOP);
     }
 
     SmartDashboard.putNumber("Left Elevator Encoder", leftmotor.getEncoder().getPosition());
-    SmartDashboard.putNumber("Right Elevator Encoder", getRightPosition());
+    SmartDashboard.putNumber("Right Elevator Encoder", -getRightPosition());
     SmartDashboard.putString("Elevator State", elevatorState+"");
     SmartDashboard.putBoolean("Lower Switch", isAtMaxDown());
     SmartDashboard.putBoolean("Upper Switch", isAtMaxUp());
     SmartDashboard.putNumber("Stick lever", stick.getRawAxis(3));
   }
 }
-
-/*
- * Elevator Encoder Values
- * 1. 69.5 max extension, high shot
- * 2. 50 mid shot
- * 3. 0 home position low shot
- */

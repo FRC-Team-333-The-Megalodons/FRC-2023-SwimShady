@@ -51,6 +51,7 @@ public class PIDController {
 
     public double getOutput(double sensorValue){
         SmartDashboard.putNumber("Target", target);
+        SmartDashboard.putNumber("error", error);
         currentTime = Timer.getFPGATimestamp() - lastTimeStamp;
         if(sensorValue > maxTarget){
             error = maxTarget - sensorValue;
@@ -78,6 +79,14 @@ public class PIDController {
         SmartDashboard.putNumber("error", error);
         SmartDashboard.putNumber("error sum", errorSum);
 
+        SmartDashboard.putNumber("output", (kP * error) + (kI * errorSum) + (kD * errorRate));
+
+        if(isOnTarget){
+            error = 0;
+            errorSum = 0;
+            errorRate = 0;
+            return 0;
+        }
         return (kP * error) + (kI * errorSum) + (kD * errorRate);//only PI for now
     }
 

@@ -67,16 +67,16 @@ public final class Constants {
 
     public static class Elevator {
         public static final double ELEVATOR_POS_BOTTOM = 0;
-        public static final double ELEVATOR_POS_GROUND_INTAKE = 25;
+        public static final double ELEVATOR_POS_GROUND_INTAKE = 14.5;
         public static final double ELEVATOR_POS_TOP = 215;
-
+        public static final double ELEVATOR_POS_MID = 130;
     }
 
     public static class Wrist {
         public static final double WRIST_MAX = 1.02;
         public static final double WRIST_MIN = 0.74;
         public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.82;
-        public static final double WRIST_STRAIGHT = 0.8;
+        public static final double WRIST_STRAIGHT = 0.83;
         public static final double WRIST_GROUND_INTAKE = 0.74;
         public static final double WRIST_APPROX_THRESHOLD = 0.07;
         public static final double WRIST_ENCODER_MULTIPLIER = 20;

@@ -7,12 +7,10 @@ package frc.robot.commands.roboActions.elevator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
 
-public class GoMid extends CommandBase {
-  /** Creates a new GoMid. */
-
+public class GoGround extends CommandBase {
+  /** Creates a new GoGround. */
   Elevator elevator;
-
-  public GoMid(Elevator elevator) {
+  public GoGround(Elevator elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
     this.elevator = elevator;
@@ -25,7 +23,7 @@ public class GoMid extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator.e_Mid();
+    elevator.e_GroundPosition();
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +35,6 @@ public class GoMid extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isAtMaxUp() || elevator.isMidControllerOnTarget();
+    return elevator.isGroungControllerOnTarget();
   }
 }

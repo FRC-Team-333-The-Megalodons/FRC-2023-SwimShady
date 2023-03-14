@@ -2,41 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.roboActions.elevator;
+package frc.robot.commands.roboActions.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 
-public class GoMid extends CommandBase {
-  /** Creates a new GoMid. */
-
-  Elevator elevator;
-
-  public GoMid(Elevator elevator) {
+public class WristAtOrigin extends CommandBase {
+  /** Creates a new WristAtOrigin. */
+  Intake intake;
+  public WristAtOrigin(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevator);
-    this.elevator = elevator;
+    addRequirements(intake);
+    this.intake = intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator.e_Mid();
+    intake.moveWrist(-.3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevator.stop();
+    intake.moveWrist(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isAtMaxUp() || elevator.isMidControllerOnTarget();
+    return intake.isAtMaxUp();
   }
 }

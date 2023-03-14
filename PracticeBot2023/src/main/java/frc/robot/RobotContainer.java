@@ -5,9 +5,10 @@
 package frc.robot;
 
 import frc.robot.RobotStates.ElevatorState;
-import frc.robot.commands.roboAutos.HybridPlusHigh;
 import frc.robot.commands.roboAutos.MobilityOnly;
+import frc.robot.commands.roboAutos.ScoreHighCube;
 import frc.robot.commands.roboAutos.ScoreHighTwice;
+import frc.robot.commands.roboAutos.ScoreHybridTwice;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
@@ -16,7 +17,6 @@ import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -87,10 +87,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand(String selectedAuto) {
     // An example command will be run in autonomous
+    //return new ScoreHighCube(m_elevator, m_intake);
+    
     switch (selectedAuto) {
       case Robot.kNoAuto: return null;
       case Robot.kMobilityAuto: return new MobilityOnly(m_chassis, m_gyro);
-      case Robot.kHybridPlusHighAuto: return new HybridPlusHigh(m_chassis, m_gyro, m_elevator);
       case Robot.kScoreHighTwiceAuto: return new ScoreHighTwice(m_chassis, m_gyro, m_elevator);
       default: return null;
     }
@@ -102,35 +103,22 @@ public class RobotContainer {
     try {
       m_elevator.periodic();
     } catch (Exception e) { /* Don't die if the elevator dies */}
-    double elevator_elapsed = timer.get();
     timer.reset();
     try {
       m_intake.periodic();
     } catch (Exception e) { /* Don't die if the intake dies */}
-    double intake_elapsed = timer.get();
     timer.reset();
     try {
       m_gyro.periodic();
     } catch (Exception e) { /* Don't die if the gyro dies */}
-    double gyro_elapsed = timer.get();
     timer.reset();
     try {
       m_lLight.periodic();
     } catch (Exception e) { /* Don't die if the limelight dies */ }
-    double limelight_elapsed = timer.get();
     timer.reset();
     try {
       m_colorSensor.periodic();
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
-    double colorsensor_elapsed = timer.get();
-
-    /*
-    System.out.println("\tElevator   (P): "+elevator_elapsed+
-                       "\tIntake     (P): "+intake_elapsed+
-                       "\tGyro       (P): "+gyro_elapsed+
-                       "\tLimelight  (P):"+limelight_elapsed+
-                       "\tColorSensor(P):"+colorsensor_elapsed+"\n");
-                       */
   }
 
   public void teleopPeriodic() {
@@ -140,29 +128,18 @@ public class RobotContainer {
     try {
       elevatorState = m_elevator.getState();
     } catch (Exception e) { /* Don't die if we fail to evaluate the elevator state */}
-    double elevatorstate_elapsed = timer.get();
     timer.reset();
     try {
       m_chassis.teleopPeriodic(elevatorState);
     } catch (Exception e) { /* Don't die if we fail to run the chassis */}
-    double chassis_elapsed = timer.get();
     timer.reset();
     try {
       m_elevator.teleopPeriodic();
     } catch (Exception e) { /* Don't die if we fail to run the elevator */}
-    double elevator_elapsed = timer.get();
     timer.reset();
     try {
       m_intake.teleopPeriodic();
     } catch (Exception e) { /* Don't die if we fail to run the intake */}
-    double intake_elapsed = timer.get();
-    
-    /*
-    System.out.println("\tElevState (T): "+elevatorstate_elapsed+
-                       "\tChassis   (T): "+chassis_elapsed+
-                       "\tElevator  (T): "+elevator_elapsed+  
-                       "\tIntake    (T): "+intake_elapsed+"\n");
-                       */
   }
 
   public void resetEncoders() {
