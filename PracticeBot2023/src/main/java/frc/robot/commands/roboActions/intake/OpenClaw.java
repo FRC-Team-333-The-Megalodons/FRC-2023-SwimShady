@@ -33,6 +33,6 @@ public class OpenClaw extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeCLosed();
+    return intake.intakeOpen();
   }
 }

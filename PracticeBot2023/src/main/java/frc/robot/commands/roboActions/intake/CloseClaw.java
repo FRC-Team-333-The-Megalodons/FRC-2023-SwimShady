@@ -15,7 +15,7 @@ public class CloseClaw extends CommandBase {
   public CloseClaw(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
-    this.intake =intake;
+    this.intake = intake;
   }
 
   // Called when the command is initially scheduled.

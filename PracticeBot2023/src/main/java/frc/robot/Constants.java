@@ -76,7 +76,7 @@ public final class Constants {
         public static final double WRIST_MAX = 1.02;
         public static final double WRIST_MIN = 0.74;
         public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.82;
-        public static final double WRIST_STRAIGHT = 0.83;
+        public static final double WRIST_STRAIGHT = 0.78;
         public static final double WRIST_GROUND_INTAKE = 0.74;
         public static final double WRIST_APPROX_THRESHOLD = 0.07;
         public static final double WRIST_ENCODER_MULTIPLIER = 20;

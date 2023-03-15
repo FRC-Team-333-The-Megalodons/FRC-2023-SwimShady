@@ -7,30 +7,28 @@ package frc.robot.commands.roboAutos;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.roboActions.Combo.ElevatorGroundWhileWristAtOrigin;
 import frc.robot.commands.roboActions.Combo.ElevatorHighWithWristStraight;
+import frc.robot.commands.roboActions.intake.CloseClaw;
 import frc.robot.commands.roboActions.intake.Eject;
-import frc.robot.commands.roboActions.intake.IntakeIn;
-import frc.robot.commands.roboActions.intake.OpenClaw;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreHighCube extends SequentialCommandGroup {
-  /** Creates a new ScoreHighCube. */
-  frc.robot.subsystems.Elevator elevator;
+public class ScoreHighCone extends SequentialCommandGroup {
+  /** Creates a new ScoreHighCone. */
+  Elevator elevator;
   Intake intake;
-  public ScoreHighCube(frc.robot.subsystems.Elevator elevator, Intake intake) {
+  public ScoreHighCone(Elevator elevator, Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     this.elevator = elevator;
     this.intake = intake;
-
     addCommands(
-      new OpenClaw(intake)
-      ,new IntakeIn(intake)
+      new CloseClaw(intake)
       ,new ElevatorHighWithWristStraight(elevator, intake)
       ,new Eject(intake)
-      ,new ElevatorGroundWhileWristAtOrigin(elevator, intake)
+      ,new ElevatorGroundWhileWristAtOrigin(elevator, intake) 
     );
   }
 }

@@ -75,12 +75,7 @@ public class PIDController {
         lastError = error;
 
         isOnTarget = maxTarget >= sensorValue && minTarget <= sensorValue;
-        SmartDashboard.putBoolean("is on target", isOnTarget);
-        SmartDashboard.putNumber("error", error);
-        SmartDashboard.putNumber("error sum", errorSum);
-
-        SmartDashboard.putNumber("output", (kP * error) + (kI * errorSum) + (kD * errorRate));
-
+        
         if(isOnTarget){
             error = 0;
             errorSum = 0;

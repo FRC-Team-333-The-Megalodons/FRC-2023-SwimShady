@@ -88,8 +88,8 @@ public class Intake extends SubsystemBase {
     wristEncoder.setConnectedFrequencyThreshold(900);
     wristEncoder.reset();
     wristStraightController = new PIDController(4, 5.5, 0, .8, 
-                                                0.04,
-                                                0.02,
+                                                0.015,
+                                                0.015,
                                                 Constants.Wrist.WRIST_STRAIGHT);
   }
 
@@ -109,11 +109,11 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean intakeCLosed(){
-    return solenoid.get() == Value.kReverse;
+    return solenoid.get() == Value.kForward;
   }
 
   public boolean intakeOpen(){
-    return solenoid.get() == Value.kForward;
+    return solenoid.get() == Value.kReverse;
   }
 
   public void iIn(){
@@ -311,7 +311,6 @@ public class Intake extends SubsystemBase {
       wristState = WristStates.ROTATING_OUT;
     } else if(stick.getPOV() == 90){
       setWristStaight();
-      SmartDashboard.putNumber("Wrist pid output", wristStraightController.getOutput(wristValue));
     }else {
       stop();
       wristState = WristStates.MOTORS_STOPPED;

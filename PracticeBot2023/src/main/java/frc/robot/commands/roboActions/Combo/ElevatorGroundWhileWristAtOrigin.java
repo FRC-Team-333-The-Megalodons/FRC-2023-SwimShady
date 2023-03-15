@@ -5,11 +5,18 @@
 package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 
-public class ElevatorLowWhileWristAtOrigin extends CommandBase {
+public class ElevatorGroundWhileWristAtOrigin extends CommandBase {
   /** Creates a new ElevatorLowWhileWristAtOrigin. */
-  public ElevatorLowWhileWristAtOrigin() {
+  Elevator elevator;
+  Intake intake;
+  public ElevatorGroundWhileWristAtOrigin(Elevator elevator, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(elevator,intake);
+    this.elevator = elevator;
+    this.intake = intake;
   }
 
   // Called when the command is initially scheduled.
@@ -18,15 +25,23 @@ public class ElevatorLowWhileWristAtOrigin extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(!elevator.isAtMaxDown() || !elevator.isGroungControllerOnTarget()){
+      elevator.e_GroundPosition();
+    }
+    intake.moveWrist(-.3);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    elevator.stop();
+    intake.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return elevator.isGroungControllerOnTarget() && intake.isAtMaxUp();
   }
 }
