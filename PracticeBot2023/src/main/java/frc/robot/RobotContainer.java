@@ -6,9 +6,7 @@ package frc.robot;
 
 import frc.robot.RobotStates.ElevatorState;
 import frc.robot.commands.roboAutos.MobilityOnly;
-import frc.robot.commands.roboAutos.ScoreHighCube;
 import frc.robot.commands.roboAutos.ScoreHighTwice;
-import frc.robot.commands.roboAutos.ScoreHybridTwice;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
