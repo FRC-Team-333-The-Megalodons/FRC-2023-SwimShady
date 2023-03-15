@@ -87,7 +87,7 @@ public class Intake extends SubsystemBase {
     wristEncoder = new DutyCycleEncoder(9);
     wristEncoder.setConnectedFrequencyThreshold(900);
     wristEncoder.reset();
-    wristStraightController = new PIDController(4, 5.5, 0, .8, 
+    wristStraightController = new PIDController(5.5, 5.5, 0, .8, 
                                                 0.015,
                                                 0.015,
                                                 Constants.Wrist.WRIST_STRAIGHT);
@@ -140,7 +140,7 @@ public class Intake extends SubsystemBase {
   double lastIntakeMotorPosition = 0;
 
   public boolean intakeAutoDone(){
-    if((intakEncoder.getPosition() + lastIntakeMotorPosition) <= -25){
+    if((intakEncoder.getPosition() + lastIntakeMotorPosition) <= -35){
       lastIntakeMotorPosition = intakEncoder.getPosition();
       return true;
     }
@@ -148,7 +148,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean outakeAutoDone(){
-    if((lastIntakeMotorPosition + intakEncoder.getPosition()) >= 15){
+    if((lastIntakeMotorPosition + intakEncoder.getPosition()) >= 10){
       lastIntakeMotorPosition = intakEncoder.getPosition();
       return true;
     }

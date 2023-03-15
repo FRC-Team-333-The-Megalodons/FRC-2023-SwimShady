@@ -28,6 +28,8 @@ public class ElevatorGroundWhileWristAtOrigin extends CommandBase {
   public void execute() {
     if(!elevator.isAtMaxDown() || !elevator.isGroungControllerOnTarget()){
       elevator.e_GroundPosition();
+    }else{
+      elevator.stop();
     }
     intake.moveWrist(-.3);
   }

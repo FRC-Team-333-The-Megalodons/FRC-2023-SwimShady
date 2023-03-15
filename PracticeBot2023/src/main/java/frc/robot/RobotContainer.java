@@ -5,7 +5,10 @@
 package frc.robot;
 
 import frc.robot.RobotStates.ElevatorState;
+import frc.robot.commands.roboAutos.ConePlusMobility;
 import frc.robot.commands.roboAutos.MobilityOnly;
+import frc.robot.commands.roboAutos.ScoreHighCone;
+import frc.robot.commands.roboAutos.ScoreHighCube;
 import frc.robot.commands.roboAutos.ScoreHighTwice;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ColorSensor;
@@ -85,14 +88,15 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand(String selectedAuto) {
     // An example command will be run in autonomous
-    //return new ScoreHighCube(m_elevator, m_intake);
-    
+    return new ConePlusMobility(m_chassis, m_gyro, m_elevator, m_intake);
+    /* 
     switch (selectedAuto) {
       case Robot.kNoAuto: return null;
       case Robot.kMobilityAuto: return new MobilityOnly(m_chassis, m_gyro);
       case Robot.kScoreHighTwiceAuto: return new ScoreHighTwice(m_chassis, m_gyro, m_elevator);
       default: return null;
     }
+    */
   }
 
   public void periodic() {

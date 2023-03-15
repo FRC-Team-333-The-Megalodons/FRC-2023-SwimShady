@@ -28,6 +28,8 @@ public class ElevatorGroundWhileWristStraight extends CommandBase {
   public void execute() {
     if(!elevator.isAtMaxDown() || !elevator.isGroungControllerOnTarget()){
       elevator.e_GroundPosition();
+    }else{
+      elevator.stop();
     }
     intake.setWristStaight();
   }

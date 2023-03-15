@@ -5,14 +5,13 @@
 package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 
-public class ElevatorHighWithWristStraight extends CommandBase {
-  /** Creates a new ElevatorHighWithWristStraight. */
-  Elevator elevator;
+public class ElevatorHighWithWristSafe extends CommandBase {
+  /** Creates a new ElevatorHighWithWristStraightCone. */
+  frc.robot.subsystems.Elevator elevator;
   Intake intake;
-  public ElevatorHighWithWristStraight(Elevator elevator, Intake intake) {
+  public ElevatorHighWithWristSafe(frc.robot.subsystems.Elevator elevator, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator,intake);
     this.elevator = elevator;
@@ -31,19 +30,23 @@ public class ElevatorHighWithWristStraight extends CommandBase {
     }else{
       elevator.stop();
     }
-    intake.setWristStaight();
+    if(intake.getRealWristPosition() >= .96){//60 for mid
+      intake.moveWrist(.3);
+    }else{
+      intake.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     elevator.stop();
-    intake.moveWrist(0);
+    intake.stop();
   }
-
+  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isAtMaxUp() && intake.isWristStraight();
+    return elevator.isAtMaxUp();
   }
 }
