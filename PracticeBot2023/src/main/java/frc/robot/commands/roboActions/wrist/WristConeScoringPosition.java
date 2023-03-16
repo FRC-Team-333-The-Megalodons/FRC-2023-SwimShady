@@ -25,7 +25,7 @@ public class WristConeScoringPosition extends CommandBase {
   @Override
   public void execute() {
     if(intake.getRealWristPosition() >= Constants.Wrist.WRIST_CONE_SCORING_POSITION){
-      intake.moveWrist(.3);
+      intake.moveWrist(.4);
     }else{
       intake.stop();
     }

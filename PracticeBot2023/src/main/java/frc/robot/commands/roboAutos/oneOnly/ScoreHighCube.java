@@ -2,14 +2,15 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.roboAutos;
+package frc.robot.commands.roboAutos.oneOnly;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.roboActions.Combo.ElevatorGroundWhileWristAtOrigin;
-import frc.robot.commands.roboActions.Combo.ElevatorHighWithWristStraight;
+import frc.robot.commands.roboActions.Combo.ElevatorHighWithWristSafe;
 import frc.robot.commands.roboActions.intake.Eject;
 import frc.robot.commands.roboActions.intake.IntakeIn;
 import frc.robot.commands.roboActions.intake.OpenClaw;
+import frc.robot.commands.roboActions.wrist.WristStraight;
 import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -28,7 +29,8 @@ public class ScoreHighCube extends SequentialCommandGroup {
     addCommands(
       new OpenClaw(intake)
       ,new IntakeIn(intake)
-      ,new ElevatorHighWithWristStraight(elevator, intake)
+      ,new ElevatorHighWithWristSafe(elevator, intake)
+      ,new WristStraight(intake)
       ,new Eject(intake)
       ,new ElevatorGroundWhileWristAtOrigin(elevator, intake)
     );

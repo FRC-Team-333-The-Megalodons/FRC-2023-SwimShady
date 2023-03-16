@@ -5,11 +5,9 @@
 package frc.robot;
 
 import frc.robot.RobotStates.ElevatorState;
-import frc.robot.commands.roboAutos.ConePlusMobility;
-import frc.robot.commands.roboAutos.MobilityOnly;
-import frc.robot.commands.roboAutos.ScoreHighCone;
-import frc.robot.commands.roboAutos.ScoreHighCube;
-import frc.robot.commands.roboAutos.ScoreHighTwice;
+import frc.robot.commands.roboAutos.ChargeStation.Balance;
+import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
+import frc.robot.commands.roboAutos.onePlusPickUp.ConeHighPlusPickUp;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
@@ -51,7 +49,7 @@ public class RobotContainer {
     m_hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
     //m_colorSensor = new ColorSensor();
     m_chassis = new Chassis(m_hub);
-    m_intake = new Intake(m_hub, m_colorSensor);
+    m_intake = new Intake(m_hub, null);
     m_elevator = new Elevator(m_intake);
     m_intake.setElevator(m_elevator);
     m_gyro = new Gyro();
@@ -88,7 +86,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand(String selectedAuto) {
     // An example command will be run in autonomous
-    return new ConePlusMobility(m_chassis, m_gyro, m_elevator, m_intake);
+    //return new ConePlusMobility(m_chassis, m_gyro, m_elevator, m_intake);
     /* 
     switch (selectedAuto) {
       case Robot.kNoAuto: return null;
@@ -97,6 +95,8 @@ public class RobotContainer {
       default: return null;
     }
     */
+    //return new ConeHighPlusPickUp(m_chassis, m_gyro, m_elevator, m_intake);
+    return new Balance(m_chassis,m_gyro);
   }
 
   public void periodic() {
@@ -119,7 +119,7 @@ public class RobotContainer {
     } catch (Exception e) { /* Don't die if the limelight dies */ }
     timer.reset();
     try {
-      m_colorSensor.periodic();
+      //m_colorSensor.periodic();
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
   }
 
@@ -147,6 +147,7 @@ public class RobotContainer {
   public void resetEncoders() {
     m_gyro.reset();
     m_chassis.resetEncoders();
+    m_intake.resetIntakeEncoder();
   }
 
   public void setChassisCoast(){

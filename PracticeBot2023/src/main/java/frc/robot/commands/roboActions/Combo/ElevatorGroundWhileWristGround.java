@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 
-public class ElevatorGroundWhileWristStraight extends CommandBase {
+public class ElevatorGroundWhileWristGround extends CommandBase {
   /** Creates a new ElevatorGroundWhileWristStraight. */
   Elevator elevator;
   Intake intake;
-  public ElevatorGroundWhileWristStraight(Elevator elevator, Intake intake) {
+  public ElevatorGroundWhileWristGround(Elevator elevator, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator,intake);
     this.elevator = elevator;
@@ -31,7 +31,7 @@ public class ElevatorGroundWhileWristStraight extends CommandBase {
     }else{
       elevator.stop();
     }
-    intake.setWristStaight();
+    intake.moveWrist(.4);
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +44,6 @@ public class ElevatorGroundWhileWristStraight extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isGroungControllerOnTarget() && intake.isWristStraight();
+    return elevator.isGroungControllerOnTarget() && intake.isAtMaxDown();
   }
 }

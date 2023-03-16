@@ -76,15 +76,15 @@ public final class Constants {
         public static final double WRIST_MAX = 1.02;
         public static final double WRIST_MIN = 0.74;
         public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.82;
-        public static final double WRIST_STRAIGHT = 0.78;
+        public static final double WRIST_STRAIGHT = 0.77;
         public static final double WRIST_GROUND_INTAKE = 0.74;
         public static final double WRIST_APPROX_THRESHOLD = 0.07;
         public static final double WRIST_ENCODER_MULTIPLIER = 20;
         public static final double WRIST_CONE_SCORING_POSITION = .85;
         
         public static final double WRIST_UP_SPEED = -0.65;
-        public static final double WRIST_UP_SLOW_SPEED = -0.3;
-        public static final double WRIST_DOWN_SPEED = 0.4;
+        public static final double WRIST_UP_SLOW_SPEED = -0.37;
+        public static final double WRIST_DOWN_SPEED = 0.43;
     }
 
     public static class RobotMap{

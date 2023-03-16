@@ -25,7 +25,7 @@ public class WristDownToIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.moveWrist(.3);
+    intake.moveWrist(.4);
   }
 
   // Called once the command ends or is interrupted.

@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.text.DecimalFormat;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,6 +14,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Gyro extends SubsystemBase {
   /** Creates a new Gyro. */
    AHRS navx;
+   DecimalFormat df1 = new DecimalFormat("0");
+
+   public double getUsableTilt(){
+    return Double.valueOf(df1.format(getTilt()))-4;
+   }
 
    public Gyro() {
      navx = new AHRS();
@@ -27,7 +34,7 @@ public class Gyro extends SubsystemBase {
      return navx.getAngle();
    }
  
-   public double getTilt(){
+   private double getTilt(){
      //todo get rid of gyro noise
      return navx.getPitch();
    }
@@ -35,7 +42,7 @@ public class Gyro extends SubsystemBase {
    @Override
    public void periodic() {
      // This method will be called once per scheduler run
-     SmartDashboard.putNumber("tilt", (getTilt()-navx.getRawAccelX()) > 0 ? (getTilt()-navx.getRawAccelX())-2 : (getTilt()-navx.getRawAccelX())+2);
+     SmartDashboard.putNumber("tilt", getUsableTilt());
      SmartDashboard.putNumber("Z", navx.getRawGyroZ());
      SmartDashboard.putNumber("accel", navx.getCompassHeading());
      SmartDashboard.putNumber("x", navx.getAngle());

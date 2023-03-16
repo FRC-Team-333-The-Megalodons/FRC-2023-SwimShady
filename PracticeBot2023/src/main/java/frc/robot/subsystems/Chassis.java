@@ -94,8 +94,8 @@ public class Chassis extends SubsystemBase {
 
     if(RobotContainer.TWO_DRIVER_MODE){
       if(stick.getTrigger()){//slows down the chassis for lining up
-        x /= 1.7;
-        y /= 2.5;
+        x /= 2.3;
+        y /= 1.7;
         setBrake();
       }else{
         setCoast();

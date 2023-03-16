@@ -17,7 +17,6 @@ public class ColorSensor {
   ColorSensorV3 cs;
   ColorMatch m_colorMatcher;
   Joystick joy;
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
   LEDStrip strip;
 
   final Color kBlueTarget = new Color(0.143, 0.427, 0.429);
@@ -28,12 +27,9 @@ public class ColorSensor {
   final int NUMBER_OF_LEDS = 85;
 
   public ColorSensor(){
-    m_colorMatcher = new ColorMatch();
-    m_colorMatcher.addColorMatch(kBlueTarget);
-    m_colorMatcher.addColorMatch(kYellowTarget);
 
     try {
-      cs = new ColorSensorV3(i2cPort);
+      //cs = new ColorSensorV3(i2cPort);
     } catch (Exception e) {
       // Failed to instantiate color sensor, but it's not fatal for the robot.
       // Just do null checks everywhere in the code so that we don't actually
@@ -41,14 +37,14 @@ public class ColorSensor {
     }
     
     try {
-      //strip = new LEDStrip(6, NUMBER_OF_LEDS);
+      strip = new LEDStrip(6, NUMBER_OF_LEDS);
     } catch (Exception e) {
       // Failed to instantiate LED Strip, but it's not fatal for the robot.
       // Just do null checks everywhere in the code so that we don't actually
       //  throw exceptions on failures.
     }
 
-    joy = new Joystick(1);
+    joy = new Joystick(0);
   }
 
   /*
@@ -127,6 +123,7 @@ public class ColorSensor {
   public void periodic(){
     //Timer timer = new Timer();
     //timer.start();
+    /* 
     SmartDashboard.putBoolean("Is Cone?", isCone());
     SmartDashboard.putBoolean("Is Cube?", isCube());
     SmartDashboard.putString("Color", getDisplayColor());
@@ -150,5 +147,8 @@ public class ColorSensor {
       //strip.set(10, 0, 40);//purple
       strip.setFancyDualLayer(FancyLED.PULSE, 0, 0, 100, 155, 10, 0);
     }
+    */
+    
+    strip.setFancyDualLayer(FancyLED.KNIGHT_RIDER, 0, 0, 100, 0, 0, 0);    
   }
 }
