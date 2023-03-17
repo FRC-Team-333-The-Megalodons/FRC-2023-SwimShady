@@ -10,10 +10,18 @@ import frc.robot.subsystems.Intake;
 public class IntakeIn extends CommandBase {
   /** Creates a new IntakeIn. */
   Intake intake;
+  boolean shortDuration;
   public IntakeIn(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;
+  }
+
+  public IntakeIn(Intake intake, boolean shortDuration) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake);
+    this.intake = intake;
+    this.shortDuration = shortDuration;
   }
 
   // Called when the command is initially scheduled.
@@ -31,12 +39,12 @@ public class IntakeIn extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.iStop();;
+    intake.iStop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeAutoDone();
+    return shortDuration ? intake.shortIntakeAutoDone() : intake.intakeAutoDone();
   }
 }

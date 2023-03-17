@@ -28,7 +28,7 @@ public class ScoreHighCube extends SequentialCommandGroup {
 
     addCommands(
       new OpenClaw(intake)
-      ,new IntakeIn(intake)
+      ,new IntakeIn(intake,true)
       ,new ElevatorHighWithWristSafe(elevator, intake)
       ,new WristStraight(intake)
       ,new Eject(intake)

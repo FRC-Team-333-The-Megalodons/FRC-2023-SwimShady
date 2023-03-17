@@ -31,7 +31,6 @@ public class ScoreHighCone extends SequentialCommandGroup {
       ,new WristConeScoringPosition(intake)
       ,new OpenClaw(intake)
       ,new ElevatorGroundWhileWristAtOrigin(elevator, intake) 
-      ,new CloseClaw(intake)
     );
   }
 }

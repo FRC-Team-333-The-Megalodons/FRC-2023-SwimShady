@@ -139,8 +139,16 @@ public class Intake extends SubsystemBase {
 
   double lastIntakeMotorPosition = 0;
 
+  public boolean shortIntakeAutoDone(){
+    if((intakEncoder.getPosition()) <= Constants.Intake.INTAKE_SHORT){
+      lastIntakeMotorPosition = intakEncoder.getPosition();
+      return true;
+    }
+    return false;
+  }
+
   public boolean intakeAutoDone(){
-    if((intakEncoder.getPosition()) <= -85){
+    if((intakEncoder.getPosition()) <= Constants.Intake.INTAKE_LONG){
       lastIntakeMotorPosition = intakEncoder.getPosition();
       return true;
     }
@@ -148,7 +156,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean outakeAutoDone(){
-    if((lastIntakeMotorPosition) >= 10){
+    if((lastIntakeMotorPosition) >= Constants.Intake.OUTAKE){
       lastIntakeMotorPosition = intakEncoder.getPosition();
       return true;
     }

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Gyro extends SubsystemBase {
   /** Creates a new Gyro. */
    AHRS navx;
-   DecimalFormat df1 = new DecimalFormat("0");
+   DecimalFormat df1 = new DecimalFormat("0.#");
 
    public double getUsableTilt(){
     return Double.valueOf(df1.format(getTilt()))-4;

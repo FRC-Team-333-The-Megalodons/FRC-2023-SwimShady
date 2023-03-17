@@ -6,8 +6,6 @@ package frc.robot;
 
 import frc.robot.RobotStates.ElevatorState;
 import frc.robot.commands.roboAutos.ChargeStation.Balance;
-import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
-import frc.robot.commands.roboAutos.onePlusPickUp.ConeHighPlusPickUp;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;

@@ -87,6 +87,12 @@ public final class Constants {
         public static final double WRIST_DOWN_SPEED = 0.43;
     }
 
+    public static class Intake{
+        public static final int INTAKE_SHORT = -10;
+        public static final int INTAKE_LONG = -85;
+        public static final int OUTAKE = 10;
+    }
+
     public static class RobotMap{
         /*
          * Motor IDS
