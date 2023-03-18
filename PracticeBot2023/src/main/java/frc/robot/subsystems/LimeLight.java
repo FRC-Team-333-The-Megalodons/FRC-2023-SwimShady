@@ -32,6 +32,7 @@ public class LimeLight extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     x = tx.getDouble(0);
     y = ty.getDouble(0);
 

@@ -10,14 +10,16 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Metrics;
 
 public class Gyro extends SubsystemBase {
   /** Creates a new Gyro. */
    AHRS navx;
-   DecimalFormat df1 = new DecimalFormat("0.#");
+   DecimalFormat df1 = new DecimalFormat("0");
+   DecimalFormat df2 = new DecimalFormat("0.##");
 
    public double getUsableTilt(){
-    return Double.valueOf(df1.format(getTilt()))-4;
+    return Double.valueOf(df1.format(getTilt()+1.6));
    }
 
    public Gyro() {
@@ -31,7 +33,7 @@ public class Gyro extends SubsystemBase {
    }
  
    public double getAngle(){
-     return navx.getAngle();
+     return Double.valueOf(df2.format(navx.getAngle()));
    }
  
    private double getTilt(){
@@ -41,10 +43,16 @@ public class Gyro extends SubsystemBase {
  
    @Override
    public void periodic() {
-     // This method will be called once per scheduler run
-     SmartDashboard.putNumber("tilt", getUsableTilt());
-     SmartDashboard.putNumber("Z", navx.getRawGyroZ());
-     SmartDashboard.putNumber("accel", navx.getCompassHeading());
-     SmartDashboard.putNumber("x", navx.getAngle());
+      final String metric_key = "Gyro::periodic";
+      Metrics.startTimer(metric_key);
+      periodic_impl();
+      Metrics.stopTimer(metric_key);
+   }
+
+   public void periodic_impl()
+   {
+      // This method will be called once per scheduler run
+      SmartDashboard.putNumber("NavX Tilt", getUsableTilt());
+      SmartDashboard.putNumber("NavX Rotation", getAngle());
    }
 }

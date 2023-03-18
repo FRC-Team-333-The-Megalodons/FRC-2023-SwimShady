@@ -21,6 +21,7 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotStates;
 import frc.robot.RobotStates.ChassisStates;
 import frc.robot.RobotStates.ElevatorState;
+import frc.robot.utils.Metrics;
 import frc.robot.utils.Containers.Multi_CANSparkMax;
 
 public class Chassis extends SubsystemBase {
@@ -82,29 +83,42 @@ public class Chassis extends SubsystemBase {
   }
 
   public double getChassisMetersMoved(){
-    return getEncodersAverage()/Constants.Values.TICKS_PER_METER;
+    return -(getEncodersAverage()/Constants.Values.TICKS_PER_METER);
   }
 
   public void arcadeDrive(double x, double y) {
     drive.arcadeDrive(x, y);
   }
 
+  public void lowGear()
+  {
+    solenoid.set(Value.kForward);
+  }
+
+  public void highGear()
+  {
+    solenoid.set(Value.kReverse);
+  }
+
   public void teleopPeriodic(ElevatorState state){
-    double x = stick.getX(), y = -stick.getY();
+    final String metric_key = "Chassis::teleopPeriodic";
+    Metrics.startTimer(metric_key);
+
+    double x = stick.getX(), y = stick.getY();
 
     if(RobotContainer.TWO_DRIVER_MODE){
       if(stick.getTrigger()){//slows down the chassis for lining up
-        x /= 2.15;
+        x /= 2.35;
         y /= 1.5;
         setBrake();
       }else{
         setCoast();
       }
       if(stick.getRawButton(2)){
-        solenoid.set(Value.kForward);
+        lowGear();
         setBrake();
       }else{
-        solenoid.set(Value.kReverse);
+        highGear();
         setCoast();
       }
     }else{
@@ -117,6 +131,8 @@ public class Chassis extends SubsystemBase {
     //creates dead zone. Maybe it benefits driving experience
     
     arcadeDrive(x, y);
+
+    Metrics.stopTimer(metric_key);
   }
 
   // The 'periodic' function is called constantly, even when the robot is not enabled.
@@ -125,12 +141,17 @@ public class Chassis extends SubsystemBase {
   // any Global Variables related to State.
   @Override
   public void periodic() {
+    final String metric_key = "Chassis::periodic";
+    Metrics.startTimer(metric_key);
+
     chassisState = evaluateState();
-    SmartDashboard.putString("chassis State", chassisState+"");
-    SmartDashboard.putNumber("left chassis encoder", leftLeaderEncoder.getPosition());
-    SmartDashboard.putNumber("right chassis encoder", rightLeaderEncoder.getPosition());
+    //SmartDashboard.putString("chassis State", chassisState+"");
+    //SmartDashboard.putNumber("left chassis encoder", leftLeaderEncoder.getPosition());
+    //SmartDashboard.putNumber("right chassis encoder", rightLeaderEncoder.getPosition());
     SmartDashboard.putNumber("Meters moved", getChassisMetersMoved());
-    SmartDashboard.putNumber("average chassis encoders", getEncodersAverage());
+    SmartDashboard.putNumber("Chassis Encoders", getEncodersAverage());
+
+    Metrics.stopTimer(metric_key);
   }
 
   public ChassisStates evaluateState()

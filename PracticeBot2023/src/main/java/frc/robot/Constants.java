@@ -67,20 +67,27 @@ public final class Constants {
 
     public static class Elevator {
         public static final double ELEVATOR_POS_BOTTOM = 0;
-        public static final double ELEVATOR_POS_GROUND_INTAKE = 14.5;
-        public static final double ELEVATOR_POS_TOP = 215;
+        public static final double ELEVATOR_POS_GROUND_INTAKE = 12;
+        public static final double ELEVATOR_DOWN_SLOWDOWN_POINT = 20;
         public static final double ELEVATOR_POS_MID = 130;
+        public static final double ELEVATOR_UP_SLOWDOWN_POINT = 195;
+        public static final double ELEVATOR_POS_TOP = 215;
+        public static final double ELEVATOR_UP_ESPEED = 1;
+        public static final double ELEVATOR_UP_SLOWDOWN_ESPEED = 0.7;
+        public static final double ELEVATOR_DOWN_ESPEED = -1;
+        public static final double ELEVATOR_DOWN_SLOWDOWN_ESPEED = -0.35;
     }
 
     public static class Wrist {
-        public static final double WRIST_MAX = 1.02;
-        public static final double WRIST_MIN = 0.74;
-        public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.82;
-        public static final double WRIST_STRAIGHT = 0.77;
-        public static final double WRIST_GROUND_INTAKE = 0.74;
+        public static final double WRIST_MAX = 0.93; // 1.02;
+        public static final double WRIST_MIN = 0.64; //0.74;
+        public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.69; // (noice) 0.82;
+        public static final double WRIST_STRAIGHT = 0.74; // 0.77;
+        public static final double WRIST_GROUND_INTAKE = 0.64; // 0.74;
         public static final double WRIST_APPROX_THRESHOLD = 0.07;
         public static final double WRIST_ENCODER_MULTIPLIER = 20;
         public static final double WRIST_CONE_SCORING_POSITION = .85;
+        public static final double WRIST_LIMIT_FOR_ELEVATOR_UP = 0.89;
         
         public static final double WRIST_UP_SPEED = -0.65;
         public static final double WRIST_UP_SLOW_SPEED = -0.37;
@@ -91,6 +98,9 @@ public final class Constants {
         public static final int INTAKE_SHORT = -10;
         public static final int INTAKE_LONG = -85;
         public static final int OUTAKE = 10;
+        public static final double INTAKE_SPEED = -0.7;
+        public static final double EJECT_SPEED = 0.25;
+        public static final double FAST_EJECT_SPEED = 0.6;
     }
 
     public static class RobotMap{
@@ -129,6 +139,6 @@ public final class Constants {
 
     public static class Values{
         //values that can be used for autonomous.
-        public final static double TICKS_PER_METER = 28;
+        public final static double TICKS_PER_METER = 24;
     }
 }

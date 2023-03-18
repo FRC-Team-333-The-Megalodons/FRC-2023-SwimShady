@@ -107,5 +107,38 @@ public static class Multi_RelativeEncoder
     }
 }
 
+public static class Metric
+{
+    private double m_totalTime;
+    private long m_count;
+    private String m_name;
+    
+
+    public Metric(String name)
+    {
+        m_name = name;
+        m_totalTime = 0;
+        m_count = 0;
+    }
+
+    public double get()
+    {
+        if (m_count < 1) { return -1; }
+
+        return m_totalTime / m_count;
+    }
+
+    public String getName()
+    {
+        return m_name;
+    }
+
+    public void put(double time)
+    {
+        m_totalTime += time;
+        ++m_count;
+    }
+}
+
 }
 

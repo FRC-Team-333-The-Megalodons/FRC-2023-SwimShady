@@ -9,10 +9,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.utils.Metrics;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -29,10 +33,21 @@ import org.opencv.imgproc.Imgproc;
  */
 public class Robot extends TimedRobot {
   public static final String kNoAuto = "AUTO_NONE";
-  public static final String kMobilityAuto = "AUTO_MOBILITY";
-  public static final String kHybridPlusHighAuto = "AUTO_HYBRID_PLUS_HIGH";
+  public static final String kBalance = "AUTO_BALANCE";
+  public static final String kMobilityAuto = "AUTO_MOBILITY_ONLY";
+  public static final String kScoreHighCone = "AUTO_SCORE_HIGH_CONE";
+  public static final String kScoreHighCube = "AUTO_SCORE_HIGH_CUBE";
+  public static final String kConeHighPlusMobility = "AUTO_CONE_HIGH_PLUS_MOBILITY";
+  public static final String kCubeHighPlusMobility = "AUTO_CUBE_HIGH_PLUS_MOBILITY";
+  public static final String kConeHighPlusPickup = "AUTO_CONE_HIGH_PLUS_PICKUP";
+  public static final String kCubeHighPlusPickup = "AUTO_CUBE_HIGH_PLUS_PICKUP";
   public static final String kScoreHighTwiceAuto = "AUTO_SCORE_HIGH_TWICE";
+  public static final String kScoreHybridTwiceAuto = "AUTO_SCORE_HYBRID_TWICE";
+
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  // TODO: Build the slowdown widget for wrist
+
   private Command m_autonomousCommand;
   Thread m_visionThread;
 
@@ -48,9 +63,16 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("No Auto", kNoAuto);
-    m_chooser.addOption("Mobility-Only Auto", kMobilityAuto);
-    m_chooser.addOption("Hybrid + High", kHybridPlusHighAuto);
-    m_chooser.addOption("Score High Twice Auto", kScoreHighTwiceAuto);
+    m_chooser.addOption("Balance", kBalance);
+    m_chooser.addOption("Mobility-Only", kMobilityAuto);
+    m_chooser.addOption("High Cone Only", kScoreHighCone);
+    m_chooser.addOption("High Cube Only", kScoreHighCube);
+    m_chooser.addOption("Cone High + Mobility", kConeHighPlusMobility);
+    m_chooser.addOption("Cube High + Mobility", kCubeHighPlusMobility);
+    m_chooser.addOption("Cone High + Pickup", kConeHighPlusPickup);
+    m_chooser.addOption("Cube High + Pickup", kCubeHighPlusPickup);
+    m_chooser.addOption("Score High Twice", kScoreHighTwiceAuto);
+    m_chooser.addOption("Score Hybrid Twice", kScoreHybridTwiceAuto);
     SmartDashboard.putData("Auto Modes:", m_chooser);
 
 
@@ -94,7 +116,7 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
+    m_robotContainer.resetEncoders();
     CommandScheduler.getInstance().run();
   }
 
@@ -120,6 +142,7 @@ public class Robot extends TimedRobot {
     
    
     m_robotContainer.periodic();
+    Metrics.log();
     SmartDashboard.putString("Selected Auto:", m_chooser.getSelected());
     SmartDashboard.updateValues();
   }

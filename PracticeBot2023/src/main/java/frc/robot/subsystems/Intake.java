@@ -23,6 +23,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotStates.IntakeStates;
 import frc.robot.RobotStates.WristStates;
+import frc.robot.utils.Metrics;
 import frc.robot.utils.PIDController;
 
 
@@ -42,7 +43,6 @@ public class Intake extends SubsystemBase {
   Elevator m_elevator;
   RelativeEncoder intakEncoder;
 
-  public double INTAKE_SPEED = .7;
 
   public int DPAD_UP = 0;
   public int DPAD_UP_RIGHT = 45;
@@ -64,12 +64,13 @@ public class Intake extends SubsystemBase {
 
     wristMotor1.setIdleMode(IdleMode.kBrake);
     wristMotor2.setIdleMode(IdleMode.kBrake);
+    wristMotor2.setInverted(true);
 
     wrist = new MotorControllerGroup(wristMotor1, wristMotor2);
 
     intakemotor1 = new CANSparkMax(Constants.RobotMap.PORT_INTAKE1, MotorType.kBrushless);
     intakemotor2 = new CANSparkMax(Constants.RobotMap.PORT_INTAKE2, MotorType.kBrushless);
-    
+    intakemotor2.setInverted(true);
     intakemotor1.setIdleMode(IdleMode.kBrake);
     intakemotor2.setIdleMode(IdleMode.kBrake);
 
@@ -116,13 +117,16 @@ public class Intake extends SubsystemBase {
     return solenoid.get() == Value.kReverse;
   }
 
+  public boolean isWristSafeForElevatorUp()
+  {
+    return getRealWristPosition() < Constants.Wrist.WRIST_LIMIT_FOR_ELEVATOR_UP;
+  }
+
   public void iIn(){
-    intakemotor1.set(-INTAKE_SPEED);
-    intakemotor2.set(INTAKE_SPEED);
+    intake.set(Constants.Intake.INTAKE_SPEED);
   }
   public void iOut(){
-    intakemotor1.set(.35);
-    intakemotor2.set(-.35);
+    intake.set(Constants.Intake.EJECT_SPEED);
   }
   public void iStop(){
     intake.set(0);
@@ -226,8 +230,17 @@ public class Intake extends SubsystemBase {
     return wristStraightController.isOnTarget();
   }
 
-  public void teleopPeriodic() {
-    hub.enableCompressorDigital();
+  public void teleopPeriodic()
+  {
+    final String metric_key = "Intake::teleopPeriodic";
+    Metrics.startTimer(metric_key);
+    teleopPeriodic_impl();
+    Metrics.stopTimer(metric_key);
+  }
+
+  public void teleopPeriodic_impl() {
+
+    hub.enableCompressorAnalog(100,120);
     if(!RobotContainer.TWO_DRIVER_MODE){
       oneDriverModeTeleopPeriodic();
       return;
@@ -327,16 +340,24 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    final String metric_key = "Intake::periodic";
+    Metrics.startTimer(metric_key);
+    periodic_impl();
+    Metrics.stopTimer(metric_key);
+  }
+
+  public void periodic_impl()
+  {
     // This method will be called once per scheduler run
     double wristPos = getRealWristPosition();
     wristValue = (Double.valueOf(df1.format(wristPos)));
     SmartDashboard.putBoolean("Wrist MIN", isAtMaxDown());
     SmartDashboard.putBoolean("Wrist MAX", isAtMaxUp());
-    SmartDashboard.putString("Wrist State", wristState+"");
-    SmartDashboard.putString("Intake State", intakeState+"");
+    //SmartDashboard.putString("Wrist State", wristState+"");
+    //SmartDashboard.putString("Intake State", intakeState+"");
     SmartDashboard.putNumber("WristEncoder", wristValue);
     SmartDashboard.putBoolean("Wrist straight?", isWristStraight());
-    SmartDashboard.putNumber("intake encoder", intakEncoder.getPosition());
-    SmartDashboard.putNumber("last intake motor", lastIntakeMotorPosition);
+    //SmartDashboard.putNumber("intake encoder", intakEncoder.getPosition());
+    //SmartDashboard.putNumber("last intake motor", lastIntakeMotorPosition);
   }
 }
