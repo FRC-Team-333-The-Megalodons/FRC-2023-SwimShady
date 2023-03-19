@@ -74,7 +74,7 @@ public class Chassis extends SubsystemBase {
   }
 
   public double getEncodersAverage(){
-    return (rightLeaderEncoder.getPosition() + (-leftLeaderEncoder.getPosition()))/2;
+    return -(rightLeaderEncoder.getPosition() + (-leftLeaderEncoder.getPosition()))/2;
   }
 
   public void resetEncoders(){
@@ -83,11 +83,11 @@ public class Chassis extends SubsystemBase {
   }
 
   public double getChassisMetersMoved(){
-    return -(getEncodersAverage()/Constants.Values.TICKS_PER_METER);
+    return (getEncodersAverage()/Constants.Values.TICKS_PER_METER);
   }
 
   public void arcadeDrive(double x, double y) {
-    drive.arcadeDrive(x, y);
+    drive.arcadeDrive(x, -y);
   }
 
   public void lowGear()
@@ -100,11 +100,16 @@ public class Chassis extends SubsystemBase {
     solenoid.set(Value.kReverse);
   }
 
-  public void teleopPeriodic(ElevatorState state){
+  public void teleopPeriodic(){
     final String metric_key = "Chassis::teleopPeriodic";
     Metrics.startTimer(metric_key);
+    teleopPeriodic_impl();
+    Metrics.stopTimer(metric_key);
+  }
 
-    double x = stick.getX(), y = stick.getY();
+  public void teleopPeriodic_impl()
+  {
+    double x = stick.getX(), y = -stick.getY();
 
     if(RobotContainer.TWO_DRIVER_MODE){
       if(stick.getTrigger()){//slows down the chassis for lining up
@@ -131,8 +136,6 @@ public class Chassis extends SubsystemBase {
     //creates dead zone. Maybe it benefits driving experience
     
     arcadeDrive(x, y);
-
-    Metrics.stopTimer(metric_key);
   }
 
   // The 'periodic' function is called constantly, even when the robot is not enabled.
@@ -143,15 +146,18 @@ public class Chassis extends SubsystemBase {
   public void periodic() {
     final String metric_key = "Chassis::periodic";
     Metrics.startTimer(metric_key);
+    periodic_impl();
+    Metrics.stopTimer(metric_key);
+  }
 
+  public void periodic_impl()
+  {
     chassisState = evaluateState();
     //SmartDashboard.putString("chassis State", chassisState+"");
     //SmartDashboard.putNumber("left chassis encoder", leftLeaderEncoder.getPosition());
     //SmartDashboard.putNumber("right chassis encoder", rightLeaderEncoder.getPosition());
     SmartDashboard.putNumber("Meters moved", getChassisMetersMoved());
     SmartDashboard.putNumber("Chassis Encoders", getEncodersAverage());
-
-    Metrics.stopTimer(metric_key);
   }
 
   public ChassisStates evaluateState()

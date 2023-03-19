@@ -14,9 +14,6 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
-
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -32,9 +29,14 @@ import org.opencv.imgproc.Imgproc;
  * project.
  */
 public class Robot extends TimedRobot {
+  // To add a new option to the Auto Mode Picker, you need to make a change in
+  //  three places: Just search (Ctrl+Shift+F) for AUTO_MODE_PICKER, and you'll
+  //  find all three!
+  // In this place, just create a new ID name for your auto mode.
   public static final String kNoAuto = "AUTO_NONE";
   public static final String kBalance = "AUTO_BALANCE";
   public static final String kMobilityAuto = "AUTO_MOBILITY_ONLY";
+  public static final String kHalfassedStationAuto = "AUTO_HALFASSED_CHARGESTATION";
   public static final String kScoreHighCone = "AUTO_SCORE_HIGH_CONE";
   public static final String kScoreHighCube = "AUTO_SCORE_HIGH_CUBE";
   public static final String kConeHighPlusMobility = "AUTO_CONE_HIGH_PLUS_MOBILITY";
@@ -44,9 +46,7 @@ public class Robot extends TimedRobot {
   public static final String kScoreHighTwiceAuto = "AUTO_SCORE_HIGH_TWICE";
   public static final String kScoreHybridTwiceAuto = "AUTO_SCORE_HYBRID_TWICE";
 
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
-  // TODO: Build the slowdown widget for wrist
+  private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
 
   private Command m_autonomousCommand;
   Thread m_visionThread;
@@ -62,18 +62,23 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("No Auto", kNoAuto);
-    m_chooser.addOption("Balance", kBalance);
-    m_chooser.addOption("Mobility-Only", kMobilityAuto);
-    m_chooser.addOption("High Cone Only", kScoreHighCone);
-    m_chooser.addOption("High Cube Only", kScoreHighCube);
-    m_chooser.addOption("Cone High + Mobility", kConeHighPlusMobility);
-    m_chooser.addOption("Cube High + Mobility", kCubeHighPlusMobility);
-    m_chooser.addOption("Cone High + Pickup", kConeHighPlusPickup);
-    m_chooser.addOption("Cube High + Pickup", kCubeHighPlusPickup);
-    m_chooser.addOption("Score High Twice", kScoreHighTwiceAuto);
-    m_chooser.addOption("Score Hybrid Twice", kScoreHybridTwiceAuto);
-    SmartDashboard.putData("Auto Modes:", m_chooser);
+    // To add a new option to the Auto Mode Picker, you need to make a change in
+    //  three places: Just search (Ctrl+Shift+F) for AUTO_MODE_PICKER, and you'll
+    //  find all three!
+    // In this place, use addOption to add your Mode ID Name, along with a human-readable name.
+    m_autoChooser.setDefaultOption("No Auto", kNoAuto);
+    m_autoChooser.addOption("Balance", kBalance);
+    m_autoChooser.addOption("Mobility-Only", kMobilityAuto);
+    m_autoChooser.addOption("Half-assed ChargeStation", kHalfassedStationAuto);
+    m_autoChooser.addOption("High Cone Only", kScoreHighCone);
+    m_autoChooser.addOption("High Cube Only", kScoreHighCube);
+    m_autoChooser.addOption("Cone High + Mobility", kConeHighPlusMobility);
+    m_autoChooser.addOption("Cube High + Mobility", kCubeHighPlusMobility);
+    m_autoChooser.addOption("Cone High + Pickup", kConeHighPlusPickup);
+    m_autoChooser.addOption("Cube High + Pickup", kCubeHighPlusPickup);
+    m_autoChooser.addOption("Score High Twice", kScoreHighTwiceAuto);
+    m_autoChooser.addOption("Score Hybrid Twice", kScoreHybridTwiceAuto);
+    SmartDashboard.putData("Auto Modes:", m_autoChooser);
 
 
         m_visionThread = new Thread(
@@ -143,7 +148,7 @@ public class Robot extends TimedRobot {
    
     m_robotContainer.periodic();
     Metrics.log();
-    SmartDashboard.putString("Selected Auto:", m_chooser.getSelected());
+    SmartDashboard.putString("Selected Auto:", m_autoChooser.getSelected());
     SmartDashboard.updateValues();
   }
 
@@ -164,7 +169,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    String selectedAuto = m_chooser.getSelected();
+    String selectedAuto = m_autoChooser.getSelected();
     System.out.println("Auto selected: " + selectedAuto);
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand(selectedAuto);

@@ -177,8 +177,7 @@ public class Elevator extends SubsystemBase {
 
   public void teleopPeriodic_impl()
   {
-      // "Dead zone" check for Right Joystick
-      if(Math.abs(controller.getRightY()) > 0.05) {
+      if(Math.abs(controller.getRightY()) > 0.05) {  // "Dead zone" check for Right Joystick
         manualMove(-controller.getRightY());
       }else{
         if(controller.getAButton()){

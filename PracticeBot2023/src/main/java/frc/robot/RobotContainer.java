@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.RobotStates.ElevatorState;
 import frc.robot.commands.roboAutos.ChargeStation.Balance;
+import frc.robot.commands.roboAutos.ChargeStation.HalfAssedChargeStation;
 import frc.robot.commands.roboAutos.mobility.MobilityOnly;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCone;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
@@ -23,7 +24,6 @@ import frc.robot.subsystems.LimeLight;
 import frc.robot.utils.Metrics;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -93,13 +93,16 @@ public class RobotContainer {
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
   public Command getAutonomousCommand(String selectedAuto) {
-    // An example command will be run in autonomous
-    //return new ConePlusMobility(m_chassis, m_gyro, m_elevator, m_intake);
-    
+    // To add a new option to the Auto Mode Picker, you need to make a change in
+    //  three places: Just search (Ctrl+Shift+F) for AUTO_MODE_PICKER, and you'll
+    //  find all three!
+    // In this place, add a `case` for your Mode ID Name, and return a `new` of 
+    //  your Command class. 
     switch (selectedAuto) {
       case Robot.kNoAuto: return null;
       case Robot.kBalance: return new Balance(m_chassis,m_gyro);
       case Robot.kMobilityAuto: return new MobilityOnly(m_chassis, m_gyro);
+      case Robot.kHalfassedStationAuto: return new HalfAssedChargeStation(m_chassis, m_gyro);
       case Robot.kScoreHighCone: return new ScoreHighCone(m_elevator, m_intake);
       case Robot.kScoreHighCube: return new ScoreHighCube(m_elevator, m_intake);
       case Robot.kConeHighPlusMobility: return new ConeHighPlusMobility(m_chassis, m_gyro, m_elevator, m_intake);
@@ -149,12 +152,14 @@ public class RobotContainer {
 
   public void teleopPeriodic_impl()
   {
+    /*
     ElevatorState elevatorState = RobotStates.ElevatorState.ELEVATOR_UNKNOWN;
     try {
       elevatorState = m_elevator.getState();
-    } catch (Exception e) { /* Don't die if we fail to evaluate the elevator state */}
+    } catch (Exception e) { }
+    */
     try {
-      m_chassis.teleopPeriodic(elevatorState);
+      m_chassis.teleopPeriodic();
     } catch (Exception e) { /* Don't die if we fail to run the chassis */}
     try {
       m_elevator.teleopPeriodic();

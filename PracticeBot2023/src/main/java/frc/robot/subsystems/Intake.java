@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -56,8 +57,17 @@ public class Intake extends SubsystemBase {
   double wristValue;
   DecimalFormat df1 = new DecimalFormat("0.##");
   final double wristOrigin = 0;
+
+  public static final String kSlowEjectSpeed = "INTAKE_SLOW_EJECT_SPEED";
+  public static final String kFastEjectSpeed = "INTAKE_FAST_EJECT_SPEED";
+
+  private final SendableChooser<String> m_ejectChooser = new SendableChooser<>();
   
   public Intake(PneumaticHub hub, ColorSensor colorSensor) {
+    m_ejectChooser.setDefaultOption("Slow Eject Speed", kSlowEjectSpeed);
+    m_ejectChooser.addOption("Fast Eject Speed", kFastEjectSpeed);
+    SmartDashboard.putData("Eject Speeds:", m_ejectChooser);
+
     wristMotor1 = new CANSparkMax(Constants.RobotMap.PORT_WRIST1, MotorType.kBrushless);
     wristMotor1.setInverted(false);
     wristMotor2 = new CANSparkMax(Constants.RobotMap.PORT_WRIST2, MotorType.kBrushless);
@@ -126,7 +136,11 @@ public class Intake extends SubsystemBase {
     intake.set(Constants.Intake.INTAKE_SPEED);
   }
   public void iOut(){
-    intake.set(Constants.Intake.EJECT_SPEED);
+    if (m_ejectChooser.getSelected() == kFastEjectSpeed) {
+      intake.set(Constants.Intake.FAST_EJECT_SPEED);
+    } else {
+      intake.set(Constants.Intake.EJECT_SPEED);
+    }
   }
   public void iStop(){
     intake.set(0);
