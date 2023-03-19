@@ -8,40 +8,39 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
 
-public class Balance extends CommandBase {
-  /** Creates a new Balance. */
-
+public class Unbalance extends CommandBase {
+  /** Creates a new Unbalance. */
   Chassis chassis;
   Gyro gyro;
-  frc.robot.utils.PIDController balanceController;
-  public Balance(Chassis chassis, Gyro gyro) {
+  public Unbalance(Chassis chassis, Gyro gyro) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
     this.chassis = chassis;
     this.gyro = gyro;
-    balanceController = new frc.robot.utils.PIDController(0.0254, 0.000254, 0, 20, 0, 0, 0,true);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    chassis.resetEncoders();
     chassis.lowGear();
+    chassis.resetEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    chassis.arcadeDrive(0, -balanceController.getOutput(gyro.getUsableTilt()));
+    chassis.arcadeDrive(0, -.45);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    chassis.arcadeDrive(0, 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return gyro.getUsableTilt() < -8;
   }
 }

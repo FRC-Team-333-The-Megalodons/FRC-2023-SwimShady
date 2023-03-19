@@ -36,6 +36,8 @@ public class PIDController {
     boolean greaterThanMax = false;
     boolean lowerThanMin = false;
     boolean isOnTarget = false;
+    
+    boolean autoKill;
 
     public PIDController(double kP, double kI, double kD, double iLimit, double maxTolerance, double minTolerance, double target){
         this.kP = kP;
@@ -47,6 +49,19 @@ public class PIDController {
         this.target = target;
         minTarget = target - minTolerance;
         maxTarget = target + maxTolerance;
+    }
+
+    public PIDController(double kP, double kI, double kD, double iLimit, double maxTolerance, double minTolerance, double target, boolean autoKill){
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+        this.iLimit = iLimit;
+        this.maxTolerance = maxTolerance;
+        this.minTolerance = minTolerance;
+        this.target = target;
+        minTarget = target - minTolerance;
+        maxTarget = target + maxTolerance;
+        this.autoKill = autoKill;
     }
 
     public double getOutput(double sensorValue){
@@ -76,7 +91,7 @@ public class PIDController {
 
         isOnTarget = maxTarget >= sensorValue && minTarget <= sensorValue;
         
-        if(isOnTarget){
+        if(isOnTarget && autoKill){
             error = 0;
             errorSum = 0;
             errorRate = 0;

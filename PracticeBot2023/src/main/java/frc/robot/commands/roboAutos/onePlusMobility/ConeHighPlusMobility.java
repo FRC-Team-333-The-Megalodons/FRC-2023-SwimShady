@@ -24,7 +24,7 @@ public class ConeHighPlusMobility extends SequentialCommandGroup {
   public ConeHighPlusMobility(Chassis chassis, Gyro gyro,frc.robot.subsystems.Elevator elevator, Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    driveForwardController = new PIDController(.013, .01, 0, 35, 3, 1, -Constants.Values.TICKS_PER_METER*2.5);
+    driveForwardController = new PIDController(.014, .01, 0, 35, 3, 1, -Constants.Values.TICKS_PER_METER*2.5);
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
     this.elevator = elevator;
     this.intake = intake;

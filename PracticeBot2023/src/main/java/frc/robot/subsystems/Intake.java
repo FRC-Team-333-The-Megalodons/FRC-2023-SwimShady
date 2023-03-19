@@ -174,7 +174,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean outakeAutoDone(){
-    if((lastIntakeMotorPosition) >= Constants.Intake.OUTAKE){
+    if((intakEncoder.getPosition()) >= Constants.Intake.OUTAKE){
       lastIntakeMotorPosition = intakEncoder.getPosition();
       return true;
     }
@@ -371,7 +371,7 @@ public class Intake extends SubsystemBase {
     //SmartDashboard.putString("Intake State", intakeState+"");
     SmartDashboard.putNumber("WristEncoder", wristValue);
     SmartDashboard.putBoolean("Wrist straight?", isWristStraight());
-    //SmartDashboard.putNumber("intake encoder", intakEncoder.getPosition());
-    //SmartDashboard.putNumber("last intake motor", lastIntakeMotorPosition);
+    SmartDashboard.putNumber("intake encoder", intakEncoder.getPosition());
+    SmartDashboard.putNumber("last intake motor", lastIntakeMotorPosition);
   }
 }

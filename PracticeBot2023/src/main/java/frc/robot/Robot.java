@@ -169,6 +169,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    
+    CommandScheduler.getInstance().enable();
+    CommandScheduler.getInstance().run();
     String selectedAuto = m_autoChooser.getSelected();
     System.out.println("Auto selected: " + selectedAuto);
 
@@ -179,7 +182,6 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.resetEncoders();
     m_robotContainer.setChassisBrake();
-    CommandScheduler.getInstance().run();
   }
 
   /** This function is called periodically during autonomous. */
@@ -200,7 +202,6 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of teleopmode.
     CommandScheduler.getInstance().cancelAll();
     CommandScheduler.getInstance().disable();
-
     m_robotContainer.resetEncoders();
     m_robotContainer.setChassisCoast();
   }

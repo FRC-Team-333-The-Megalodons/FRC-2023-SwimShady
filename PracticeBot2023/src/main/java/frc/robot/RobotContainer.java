@@ -5,7 +5,8 @@
 package frc.robot;
 
 import frc.robot.commands.roboAutos.ChargeStation.Balance;
-import frc.robot.commands.roboAutos.ChargeStation.HalfAssedChargeStation;
+import frc.robot.commands.roboAutos.ChargeStation.DockAndEngage;
+import frc.robot.commands.roboAutos.ChargeStation.ScoreHighConePlusEngage;
 import frc.robot.commands.roboAutos.mobility.MobilityOnly;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCone;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
@@ -98,10 +99,9 @@ public class RobotContainer {
     // In this place, add a `case` for your Mode ID Name, and return a `new` of 
     //  your Command class. 
     switch (selectedAuto) {
-      case Robot.kNoAuto: return null;
-      case Robot.kBalance: return new Balance(m_chassis,m_gyro);
+      case Robot.kNoAuto: return new ScoreHighConePlusEngage(m_elevator, m_intake, m_chassis, m_gyro);
+      case Robot.kBalance: return new DockAndEngage(m_chassis,m_gyro);
       case Robot.kMobilityAuto: return new MobilityOnly(m_chassis, m_gyro);
-      case Robot.kHalfassedStationAuto: return new HalfAssedChargeStation(m_chassis, m_gyro);
       case Robot.kScoreHighCone: return new ScoreHighCone(m_elevator, m_intake);
       case Robot.kScoreHighCube: return new ScoreHighCube(m_elevator, m_intake);
       case Robot.kConeHighPlusMobility: return new ConeHighPlusMobility(m_chassis, m_gyro, m_elevator, m_intake);

@@ -5,6 +5,7 @@
 package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 
@@ -31,7 +32,7 @@ public class ElevatorGroundWhileWristGround extends CommandBase {
     }else{
       elevator.stop();
     }
-    intake.moveWrist(.4);
+    intake.moveWrist(Constants.Wrist.WRIST_DOWN_SPEED);
   }
 
   // Called once the command ends or is interrupted.

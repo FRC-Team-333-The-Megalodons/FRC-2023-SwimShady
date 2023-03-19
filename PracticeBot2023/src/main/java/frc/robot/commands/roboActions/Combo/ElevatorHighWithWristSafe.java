@@ -5,6 +5,7 @@
 package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
 public class ElevatorHighWithWristSafe extends CommandBase {
@@ -30,8 +31,8 @@ public class ElevatorHighWithWristSafe extends CommandBase {
     }else{
       elevator.stop();
     }
-    if(intake.getRealWristPosition() >= .96){//60 for mid
-      intake.moveWrist(.3);
+    if(intake.getRealWristPosition() >= Constants.Wrist.WRIST_LIMIT_FOR_ELEVATOR_UP){//60 for mid
+      intake.moveWrist(Constants.Wrist.WRIST_DOWN_SPEED);
     }else{
       intake.stop();
     }
