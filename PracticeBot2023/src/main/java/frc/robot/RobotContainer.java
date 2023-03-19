@@ -99,15 +99,15 @@ public class RobotContainer {
     // In this place, add a `case` for your Mode ID Name, and return a `new` of 
     //  your Command class. 
     switch (selectedAuto) {
-      case Robot.kNoAuto: return new ScoreHighConePlusEngage(m_elevator, m_intake, m_chassis, m_gyro);
+      case Robot.kNoAuto: return null;
       case Robot.kBalance: return new DockAndEngage(m_chassis,m_gyro);
+      case Robot.kScoreConePlusBalance: return new ScoreHighConePlusEngage(m_elevator, m_intake, m_chassis, m_gyro);
       case Robot.kMobilityAuto: return new MobilityOnly(m_chassis, m_gyro);
       case Robot.kScoreHighCone: return new ScoreHighCone(m_elevator, m_intake);
       case Robot.kScoreHighCube: return new ScoreHighCube(m_elevator, m_intake);
       case Robot.kConeHighPlusMobility: return new ConeHighPlusMobility(m_chassis, m_gyro, m_elevator, m_intake);
       case Robot.kCubeHighPlusMobility: return new CubeHighPlusMobility(m_chassis, m_gyro, m_elevator, m_intake);
       case Robot.kConeHighPlusPickup: return new ConeHighPlusPickUp(m_chassis, m_gyro, m_elevator, m_intake);
-      case Robot.kCubeHighPlusPickup: return new CubeHighPlusPickUp();
       case Robot.kScoreHighTwiceAuto: return new ScoreHighTwice(m_chassis, m_gyro, m_elevator, m_intake);
       case Robot.kScoreHybridTwiceAuto: return new ScoreHybridTwice(m_chassis, m_gyro, m_elevator, m_intake);
       default: return null;

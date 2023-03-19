@@ -35,8 +35,8 @@ public class Robot extends TimedRobot {
   // In this place, just create a new ID name for your auto mode.
   public static final String kNoAuto = "AUTO_NONE";
   public static final String kBalance = "AUTO_BALANCE";
+  public static final String kScoreConePlusBalance = "AUTO_HIGH_CONE_PLUS_BALANCE";
   public static final String kMobilityAuto = "AUTO_MOBILITY_ONLY";
-  public static final String kHalfassedStationAuto = "AUTO_HALFASSED_CHARGESTATION";
   public static final String kScoreHighCone = "AUTO_SCORE_HIGH_CONE";
   public static final String kScoreHighCube = "AUTO_SCORE_HIGH_CUBE";
   public static final String kConeHighPlusMobility = "AUTO_CONE_HIGH_PLUS_MOBILITY";
@@ -68,14 +68,13 @@ public class Robot extends TimedRobot {
     // In this place, use addOption to add your Mode ID Name, along with a human-readable name.
     m_autoChooser.setDefaultOption("No Auto", kNoAuto);
     m_autoChooser.addOption("Balance", kBalance);
+    m_autoChooser.addOption("ConeHigh + Balance", kScoreConePlusBalance);
     m_autoChooser.addOption("Mobility-Only", kMobilityAuto);
-    m_autoChooser.addOption("Half-assed ChargeStation", kHalfassedStationAuto);
     m_autoChooser.addOption("High Cone Only", kScoreHighCone);
     m_autoChooser.addOption("High Cube Only", kScoreHighCube);
     m_autoChooser.addOption("Cone High + Mobility", kConeHighPlusMobility);
     m_autoChooser.addOption("Cube High + Mobility", kCubeHighPlusMobility);
     m_autoChooser.addOption("Cone High + Pickup", kConeHighPlusPickup);
-    m_autoChooser.addOption("Cube High + Pickup", kCubeHighPlusPickup);
     m_autoChooser.addOption("Score High Twice", kScoreHighTwiceAuto);
     m_autoChooser.addOption("Score Hybrid Twice", kScoreHybridTwiceAuto);
     SmartDashboard.putData("Auto Modes:", m_autoChooser);
