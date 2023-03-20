@@ -155,10 +155,10 @@
               "Crosshair/Crosshair color": "#FFFFFFFF",
               "Controls/Show controls": true,
               "Controls/Rotation": "NONE",
-              "compression": 85.47712544210596,
-              "fps": 30,
-              "imageWidth": -1,
-              "imageHeight": -1
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": 0,
+              "imageHeight": 0
             }
           },
           "0,2": {

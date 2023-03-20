@@ -18,8 +18,17 @@ public class Gyro extends SubsystemBase {
    DecimalFormat df1 = new DecimalFormat("0");
    DecimalFormat df2 = new DecimalFormat("0.##");
 
+   double tiltOffset = 0;
+
    public double getUsableTilt(){
-    return Double.valueOf(df1.format(getTilt()+1.6));
+    return Double.valueOf(df1.format(getTilt()+tiltOffset));
+   }
+
+   public void resetTiltOffset()
+   {
+      // This means we should be at zero; make it so!
+      double current = getUsableTilt();
+      tiltOffset = 0-current;
    }
 
    public Gyro() {
@@ -53,6 +62,7 @@ public class Gyro extends SubsystemBase {
    {
       // This method will be called once per scheduler run
       SmartDashboard.putNumber("NavX Tilt", getUsableTilt());
+      SmartDashboard.putNumber("Tilt Offset", tiltOffset);
       SmartDashboard.putNumber("NavX Rotation", getAngle());
    }
 }

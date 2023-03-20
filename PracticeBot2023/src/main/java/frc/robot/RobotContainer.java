@@ -166,6 +166,11 @@ public class RobotContainer {
     } catch (Exception e) { /* Don't die if we fail to run the intake */}
   }
 
+  public void resetTiltOffset()
+  {
+    m_gyro.resetTiltOffset();
+  }
+
   public void resetEncoders() {
     m_gyro.reset();
     m_chassis.resetEncoders();

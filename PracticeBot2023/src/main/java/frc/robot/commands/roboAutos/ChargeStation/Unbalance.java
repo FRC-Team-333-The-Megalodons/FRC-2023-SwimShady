@@ -47,6 +47,6 @@ public class Unbalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return gyro.getUsableTilt() < -8;
+    return gyro.getUsableTilt() <= Constants.Chassis.AUTO_UNBALANCE_TILT_THRESHOLD;
   }
 }

@@ -180,6 +180,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
     m_robotContainer.resetEncoders();
+    m_robotContainer.resetTiltOffset(); // Only ever call this in autonomousInit!!!
     m_robotContainer.setChassisBrake();
   }
 
