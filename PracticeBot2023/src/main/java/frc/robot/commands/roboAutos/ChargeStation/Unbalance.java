@@ -5,6 +5,7 @@
 package frc.robot.commands.roboAutos.ChargeStation;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
 
@@ -12,6 +13,7 @@ public class Unbalance extends CommandBase {
   /** Creates a new Unbalance. */
   Chassis chassis;
   Gyro gyro;
+  double output = Constants.Chassis.AUTO_UNBALANCE_START_SPEED;
   public Unbalance(Chassis chassis, Gyro gyro) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
@@ -24,14 +26,14 @@ public class Unbalance extends CommandBase {
   public void initialize() {
     chassis.lowGear();
     chassis.resetEncoders();
+    output = Constants.Chassis.AUTO_UNBALANCE_START_SPEED;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-  double output = .2;
   @Override
   public void execute() {
-    if(output < .88){
-      output += .02;
+    if(output < Constants.Chassis.AUTO_UNBALANCE_MAX_SPEED){
+      output += Constants.Chassis.AUTO_UNBALANCE_INCREMENT;
     }
     chassis.arcadeDrive(0, -output);
   }

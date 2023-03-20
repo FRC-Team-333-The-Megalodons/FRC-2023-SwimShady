@@ -58,6 +58,14 @@ public final class Constants {
         public static final int BOTTOM_ROW_SHOT             = -1;
     }
 
+    public static class Chassis {
+        public static final double AUTO_UNBALANCE_START_SPEED = 0.1;
+        public static final double AUTO_UNBALANCE_INCREMENT = 0.01;
+        public static final double AUTO_UNBALANCE_MAX_SPEED = 0.88;
+        public static final double TELEOP_X_SLOWDOWN_DIVISOR = 2.35;
+        public static final double TELEOP_Y_SLOWDOWN_DIVISOR = 1.5;
+    }
+
     public static class OperatorConstants {
         public static final int OPERATOR_CONTROLLER_PORT = 0;
 

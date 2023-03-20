@@ -114,39 +114,46 @@ public class Chassis extends SubsystemBase {
   {
     double x = stick.getX(), y = -stick.getY();
 
-    boolean isSlowed= false;
-    if(RobotContainer.TWO_DRIVER_MODE){
-      if(stick.getTrigger()){//slows down the chassis for lining up
-        x /= 2.35;
-        y /= 1.5;
-        isSlowed = true;
-        setBrake();
-      }else{
-        setCoast();
-      }
-      if(stick.getRawButton(2)){
-        lowGear();
-        setBrake();
-      }else{
-        highGear();
-        setCoast();
-      }
-      
+    if(!RobotContainer.TWO_DRIVER_MODE){
+      teleopOneDriverMode(x, y);
+      return;
+    }
+
+    boolean shouldSlowDown = false;
+
+    if(stick.getTrigger()){//slows down the chassis for lining up
+      shouldSlowDown = true;
+      highGear();
+      setBrake();
+    }else if(stick.getRawButton(2)){
+      lowGear();
+      setBrake();
     }else{
-      if(stick.getRawButton(7)){
-        x /= 1.5;
-        y /= 2.8;
-        isSlowed = true;
-      }
+      highGear();
+      setCoast();
     }
 
     // If the elevator is high enough up, it's not safe to drive at full speed.
-    
-    if (!isSlowed && m_elevator.getRightPosition() >= Constants.Elevator.ELEVATOR_BACKUP_UNSAFE) {
-      x /= 2.35;
-      y /= 1.5;
+    if (m_elevator.getRightPosition() >= Constants.Elevator.ELEVATOR_BACKUP_UNSAFE) {
+      shouldSlowDown = true;
     }
 
+    if (shouldSlowDown) {
+      x /= Constants.Chassis.TELEOP_X_SLOWDOWN_DIVISOR;
+      y /= Constants.Chassis.TELEOP_Y_SLOWDOWN_DIVISOR;
+    }
+
+    arcadeDrive(x, y);
+  }
+
+  public void teleopOneDriverMode(double x, double y)
+  {
+    
+    if(stick.getRawButton(7)){
+      x /= 1.5;
+      y /= 2.8;
+    }
+  
     arcadeDrive(x, y);
   }
 
