@@ -34,10 +34,11 @@ public class Chassis extends SubsystemBase {
   RobotStates.ChassisStates chassisState;
   PneumaticHub hub;
   DoubleSolenoid solenoid;
+  Elevator m_elevator;
 
   ElevatorState elevatorState;
 
-  public Chassis(PneumaticHub hub) {
+  public Chassis(PneumaticHub hub, Elevator elevator) {
     leftMotors = new Multi_CANSparkMax(
         new CANSparkMax(Constants.RobotMap.PORT_DRIVE_TRAIN_L_LEADER, MotorType.kBrushless),
         new CANSparkMax(Constants.RobotMap.PORT_DRIVE_TRAIN_L_FOLLOWER1, MotorType.kBrushless),
@@ -58,6 +59,8 @@ public class Chassis extends SubsystemBase {
     stick = new Joystick(0);
 
     drive = new DifferentialDrive(leftLeader, rightleader);
+
+    m_elevator = elevator;
 
     this.hub = hub;
     solenoid = hub.makeDoubleSolenoid(0, 1);
@@ -90,7 +93,7 @@ public class Chassis extends SubsystemBase {
     drive.arcadeDrive(x, -y);
   }
 
-  public void lowGear()
+  public void lowGear() 
   {
     solenoid.set(Value.kForward);
   }
@@ -111,10 +114,12 @@ public class Chassis extends SubsystemBase {
   {
     double x = stick.getX(), y = -stick.getY();
 
+    boolean isSlowed= false;
     if(RobotContainer.TWO_DRIVER_MODE){
       if(stick.getTrigger()){//slows down the chassis for lining up
         x /= 2.35;
         y /= 1.5;
+        isSlowed = true;
         setBrake();
       }else{
         setCoast();
@@ -126,15 +131,22 @@ public class Chassis extends SubsystemBase {
         highGear();
         setCoast();
       }
+      
     }else{
       if(stick.getRawButton(7)){
         x /= 1.5;
         y /= 2.8;
+        isSlowed = true;
       }
     }
 
-    //creates dead zone. Maybe it benefits driving experience
+    // If the elevator is high enough up, it's not safe to drive at full speed.
     
+    if (!isSlowed && m_elevator.getRightPosition() >= Constants.Elevator.ELEVATOR_BACKUP_UNSAFE) {
+      x /= 2.35;
+      y /= 1.5;
+    }
+
     arcadeDrive(x, y);
   }
 

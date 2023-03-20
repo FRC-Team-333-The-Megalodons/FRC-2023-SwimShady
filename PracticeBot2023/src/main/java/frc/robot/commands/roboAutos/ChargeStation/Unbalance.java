@@ -27,9 +27,13 @@ public class Unbalance extends CommandBase {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
+  double output = .2;
   @Override
   public void execute() {
-    chassis.arcadeDrive(0, -.45);
+    if(output < .88){
+      output += .02;
+    }
+    chassis.arcadeDrive(0, -output);
   }
 
   // Called once the command ends or is interrupted.

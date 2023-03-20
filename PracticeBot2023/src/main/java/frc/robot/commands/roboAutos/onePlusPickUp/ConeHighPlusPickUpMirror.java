@@ -21,22 +21,22 @@ import frc.robot.utils.PIDController;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ConeHighPlusPickUp extends SequentialCommandGroup {
-  /** Creates a new ConeHighPlusPickUp. */
+public class ConeHighPlusPickUpMirror extends SequentialCommandGroup {
+  /** Creates a new ConeHighPlusPickUpMirror. */
   frc.robot.utils.PIDController straightHeadingController, turnController, driveStraightController, resetDriveController, turn0Controller;
-  public ConeHighPlusPickUp(Chassis chassis, Gyro gyro, Elevator elevator, Intake intake) {
+  public ConeHighPlusPickUpMirror(Chassis chassis, Gyro gyro, Elevator elevator, Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
-    turnController = new PIDController(.0043, .008, 0, 90, .35, .35, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
-    driveStraightController = new PIDController(.006, .0083, 0, 35, 1, 1, Constants.Values.TICKS_PER_METER*.41);
+    turnController = new PIDController(.0043, .008, 0, 90, .25, .25, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
+    driveStraightController = new PIDController(.006, .008, 0, 35, 1, 1, Constants.Values.TICKS_PER_METER*.41);
     resetDriveController = new PIDController(.006, .008, 0, 35, 1, 1, -Constants.Values.TICKS_PER_METER*.41);
     turn0Controller = new PIDController(.0043, .008, 0, 90, .25, .25, 0);
 
     addCommands(
       new ConeHighPlusMobility(chassis, gyro, elevator, intake)
       ,new OpenClaw(intake)
-      ,new Turn(chassis, gyro, 185, turnController, true)
+      ,new Turn(chassis, gyro, 175 , turnController, true)
       ,new ElevatorGroundWhileWristGround(elevator, intake)
       ,new DriveWhileIntaking(chassis, gyro, intake, driveStraightController, straightHeadingController, true)//if bad delete
       ,new WristAtOrigin(intake)//if bad delete

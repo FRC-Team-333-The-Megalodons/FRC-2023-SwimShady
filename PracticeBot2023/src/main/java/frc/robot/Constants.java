@@ -69,6 +69,8 @@ public final class Constants {
         public static final double ELEVATOR_POS_BOTTOM = 0;
         public static final double ELEVATOR_POS_GROUND_INTAKE = 5;
         public static final double ELEVATOR_DOWN_SLOWDOWN_POINT = 20;
+        
+        public static final double ELEVATOR_BACKUP_UNSAFE = 70;
         public static final double ELEVATOR_POS_MID = 130;
         public static final double ELEVATOR_UP_SLOWDOWN_POINT = 195;
         public static final double ELEVATOR_POS_TOP = 215;

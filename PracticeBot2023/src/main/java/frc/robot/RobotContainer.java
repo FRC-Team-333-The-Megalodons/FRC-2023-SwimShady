@@ -54,11 +54,11 @@ public class RobotContainer {
   public RobotContainer() {
     m_hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
     //m_colorSensor = new ColorSensor();
-    m_chassis = new Chassis(m_hub);
     m_intake = new Intake(m_hub, null);
     m_elevator = new Elevator(m_intake);
     m_intake.setElevator(m_elevator);
     m_gyro = new Gyro();
+    m_chassis = new Chassis(m_hub, m_elevator);
     //m_lLight = new LimeLight();
     // Configure the trigger bindings
     configureBindings();
