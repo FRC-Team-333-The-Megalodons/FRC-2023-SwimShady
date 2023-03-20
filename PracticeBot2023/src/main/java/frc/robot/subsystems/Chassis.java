@@ -129,7 +129,7 @@ public class Chassis extends SubsystemBase {
     }else{
       if(stick.getRawButton(7)){
         x /= 1.5;
-        y /= 2.5;
+        y /= 2.8;
       }
     }
 
