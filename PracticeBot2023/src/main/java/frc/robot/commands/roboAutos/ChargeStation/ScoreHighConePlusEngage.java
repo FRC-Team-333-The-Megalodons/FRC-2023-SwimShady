@@ -7,14 +7,16 @@ package frc.robot.commands.roboAutos.ChargeStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCone;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreHighConePlusEngage extends SequentialCommandGroup {
   /** Creates a new ScoreHighPlusEngage. */
-  public ScoreHighConePlusEngage(frc.robot.subsystems.Elevator elevator, frc.robot.subsystems.Intake intake, Chassis chassis, Gyro gyro) {
+  public ScoreHighConePlusEngage(Elevator elevator, Intake intake, Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
