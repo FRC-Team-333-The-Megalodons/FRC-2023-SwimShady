@@ -27,8 +27,8 @@ public class ElevatorGroundWhileWristGround extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!elevator.isAtMaxDown() || !elevator.isGroungControllerOnTarget()){
-      elevator.e_GroundPosition();
+    if(!(elevator.getRightPosition() <= 15)){
+      elevator.manualDown();
     }else{
       elevator.stop();
     }
@@ -45,6 +45,6 @@ public class ElevatorGroundWhileWristGround extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isGroungControllerOnTarget() && intake.isAtMaxDown();
+    return intake.isAtMaxDown();
   }
 }

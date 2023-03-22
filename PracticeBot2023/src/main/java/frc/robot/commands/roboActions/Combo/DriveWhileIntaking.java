@@ -49,6 +49,7 @@ public class DriveWhileIntaking extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     chassis.arcadeDrive(0, 0);
+    intake.iStop();
   }
 
   // Returns true when the command should end.

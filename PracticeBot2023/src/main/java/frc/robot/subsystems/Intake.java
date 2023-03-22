@@ -44,7 +44,6 @@ public class Intake extends SubsystemBase {
   Elevator m_elevator;
   RelativeEncoder intakEncoder;
 
-
   public int DPAD_UP = 0;
   public int DPAD_UP_RIGHT = 45;
   public int DPAD_RIGHT = 90;

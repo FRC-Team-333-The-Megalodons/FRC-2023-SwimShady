@@ -60,9 +60,9 @@ public final class Constants {
 
     public static class Chassis {
         public static final double AUTO_UNBALANCE_START_SPEED = 0.1;
-        public static final double AUTO_UNBALANCE_INCREMENT = 0.026;
+        public static final double AUTO_UNBALANCE_INCREMENT = 0.02;
         public static final double AUTO_UNBALANCE_MAX_SPEED = 0.83;
-        public static final double AUTO_UNBALANCE_TILT_THRESHOLD = -5;
+        public static final double AUTO_UNBALANCE_TILT_THRESHOLD = -12;
         public static final double TELEOP_X_SLOWDOWN_DIVISOR = 2.35;
         public static final double TELEOP_Y_SLOWDOWN_DIVISOR = 1.5;
 
@@ -77,7 +77,7 @@ public final class Constants {
 
     public static class Elevator {
         public static final double ELEVATOR_POS_BOTTOM = 0;
-        public static final double ELEVATOR_POS_GROUND_INTAKE = 5;
+        public static final double ELEVATOR_POS_GROUND_INTAKE = 3.8;
         public static final double ELEVATOR_DOWN_SLOWDOWN_POINT = 20;
         
         public static final double ELEVATOR_BACKUP_UNSAFE = 70;
@@ -92,7 +92,7 @@ public final class Constants {
 
     public static class Wrist {
         public static final double WRIST_MAX = 0.93; // 1.02;
-        public static final double WRIST_MIN = 0.64; //0.74;
+        public static final double WRIST_MIN = 0.62; //0.74;
         public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.69; // (noice) 0.82;
         public static final double WRIST_STRAIGHT = 0.71; // 0.77;
         public static final double WRIST_GROUND_INTAKE = 0.64; // 0.74;

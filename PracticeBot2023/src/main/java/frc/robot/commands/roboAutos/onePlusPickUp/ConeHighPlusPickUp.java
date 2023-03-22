@@ -10,6 +10,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.Constants;
 import frc.robot.commands.roboActions.Combo.DriveWhileIntaking;
 import frc.robot.commands.roboActions.Combo.ElevatorGroundWhileWristGround;
+import frc.robot.commands.roboActions.drive.Drive;
 import frc.robot.commands.roboActions.drive.Turn;
 import frc.robot.commands.roboActions.intake.OpenClaw;
 import frc.robot.commands.roboActions.wrist.WristAtOrigin;
@@ -28,18 +29,20 @@ public class ConeHighPlusPickUp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
-    turnController = new PIDController(.0043, .008, 0, 90, .35, .35, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
-    driveStraightController = new PIDController(.006, .0083, 0, 35, 1, 1, Constants.Values.TICKS_PER_METER*.41);
-    resetDriveController = new PIDController(.006, .008, 0, 35, 1, 1, -Constants.Values.TICKS_PER_METER*.41);
+    turnController = new PIDController(.0043, .008, 0, 90, .35, .45, 0);//setting the target on turn controllers will not matter as they will be reset via constructor
+    driveStraightController = new PIDController(.005, .008, 0, 35, 1, 1, Constants.Values.TICKS_PER_METER*.44);
+    resetDriveController = new PIDController(.005, .008, 0, 35, 1, 1, -Constants.Values.TICKS_PER_METER*.44);
     turn0Controller = new PIDController(.0043, .008, 0, 90, .25, .25, 0);
 
     addCommands(
       new ConeHighPlusMobility(chassis, gyro, elevator, intake)
       ,new OpenClaw(intake)
-      ,new Turn(chassis, gyro, 185, turnController, true)
+      ,new Turn(chassis, gyro, 184, turnController, true)
       ,new ElevatorGroundWhileWristGround(elevator, intake)
-      ,new DriveWhileIntaking(chassis, gyro, intake, driveStraightController, straightHeadingController, true)//if bad delete
-      ,new WristAtOrigin(intake)//if bad delete
+      ,new DriveWhileIntaking(chassis, gyro, intake, driveStraightController, null, true)//if bad delete
+      ,new Drive(chassis,gyro,resetDriveController,true)
+      ,new WristAtOrigin(intake)
+      ,new Turn(chassis, gyro, 360, turn0Controller, true)
       /* 
       ,new Drive(chassis, gyro, driveStraightController, true)
       ,new IntakeIn(intake)

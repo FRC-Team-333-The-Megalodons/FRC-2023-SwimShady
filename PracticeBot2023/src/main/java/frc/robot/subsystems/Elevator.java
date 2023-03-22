@@ -39,7 +39,7 @@ public class Elevator extends SubsystemBase {
     stick = new Joystick(0);
     controller = new XboxController(1);
     eMidPidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,Constants.Elevator.ELEVATOR_POS_MID);
-    eGroundPidController = new PIDController(.05, .008, 0, 25, 1.5, 2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
+    eGroundPidController = new PIDController(.05, .005, 0, 25, .4, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
