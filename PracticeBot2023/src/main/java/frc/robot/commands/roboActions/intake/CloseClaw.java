@@ -5,14 +5,14 @@
 package frc.robot.commands.roboActions.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 public class CloseClaw extends CommandBase {
   /** Creates a new CloseClaw. */
 
-  Intake intake;
+  IntakeOld intake;
 
-  public CloseClaw(Intake intake) {
+  public CloseClaw(IntakeOld intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;

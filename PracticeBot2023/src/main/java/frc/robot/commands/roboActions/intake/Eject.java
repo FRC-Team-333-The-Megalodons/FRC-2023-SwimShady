@@ -5,12 +5,12 @@
 package frc.robot.commands.roboActions.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 public class Eject extends CommandBase {
   /** Creates a new Eject. */
-  Intake intake;
-  public Eject(Intake intake) {
+  IntakeOld intake;
+  public Eject(IntakeOld intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;

@@ -14,7 +14,7 @@ import frc.robot.subsystems.Gyro;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreHighCubePlusEngage extends SequentialCommandGroup {
   /** Creates a new ScoreHighCubePlusEngage. */
-  public ScoreHighCubePlusEngage(frc.robot.subsystems.Elevator elevator, frc.robot.subsystems.Intake intake, Chassis chassis, Gyro gyro) {
+  public ScoreHighCubePlusEngage(frc.robot.subsystems.Elevator elevator, frc.robot.subsystems.IntakeOld intake, Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

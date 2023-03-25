@@ -6,12 +6,12 @@ package frc.robot.commands.roboActions.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 public class WristConeScoringPosition extends CommandBase {
   /** Creates a new WristConeScoringPosition. */
-  Intake intake;
-  public WristConeScoringPosition(Intake intake) {
+  IntakeOld intake;
+  public WristConeScoringPosition(IntakeOld intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake= intake;

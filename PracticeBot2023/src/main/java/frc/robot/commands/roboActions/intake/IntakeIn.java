@@ -5,19 +5,19 @@
 package frc.robot.commands.roboActions.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 public class IntakeIn extends CommandBase {
   /** Creates a new IntakeIn. */
-  Intake intake;
+  IntakeOld intake;
   boolean shortDuration;
-  public IntakeIn(Intake intake) {
+  public IntakeIn(IntakeOld intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;
   }
 
-  public IntakeIn(Intake intake, boolean shortDuration) {
+  public IntakeIn(IntakeOld intake, boolean shortDuration) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;

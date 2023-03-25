@@ -5,7 +5,7 @@
 package frc.robot.commands.roboAutos.two;
 
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.roboAutos.onePlusMobility.ConeHighPlusMobility;
@@ -19,7 +19,7 @@ import frc.robot.utils.PIDController;
 public class ScoreHighTwice extends SequentialCommandGroup {
   /** Creates a new ScoreHighTwice. */
   frc.robot.utils.PIDController driveBackController,straightHeadingController, turnController, turn180Controller, driveToGridController, alignController;
-  public ScoreHighTwice(Chassis chassis, Gyro gyro, Elevator elevator, Intake intake) {
+  public ScoreHighTwice(Chassis chassis, Gyro gyro, Elevator elevator, IntakeOld intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 

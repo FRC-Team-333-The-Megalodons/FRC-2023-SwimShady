@@ -28,7 +28,8 @@ import frc.robot.utils.Metrics;
 import frc.robot.utils.PIDController;
 
 
-public class Intake extends SubsystemBase {
+public class IntakeOld extends SubsystemBase {
+  
   /** Creates a new Intake. */
   CANSparkMax wristMotor1, wristMotor2,intakemotor1, intakemotor2;
   MotorControllerGroup wrist, intake;
@@ -62,7 +63,7 @@ public class Intake extends SubsystemBase {
 
   private final SendableChooser<String> m_ejectChooser = new SendableChooser<>();
   
-  public Intake(PneumaticHub hub, ColorSensor colorSensor) {
+  public IntakeOld(PneumaticHub hub, ColorSensor colorSensor) {
     m_ejectChooser.setDefaultOption("Slow Eject Speed", kSlowEjectSpeed);
     m_ejectChooser.addOption("Fast Eject Speed", kFastEjectSpeed);
     SmartDashboard.putData("Eject Speeds:", m_ejectChooser);
@@ -291,6 +292,7 @@ public class Intake extends SubsystemBase {
       }
     }
 
+    
     // Wrist Angle (default to "stopped"; DPAD Up is wrist up, DPAD down is wrist down)
     if (controller.getPOV() == DPAD_UP) {
       moveWrist(Constants.Wrist.WRIST_UP_SLOW_SPEED);

@@ -10,7 +10,7 @@ import frc.robot.commands.roboActions.drive.Drive;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCone;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 import frc.robot.utils.PIDController;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -19,9 +19,9 @@ import frc.robot.utils.PIDController;
 public class ConeHighPlusMobility extends SequentialCommandGroup {
   /** Creates a new ConePlusMobility. */
   frc.robot.subsystems.Elevator elevator;
-  Intake intake;
+  IntakeOld intake;
   frc.robot.utils.PIDController driveForwardController, straightHeadingController;
-  public ConeHighPlusMobility(Chassis chassis, Gyro gyro,frc.robot.subsystems.Elevator elevator, Intake intake) {
+  public ConeHighPlusMobility(Chassis chassis, Gyro gyro,frc.robot.subsystems.Elevator elevator, IntakeOld intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     driveForwardController = new PIDController(.014, .01, 0, 35, 3, 1, -Constants.Values.TICKS_PER_METER*2.5);

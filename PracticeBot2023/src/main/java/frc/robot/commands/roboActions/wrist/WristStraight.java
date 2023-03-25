@@ -5,14 +5,14 @@
 package frc.robot.commands.roboActions.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 public class WristStraight extends CommandBase {
   /** Creates a new WristStraight. */
 
-  Intake intake;
+  IntakeOld intake;
 
-  public WristStraight(Intake intake) {
+  public WristStraight(IntakeOld intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;

@@ -6,13 +6,13 @@ package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 public class ElevatorHighWithWristStraight extends CommandBase {
   /** Creates a new ElevatorHighWithWristStraight. */
   Elevator elevator;
-  Intake intake;
-  public ElevatorHighWithWristStraight(Elevator elevator, Intake intake) {
+  IntakeOld intake;
+  public ElevatorHighWithWristStraight(Elevator elevator, IntakeOld intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator,intake);
     this.elevator = elevator;

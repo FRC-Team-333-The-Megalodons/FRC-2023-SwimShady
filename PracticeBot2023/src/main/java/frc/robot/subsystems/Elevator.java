@@ -27,10 +27,12 @@ public class Elevator extends SubsystemBase {
   Joystick stick;
   XboxController controller;
 
-  frc.robot.utils.PIDController eMidPidController, eGroundPidController;
+  frc.robot.utils.PIDController eGroundPidController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
   DigitalInput lowerLimitSwitch;
   DigitalInput upperLimitSwitch;
+  IntakeAlternate m_intake;
+  /*
   Intake intake;
 
   public Elevator(Intake intake) {
@@ -52,33 +54,75 @@ public class Elevator extends SubsystemBase {
 
     this.intake = intake;
   }
+  */
+
+  public Elevator(IntakeAlternate intake) {
+    rightMotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR1, MotorType.kBrushless);
+    leftmotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR2, MotorType.kBrushless);
+    stick = new Joystick(0);
+    controller = new XboxController(1);
+    eGroundPidController = new PIDController(.045, .007, 0, 25, .4, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
+
+    rightMotor.setIdleMode(IdleMode.kBrake);
+    leftmotor.setIdleMode(IdleMode.kBrake);
+    leftmotor.setInverted(true);
+    elevator = new MotorControllerGroup(rightMotor, leftmotor);
+    elevator.setInverted(true);
+
+    lowerLimitSwitch = new DigitalInput(1);
+    upperLimitSwitch = new DigitalInput(0);
+    //this.intake = null;
+    m_intake = intake;
+  }
+
+  public double rampUpRate = 0, rampDownRate = 0;
 
   public void stop() {
     elevator.set(0);
-    //elevatorState = RobotStates.ElevatorState.MOTORS_STOPPED;
+    rampUpRate = 0;
+    rampDownRate = 0;
   }
 
   public void manualUp()
   {
     // The elevator can't go up if the wrist is in the way.
-    if (!intake.isWristSafeForElevatorUp()) {
+    /* 
+    if (!intake.isWristSafeForElevatorUp() && intake != null) {
       stop();
       return;
     }
+    */
   
     if (getRightPosition() > Constants.Elevator.ELEVATOR_UP_SLOWDOWN_POINT) {
       manualMove(Constants.Elevator.ELEVATOR_UP_SLOWDOWN_ESPEED);
     } else {
-      manualMove(Constants.Elevator.ELEVATOR_UP_ESPEED);
+      rampDownRate = 0;
+      if(rampUpRate == 0){
+        rampUpRate = .1;
+      }else if(rampUpRate != 1){
+        rampUpRate += .1;
+      }
+      manualMove(Constants.Elevator.ELEVATOR_UP_ESPEED*rampUpRate);
     }
   }
 
   public void manualDown(){
-    if (getRightPosition() < Constants.Elevator.ELEVATOR_DOWN_SLOWDOWN_POINT) {
+    if (getRightPosition() < Constants.Elevator.ELEVATOR_POS_DOWN_SLOWDOWN_POINT) {
       manualMove(Constants.Elevator.ELEVATOR_DOWN_SLOWDOWN_ESPEED);
     } else {
-      manualMove(Constants.Elevator.ELEVATOR_DOWN_ESPEED);
+      rampUpRate = 0;
+      if(rampDownRate == 0){
+        rampDownRate = .1;
+      }else if(rampDownRate != 1){
+        rampDownRate += .1;
+      }
+      manualMove(Constants.Elevator.ELEVATOR_DOWN_ESPEED*rampDownRate);
     }
+  }
+
+  public double getHeight()
+  {
+    return getRightPosition();
   }
 
   public void manualMove(double speed){
@@ -106,7 +150,15 @@ public class Elevator extends SubsystemBase {
         return;
       }
 
-      if (getRightPosition() < Constants.Elevator.ELEVATOR_DOWN_SLOWDOWN_POINT) {
+      // If the wrist is down, it's not gonna be safe for the elevator to go lower than a certain ponit.
+      if (m_intake.getRealWristPosition() < Constants.Wrist.WRIST_POS_THRESHOLD_WHERE_ELEVATOR_NEEDS_TO_STOP
+          && getRightPosition() < Constants.Elevator.ELEVATOR_POS_LOWER_THRESHOLD_WHERE_WRIST_NEEDS_TO_BE_LIMITED)
+      {
+          stop();
+          return;
+      }
+
+      if (getRightPosition() < Constants.Elevator.ELEVATOR_POS_DOWN_SLOWDOWN_POINT) {
         // If we're near the lower limit, slow down so we don't smash through it
         //  (i.e. "cap" our speed at the down-slowdown speed). We use 'max' because
         //  both of the numbers here (speed and the down_slowdown_speed) are negative.
@@ -119,20 +171,12 @@ public class Elevator extends SubsystemBase {
     elevator.set(0);
   }
 
-  public void e_Mid(){
-    manualMove(eMidPidController.getOutput(getRightPosition()));
-  }
-
   public void e_GroundPosition(){
     manualMove(eGroundPidController.getOutput(getRightPosition()));
   }
 
   public double getRightPosition(){
     return -rightMotor.getEncoder().getPosition();
-  }
-
-  public boolean isMidControllerOnTarget(){
-    return eMidPidController.isOnTarget();
   }
 
   public boolean isGroungControllerOnTarget(){
@@ -163,6 +207,10 @@ public class Elevator extends SubsystemBase {
     if (lowerLimitSwitch.get() == false) {
       return true;
     }
+    // TODO: We need to check the wrist position and trust our height is correct
+    // so that we can actually stop our sevles from destroying ourselves.
+
+
     // We intentionally don't check getPosition at ELEVATOR_DOWN 
     //  as we'd have no way to get a reset position if not.
     return false;
@@ -177,21 +225,24 @@ public class Elevator extends SubsystemBase {
 
   public void teleopPeriodic_impl()
   {
-      if(Math.abs(controller.getRightY()) > 0.05) {  // "Dead zone" check for Right Joystick
+      if(Math.abs(controller.getRightY()) >= 0.05) {  // "Dead zone" check for Right Joystick
         manualMove(-controller.getRightY());
       }else{
         if(controller.getAButton()){
           // TODO: make an e_Home (that handles the wrist)
           manualDown();
+          eGroundPidController.pause();
         }else if(controller.getXButton()){
-          e_Mid();
+        
         }else if(controller.getBButton()){
           e_GroundPosition();
         }else if(controller.getYButton()){
           // TODO: make an e_High (that handles the wrist)
           manualUp();
+          eGroundPidController.pause();
         }else {
           stop();
+          eGroundPidController.pause();
         }
       }
 
@@ -203,7 +254,7 @@ public class Elevator extends SubsystemBase {
         manualUp();
       } else if (stick.getRawButton(3)) {
         if(stick.getRawAxis(3) < .6){
-          e_Mid();
+          
         }else{
           manualDown();
         }

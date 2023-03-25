@@ -5,12 +5,12 @@
 package frc.robot.commands.roboActions.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 public class WristAtOrigin extends CommandBase {
   /** Creates a new WristAtOrigin. */
-  Intake intake;
-  public WristAtOrigin(Intake intake) {
+  IntakeOld intake;
+  public WristAtOrigin(IntakeOld intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;

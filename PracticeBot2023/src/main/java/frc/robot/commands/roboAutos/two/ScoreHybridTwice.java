@@ -14,7 +14,7 @@ import frc.robot.commands.roboActions.intake.IntakeIn;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 import frc.robot.utils.PIDController;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -23,7 +23,7 @@ import frc.robot.utils.PIDController;
 public class ScoreHybridTwice extends SequentialCommandGroup {
   /** Creates a new ScoreHybridTwice. */
   frc.robot.utils.PIDController driveBackController,straightHeadingController, turnController, turn180Controller, driveToGridController, alignController;
-  public ScoreHybridTwice(Chassis chassis, Gyro gyro, Elevator elevator, Intake intake) {
+  public ScoreHybridTwice(Chassis chassis, Gyro gyro, Elevator elevator, IntakeOld intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 

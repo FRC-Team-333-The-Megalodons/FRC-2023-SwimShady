@@ -20,7 +20,8 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.utils.Metrics;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -42,7 +43,8 @@ public class RobotContainer {
   PneumaticHub m_hub;
   ColorSensor m_colorSensor;
   Chassis m_chassis;
-  Intake m_intake;
+  //Intake m_intake;
+  IntakeAlternate intake;
   Elevator m_elevator;
   Gyro m_gyro;
   LimeLight m_lLight;
@@ -53,14 +55,13 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
-    //m_colorSensor = new ColorSensor();
-    m_intake = new Intake(m_hub, null);
-    m_elevator = new Elevator(m_intake);
-    m_intake.setElevator(m_elevator);
+    m_colorSensor = new ColorSensor();
+    //m_intake = new Intake(m_hub, null);
+    intake = new IntakeAlternate();
+    m_elevator = new Elevator(intake);
+    intake.setElevator(m_elevator);
     m_gyro = new Gyro();
     m_chassis = new Chassis(m_hub, m_elevator);
-    //m_lLight = new LimeLight();
-    // Configure the trigger bindings
     configureBindings();
   }
 
@@ -96,6 +97,7 @@ public class RobotContainer {
     //  find all three!
     // In this place, add a `case` for your Mode ID Name, and return a `new` of 
     //  your Command class. 
+    /* 
     switch (selectedAuto) {
       case Robot.kNoAuto: return null;
       case Robot.kBalance: return new DockAndEngage(m_chassis,m_gyro);
@@ -110,6 +112,8 @@ public class RobotContainer {
       case Robot.kScoreHybridTwiceAuto: return new ScoreHybridTwice(m_chassis, m_gyro, m_elevator, m_intake);
       default: return null;
     }
+    */
+    return null;
     
   }
   
@@ -130,13 +134,14 @@ public class RobotContainer {
       m_elevator.periodic();
     } catch (Exception e) { /* Don't die if the elevator dies */}
     try {
-      m_intake.periodic();
+      //m_intake.periodic();
+      intake.periodic();
     } catch (Exception e) { /* Don't die if the intake dies */}
     try {
       m_gyro.periodic();
     } catch (Exception e) { /* Don't die if the gyro dies */}
     try {
-      //m_colorSensor.periodic();
+      m_colorSensor.periodic();
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
   }
 
@@ -162,7 +167,8 @@ public class RobotContainer {
       m_elevator.teleopPeriodic();
     } catch (Exception e) { /* Don't die if we fail to run the elevator */}
     try {
-      m_intake.teleopPeriodic();
+      //m_intake.teleopPeriodic();
+      intake.teleopPeriodic();
     } catch (Exception e) { /* Don't die if we fail to run the intake */}
   }
 
@@ -174,7 +180,7 @@ public class RobotContainer {
   public void resetEncoders() {
     m_gyro.reset();
     m_chassis.resetEncoders();
-    m_intake.resetIntakeEncoder();
+    //m_intake.resetIntakeEncoder();
   }
 
   public void setChassisCoast(){

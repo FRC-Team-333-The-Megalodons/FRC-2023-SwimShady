@@ -11,7 +11,7 @@ import frc.robot.commands.roboActions.intake.Eject;
 import frc.robot.commands.roboActions.intake.IntakeIn;
 import frc.robot.commands.roboActions.intake.OpenClaw;
 import frc.robot.commands.roboActions.wrist.WristStraight;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,8 +19,8 @@ import frc.robot.subsystems.Intake;
 public class ScoreHighCube extends SequentialCommandGroup {
   /** Creates a new ScoreHighCube. */
   frc.robot.subsystems.Elevator elevator;
-  Intake intake;
-  public ScoreHighCube(frc.robot.subsystems.Elevator elevator, Intake intake) {
+  IntakeOld intake;
+  public ScoreHighCube(frc.robot.subsystems.Elevator elevator, IntakeOld intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     this.elevator = elevator;

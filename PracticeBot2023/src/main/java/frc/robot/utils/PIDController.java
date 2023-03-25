@@ -100,6 +100,12 @@ public class PIDController {
         return (kP * error) + (kI * errorSum) + (kD * errorRate);//only PI for now
     }
 
+    public void pause(){
+        error = 0;
+        errorSum = 0;
+        errorRate = 0;
+    }
+
     public void setTarget(double minTolerance, double maxTolerance, double target){
         this.target = target;
         this.maxTolerance = maxTarget;

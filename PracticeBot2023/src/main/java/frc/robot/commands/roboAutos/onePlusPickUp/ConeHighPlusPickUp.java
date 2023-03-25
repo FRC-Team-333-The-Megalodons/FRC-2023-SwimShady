@@ -6,7 +6,7 @@ package frc.robot.commands.roboAutos.onePlusPickUp;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 import frc.robot.Constants;
 import frc.robot.commands.roboActions.Combo.DriveWhileIntaking;
 import frc.robot.commands.roboActions.Combo.ElevatorGroundWhileWristGround;
@@ -25,7 +25,7 @@ import frc.robot.utils.PIDController;
 public class ConeHighPlusPickUp extends SequentialCommandGroup {
   /** Creates a new ConeHighPlusPickUp. */
   frc.robot.utils.PIDController straightHeadingController, turnController, driveStraightController, resetDriveController, turn0Controller;
-  public ConeHighPlusPickUp(Chassis chassis, Gyro gyro, Elevator elevator, Intake intake) {
+  public ConeHighPlusPickUp(Chassis chassis, Gyro gyro, Elevator elevator, IntakeOld intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);

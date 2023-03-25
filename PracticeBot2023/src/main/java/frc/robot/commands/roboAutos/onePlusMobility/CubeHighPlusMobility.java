@@ -11,7 +11,7 @@ import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 import frc.robot.utils.PIDController;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,9 +20,9 @@ import frc.robot.utils.PIDController;
 public class CubeHighPlusMobility extends SequentialCommandGroup {
   /** Creates a new CubePlusMobility. */
   Elevator elevator;
-  Intake intake;
+  IntakeOld intake;
   frc.robot.utils.PIDController driveForwardController, straightHeadingController;
-  public CubeHighPlusMobility(Chassis chassis, Gyro gyro,Elevator elevator, Intake intake) {
+  public CubeHighPlusMobility(Chassis chassis, Gyro gyro,Elevator elevator, IntakeOld intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     driveForwardController = new PIDController(.014, .01, 0, 35, 5, 1, -Constants.Values.TICKS_PER_METER*2.515);

@@ -7,7 +7,7 @@ package frc.robot.commands.roboActions.Combo;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 import frc.robot.utils.PIDController;
 
 public class DriveWhileIntaking extends CommandBase {
@@ -15,11 +15,11 @@ public class DriveWhileIntaking extends CommandBase {
 
   Chassis chassis;
   Gyro gyro;
-  Intake intake;
+  IntakeOld intake;
   frc.robot.utils.PIDController turnController, driveController;
   boolean encodersReset;
 
-  public DriveWhileIntaking(Chassis chassis, Gyro gyro, Intake intake, PIDController driveController, PIDController straightHeadingController,  boolean encodersReset) {
+  public DriveWhileIntaking(Chassis chassis, Gyro gyro, IntakeOld intake, PIDController driveController, PIDController straightHeadingController,  boolean encodersReset) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
     this.chassis = chassis;

@@ -11,7 +11,7 @@ import frc.robot.commands.roboActions.intake.CloseClaw;
 import frc.robot.commands.roboActions.intake.OpenClaw;
 import frc.robot.commands.roboActions.wrist.WristConeScoringPosition;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeOld;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,8 +19,8 @@ import frc.robot.subsystems.Intake;
 public class ScoreHighCone extends SequentialCommandGroup {
   /** Creates a new ScoreHighCone. */
   Elevator elevator;
-  Intake intake;
-  public ScoreHighCone(Elevator elevator, Intake intake) {
+  IntakeOld intake;
+  public ScoreHighCone(Elevator elevator, IntakeOld intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     this.elevator = elevator;
