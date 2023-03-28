@@ -5,46 +5,39 @@
 package frc.robot.commands.roboActions.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 
 public class IntakeIn extends CommandBase {
   /** Creates a new IntakeIn. */
-  IntakeOld intake;
+  IntakeAlternate intake;
   boolean shortDuration;
-  public IntakeIn(IntakeOld intake) {
+  public IntakeIn(IntakeAlternate intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;
-  }
-
-  public IntakeIn(IntakeOld intake, boolean shortDuration) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
-    this.intake = intake;
-    this.shortDuration = shortDuration;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.resetIntakeEncoder();
+    intake.resetMotorEncoder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.iIn();
+    intake.intakeIn();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.iStop();
+    intake.stopIntake();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shortDuration ? intake.shortIntakeAutoDone() : intake.intakeAutoDone();
+    return intake.intakeAutoDone();
   }
 }

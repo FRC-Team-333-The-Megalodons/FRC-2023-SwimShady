@@ -5,12 +5,12 @@
 package frc.robot.commands.roboActions.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 
 public class Eject extends CommandBase {
   /** Creates a new Eject. */
-  IntakeOld intake;
-  public Eject(IntakeOld intake) {
+  IntakeAlternate intake;
+  public Eject(IntakeAlternate intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;
@@ -19,19 +19,19 @@ public class Eject extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.resetIntakeEncoder();
+    intake.resetMotorEncoder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.iOut();
+    intake.eject();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.iStop();
+    intake.stopIntake();
   }
 
   // Returns true when the command should end.

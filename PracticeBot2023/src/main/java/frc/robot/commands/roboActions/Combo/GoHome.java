@@ -2,44 +2,46 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.roboActions.wrist;
+package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.IntakeAlternate;
 
-public class WristConeScoringPosition extends CommandBase {
-  /** Creates a new WristConeScoringPosition. */
-  IntakeOld intake;
-  public WristConeScoringPosition(IntakeOld intake) {
+public class GoHome extends CommandBase {
+  /** Creates a new GoHome. */
+  IntakeAlternate intakeAlternate;
+  Elevator elevator;
+  public GoHome(IntakeAlternate intakeAlternate, Elevator elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
-    this.intake= intake;
+    addRequirements(intakeAlternate,elevator);
+    this.intakeAlternate = intakeAlternate;
+    this.elevator = elevator;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(intake.getRealWristPosition() >= Constants.Wrist.WRIST_CONE_SCORING_POSITION){
-      intake.moveWrist(.4);
-    }else{
-      intake.stop();
-    }
+    intakeAlternate.wristIn();
+    elevator.manualDown();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stop();
+    intakeAlternate.stopWrist();
+    elevator.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.getRealWristPosition() <= Constants.Wrist.WRIST_CONE_SCORING_POSITION;
+    return elevator.isAtMaxDown() && intakeAlternate.isWristAtMaxUp();
   }
 }

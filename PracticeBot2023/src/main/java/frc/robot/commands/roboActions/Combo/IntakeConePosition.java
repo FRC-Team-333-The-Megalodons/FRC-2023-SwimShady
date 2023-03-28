@@ -5,18 +5,19 @@
 package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.IntakeAlternate;
 
-public class ElevatorHighWithWristSafe extends CommandBase {
-  /** Creates a new ElevatorHighWithWristStraightCone. */
-  frc.robot.subsystems.Elevator elevator;
-  IntakeOld intake;
-  public ElevatorHighWithWristSafe(frc.robot.subsystems.Elevator elevator, IntakeOld intake) {
+public class IntakeConePosition extends CommandBase {
+  /** Creates a new IntakeConePosition. */
+  IntakeAlternate intake;
+  Elevator elevator;
+
+  public IntakeConePosition(IntakeAlternate intake, Elevator elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevator,intake);
-    this.elevator = elevator;
+    addRequirements(intake,elevator);
     this.intake = intake;
+    this.elevator = elevator;
   }
 
   // Called when the command is initially scheduled.
@@ -26,28 +27,20 @@ public class ElevatorHighWithWristSafe extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!elevator.isAtMaxUp()){
-      elevator.manualUp();
-    }else{
-      elevator.stop();
-    }
-    if(intake.getRealWristPosition() >= Constants.Wrist.WRIST_LIMIT_FOR_ELEVATOR_UP){//60 for mid
-      intake.moveWrist(Constants.Wrist.WRIST_DOWN_SPEED);
-    }else{
-      intake.stop();
-    }
+    intake.wristToIntake();
+    elevator.e_GroundPosition();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    intake.stopWrist();
     elevator.stop();
-    intake.stop();
   }
-  
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isAtMaxUp();
+    return intake.intakeConeController.isOnTarget() && elevator.isGroungControllerOnTarget();
   }
 }

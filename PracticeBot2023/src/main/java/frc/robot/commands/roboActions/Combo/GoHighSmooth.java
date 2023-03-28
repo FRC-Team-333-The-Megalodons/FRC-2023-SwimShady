@@ -6,44 +6,42 @@ package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 
-public class ElevatorGroundWhileWristAtOrigin extends CommandBase {
-  /** Creates a new ElevatorLowWhileWristAtOrigin. */
+public class GoHighSmooth extends CommandBase {
+  /** Creates a new GoHighConeSmooth. */
+  IntakeAlternate intakeAlternate;
   Elevator elevator;
-  IntakeOld intake;
-  public ElevatorGroundWhileWristAtOrigin(Elevator elevator, IntakeOld intake) {
+  public GoHighSmooth(IntakeAlternate intakeAlternate, Elevator elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevator,intake);
+    addRequirements(intakeAlternate, elevator);
+    this.intakeAlternate = intakeAlternate;
     this.elevator = elevator;
-    this.intake = intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!elevator.isAtMaxDown() || !elevator.isGroungControllerOnTarget()){
-      elevator.e_GroundPosition();
-    }else{
-      elevator.stop();
-    }
-    intake.moveWrist(-.3);
+    intakeAlternate.wristToSCore();
+    elevator.manualUp();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    intakeAlternate.stopWrist();
     elevator.stop();
-    intake.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isGroungControllerOnTarget() && intake.isAtMaxUp();
+    return intakeAlternate.scoringController.isOnTarget() && elevator.isAtMaxUp();
   }
 }

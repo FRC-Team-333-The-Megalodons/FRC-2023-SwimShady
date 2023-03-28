@@ -5,14 +5,12 @@
 package frc.robot.commands.roboActions.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 
-public class WristStraight extends CommandBase {
-  /** Creates a new WristStraight. */
-
-  IntakeOld intake;
-
-  public WristStraight(IntakeOld intake) {
+public class WristDownToIntakeCube extends CommandBase {
+  /** Creates a new WristDownToIntakeCube. */
+  IntakeAlternate intake;
+  public WristDownToIntakeCube(IntakeAlternate intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;
@@ -25,18 +23,18 @@ public class WristStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setWristStaight();
+    intake.wristToIntakeCube();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.moveWrist(0);
+    intake.stopWrist();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.isWristStraight();
+    return intake.intakeCubeController.isOnTarget();
   }
 }

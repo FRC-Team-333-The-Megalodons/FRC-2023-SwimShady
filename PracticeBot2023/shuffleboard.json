@@ -324,8 +324,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/wrist raw",
-              "_title": "wrist raw",
+              "_source0": "network_table:///SmartDashboard/intake motor",
+              "_title": "intake motor",
               "_glyph": 148,
               "_showGlyph": false
             }

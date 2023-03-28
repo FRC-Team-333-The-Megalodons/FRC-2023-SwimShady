@@ -2,37 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.roboActions.intake;
+package frc.robot.commands.roboActions.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 
-public class OpenClaw extends CommandBase {
-  /** Creates a new OpenClaw. */
-  IntakeOld intake;
-  public OpenClaw(IntakeOld intake) {
+public class WristHighScoringPosition extends CommandBase {
+  /** Creates a new WristConeScoringPosition. */
+  IntakeAlternate intake;
+  public WristHighScoringPosition(IntakeAlternate intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
-    this.intake = intake;
+    this.intake= intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    intake.stopWrist();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.pUnsqueeze();
+    intake.wristToSCore();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.stopWrist();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeOpen();
+    return intake.scoringController.isOnTarget();
   }
 }

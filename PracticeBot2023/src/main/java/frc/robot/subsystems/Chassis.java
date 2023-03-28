@@ -151,7 +151,7 @@ public class Chassis extends SubsystemBase {
     
     if(stick.getRawButton(7)){
       x /= 1.5;
-      y /= 2.8;
+      y /= 3.1;
     }
   
     arcadeDrive(x, y);

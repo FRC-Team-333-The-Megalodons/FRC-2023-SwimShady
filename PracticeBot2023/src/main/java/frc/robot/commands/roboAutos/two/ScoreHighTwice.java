@@ -5,10 +5,9 @@
 package frc.robot.commands.roboAutos.two;
 
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.roboAutos.onePlusMobility.ConeHighPlusMobility;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.utils.PIDController;
@@ -19,7 +18,7 @@ import frc.robot.utils.PIDController;
 public class ScoreHighTwice extends SequentialCommandGroup {
   /** Creates a new ScoreHighTwice. */
   frc.robot.utils.PIDController driveBackController,straightHeadingController, turnController, turn180Controller, driveToGridController, alignController;
-  public ScoreHighTwice(Chassis chassis, Gyro gyro, Elevator elevator, IntakeOld intake) {
+  public ScoreHighTwice(Chassis chassis, Gyro gyro, Elevator elevator, IntakeAlternate intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
@@ -29,7 +28,7 @@ public class ScoreHighTwice extends SequentialCommandGroup {
     driveToGridController = new PIDController(.013, .01, 0, 35, 5, 1, Constants.Values.TICKS_PER_METER * 2.1);
     alignController = new PIDController(.002, .007, 0, 90, .2, .2, 0);
     addCommands(
-      new ConeHighPlusMobility(chassis, gyro, elevator, intake)
+
     );
   }
 }

@@ -11,7 +11,7 @@ import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 import frc.robot.utils.PIDController;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -19,18 +19,14 @@ import frc.robot.utils.PIDController;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CubeHighPlusMobility extends SequentialCommandGroup {
   /** Creates a new CubePlusMobility. */
-  Elevator elevator;
-  IntakeOld intake;
   frc.robot.utils.PIDController driveForwardController, straightHeadingController;
-  public CubeHighPlusMobility(Chassis chassis, Gyro gyro,Elevator elevator, IntakeOld intake) {
+  public CubeHighPlusMobility(Chassis chassis, Gyro gyro,Elevator elevator, IntakeAlternate intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     driveForwardController = new PIDController(.014, .01, 0, 35, 5, 1, -Constants.Values.TICKS_PER_METER*2.515);
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
-    this.elevator = elevator;
-    this.intake = intake;
     addCommands(
-      new ScoreHighCube(elevator, intake)
+      new ScoreHighCube(elevator, intake,chassis,gyro)
       ,new Drive(chassis,gyro,driveForwardController,straightHeadingController,true)
     );
   }

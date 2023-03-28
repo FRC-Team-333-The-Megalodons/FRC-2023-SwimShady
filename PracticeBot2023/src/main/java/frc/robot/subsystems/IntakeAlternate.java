@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.text.DecimalFormat;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.Metrics;
+import frc.robot.utils.PIDController;
 
 public class IntakeAlternate extends SubsystemBase {
 
@@ -30,13 +32,14 @@ public class IntakeAlternate extends SubsystemBase {
 
   /** Creates a new IntakeAlternate. */
   CANSparkMax intakeMotor, wristMotor;
+  RelativeEncoder intakeEncoder;
   XboxController controller = new XboxController(1);
   DutyCycleEncoder wristEncoder;
   DecimalFormat df1 = new DecimalFormat("0.##");
   double wristValue;
   Elevator m_elevator;
 
-  frc.robot.utils.PIDController intakeController, scoringController, substationController;
+  public frc.robot.utils.PIDController intakeCubeController,intakeConeController, scoringController, substationController, midController;
 
   public IntakeAlternate() {
     intakeMotor = new CANSparkMax(Constants.RobotMap.PORT_INTAKE2, MotorType.kBrushless);
@@ -50,11 +53,12 @@ public class IntakeAlternate extends SubsystemBase {
     wristEncoder.setConnectedFrequencyThreshold(900);
     wristEncoder.reset();
 
-    
-    intakeController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0.01,0);
-    scoringController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0.01,0);
-    substationController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0.01,0);
-    
+    intakeEncoder = intakeMotor.getEncoder();    
+    intakeConeController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0,0.01,Constants.Wrist.WRIST_GROUND_INTAKE);
+    intakeCubeController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN);
+    scoringController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0.01,Constants.Wrist.WRIST_POS_TO_SCORE);
+    substationController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_SUBSTATION);
+    midController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_MID);
   }
 
   public void setElevator(Elevator e)
@@ -98,6 +102,24 @@ public class IntakeAlternate extends SubsystemBase {
     intakeMotor.set(0);
   }
 
+  public void resetMotorEncoder(){
+    intakeEncoder.setPosition(0);
+  }
+
+  public boolean intakeAutoDone(){
+    if((intakeEncoder.getPosition()) <= -30){
+      return true;
+    }
+    return false;
+  }
+
+  public boolean outakeAutoDone(){
+    if((intakeEncoder.getPosition()) >= 30){
+      return true;
+    }
+    return false;
+  }
+
   public void wristIn(){
     
     moveWrist(Constants.Wrist.WRIST_UP_SPEED);
@@ -112,7 +134,11 @@ public class IntakeAlternate extends SubsystemBase {
   }
 
   public void wristToIntake(){
-    moveWrist(intakeController.getOutput(getRealWristPosition()));
+    moveWrist(intakeConeController.getOutput(getRealWristPosition()));
+  }
+
+  public void wristToIntakeCube(){
+    moveWrist(intakeCubeController.getOutput(getRealWristPosition()));
   }
 
   public void wristToSCore(){
@@ -121,6 +147,10 @@ public class IntakeAlternate extends SubsystemBase {
 
   public void wristToSubStation(){
     moveWrist(substationController.getOutput(getRealWristPosition()));
+  }
+
+  public void wristToMid(){
+    moveWrist(midController.getOutput(getRealWristPosition()));
   }
 
   // WRIST UPPER LIMIT WITH CONE IN IT : 0.54
@@ -138,6 +168,7 @@ public class IntakeAlternate extends SubsystemBase {
 
   public  boolean isWristAtMaxDown()
   {
+    /* 
     // This considers the elevator state.
     if (m_elevator.getHeight() >= Constants.Elevator.ELEVATOR_POS_LOWEST_POINT_WRIST_CAN_MOVE) {
       return getRealWristPosition() <= Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_UP;
@@ -148,9 +179,9 @@ public class IntakeAlternate extends SubsystemBase {
         m_elevator.getHeight() <= Constants.Elevator.ELEVATOR_POS_LOWEST_POINT_WRIST_CAN_MOVE)
     {
       */
-      return getRealWristPosition() <= Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN;
+      //return getRealWristPosition() <= Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN;
     //}
-
+    return false;
   }
 
 
@@ -192,6 +223,8 @@ public class IntakeAlternate extends SubsystemBase {
       intakeIn();
     }else if(controller.getLeftBumper()){
       eject();
+    }else if(controller.getPOV() == 180){
+      intakeMotor.set(-.254);
     }else {
       // If no one is holding the intake buttons, and gravity
       //  isn't helping us, do a persistent pull-in to help hold it.
@@ -203,16 +236,66 @@ public class IntakeAlternate extends SubsystemBase {
       }
     }
 
+    /*
+   * buttons for new intake 
+   * high- Y
+   * mid- B
+   * cone ground- X
+   * cube ground - A
+   * sub- right trigger
+   * home- left trigger
+   */
+
     if (Math.abs(controller.getLeftY()) > 0.05) {
       double y = -controller.getLeftY();
       moveWrist(y);
     } else {
-      if (controller.getPOV() == DPAD_UP) {
+
+      if(controller.getAButton()){
+        // TODO: make an e_Home (that handles the wrist)
+        wristToIntakeCube();
+        intakeConeController.pause();
+        scoringController.pause();
+        substationController.pause();
+        midController.pause();
+      }else if(controller.getXButton()){
+        wristToIntake();
+        intakeCubeController.pause();
+        scoringController.pause();
+        substationController.pause();
+        midController.pause();
+      }else if(controller.getBButton()){
+        wristToMid();
+        intakeConeController.pause();
+        intakeCubeController.pause();
+        substationController.pause();
+        scoringController.pause();
+      }else if(controller.getYButton()){
+        wristToSCore();
+        intakeConeController.pause();
+        intakeCubeController.pause();
+        substationController.pause();
+        midController.pause();
+      }else if(controller.getLeftTriggerAxis() > .2){
+        wristToSubStation();
+        intakeConeController.pause();
+        intakeCubeController.pause();
+        scoringController.pause();
+        midController.pause();
+      }else if(controller.getRightTriggerAxis() > .2){
         wristIn();
-      }else if (controller.getPOV() == DPAD_DOWN) {
-        wristOut();
+        intakeConeController.pause();
+        intakeCubeController.pause();
+        scoringController.pause();
+        substationController.pause();
+        midController.pause();
       }else {
         stopWrist();
+        intakeConeController.pause();
+        intakeCubeController.pause();
+        scoringController.pause();
+        substationController.pause();
+        midController.pause();
       }
     }
   }
@@ -223,6 +306,6 @@ public class IntakeAlternate extends SubsystemBase {
     double rawWristValue = getRealWristPosition();
     wristValue = (Double.valueOf(df1.format(rawWristValue)));
     SmartDashboard.putNumber("wrist value", wristValue);
-    //SmartDashboard.putNumber("wrist raw", rawWristValue);
+    SmartDashboard.putNumber("intake motor", intakeEncoder.getPosition());
   }
 }

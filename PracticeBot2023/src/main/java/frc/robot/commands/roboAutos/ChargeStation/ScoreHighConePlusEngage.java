@@ -9,18 +9,17 @@ import frc.robot.commands.roboAutos.oneOnly.ScoreHighCone;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.IntakeOld;
-
+import frc.robot.subsystems.IntakeAlternate;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreHighConePlusEngage extends SequentialCommandGroup {
   /** Creates a new ScoreHighPlusEngage. */
-  public ScoreHighConePlusEngage(Elevator elevator, IntakeOld intake, Chassis chassis, Gyro gyro) {
+  public ScoreHighConePlusEngage(Elevator elevator, IntakeAlternate intake, Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreHighCone(elevator, intake)
+      new ScoreHighCone(elevator, intake,chassis,gyro)
       ,new DockAndEngage(chassis, gyro)
     );
   }

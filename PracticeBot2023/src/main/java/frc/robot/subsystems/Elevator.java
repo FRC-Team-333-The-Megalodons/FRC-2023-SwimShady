@@ -27,41 +27,19 @@ public class Elevator extends SubsystemBase {
   Joystick stick;
   XboxController controller;
 
-  frc.robot.utils.PIDController eGroundPidController;
+  public frc.robot.utils.PIDController eGroundPidController, cubeGroundPIDController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
   DigitalInput lowerLimitSwitch;
   DigitalInput upperLimitSwitch;
   IntakeAlternate m_intake;
-  /*
-  Intake intake;
-
-  public Elevator(Intake intake) {
-    rightMotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR1, MotorType.kBrushless);
-    leftmotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR2, MotorType.kBrushless);
-    stick = new Joystick(0);
-    controller = new XboxController(1);
-    eMidPidController = new frc.robot.utils.PIDController(.05, .005, 0, 80, 4, 5,Constants.Elevator.ELEVATOR_POS_MID);
-    eGroundPidController = new PIDController(.05, .005, 0, 25, .4, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
-
-    rightMotor.setIdleMode(IdleMode.kBrake);
-    leftmotor.setIdleMode(IdleMode.kBrake);
-    leftmotor.setInverted(true);
-    elevator = new MotorControllerGroup(rightMotor, leftmotor);
-    elevator.setInverted(true);
-
-    lowerLimitSwitch = new DigitalInput(1);
-    upperLimitSwitch = new DigitalInput(0);
-
-    this.intake = intake;
-  }
-  */
-
+  
   public Elevator(IntakeAlternate intake) {
     rightMotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR1, MotorType.kBrushless);
     leftmotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
     controller = new XboxController(1);
-    eGroundPidController = new PIDController(.045, .007, 0, 25, .4, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
+    eGroundPidController = new PIDController(.05, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
+    cubeGroundPIDController = new PIDController(.05, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_CUBE);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
@@ -98,9 +76,9 @@ public class Elevator extends SubsystemBase {
     } else {
       rampDownRate = 0;
       if(rampUpRate == 0){
-        rampUpRate = .1;
+        rampUpRate = .2;
       }else if(rampUpRate != 1){
-        rampUpRate += .1;
+        rampUpRate += .2;
       }
       manualMove(Constants.Elevator.ELEVATOR_UP_ESPEED*rampUpRate);
     }
@@ -112,9 +90,9 @@ public class Elevator extends SubsystemBase {
     } else {
       rampUpRate = 0;
       if(rampDownRate == 0){
-        rampDownRate = .1;
+        rampDownRate = .2;
       }else if(rampDownRate != 1){
-        rampDownRate += .1;
+        rampDownRate += .2;
       }
       manualMove(Constants.Elevator.ELEVATOR_DOWN_ESPEED*rampDownRate);
     }
@@ -150,14 +128,6 @@ public class Elevator extends SubsystemBase {
         return;
       }
 
-      // If the wrist is down, it's not gonna be safe for the elevator to go lower than a certain ponit.
-      if (m_intake.getRealWristPosition() < Constants.Wrist.WRIST_POS_THRESHOLD_WHERE_ELEVATOR_NEEDS_TO_STOP
-          && getRightPosition() < Constants.Elevator.ELEVATOR_POS_LOWER_THRESHOLD_WHERE_WRIST_NEEDS_TO_BE_LIMITED)
-      {
-          stop();
-          return;
-      }
-
       if (getRightPosition() < Constants.Elevator.ELEVATOR_POS_DOWN_SLOWDOWN_POINT) {
         // If we're near the lower limit, slow down so we don't smash through it
         //  (i.e. "cap" our speed at the down-slowdown speed). We use 'max' because
@@ -173,6 +143,10 @@ public class Elevator extends SubsystemBase {
 
   public void e_GroundPosition(){
     manualMove(eGroundPidController.getOutput(getRightPosition()));
+  }
+
+  public void cubeGroundPos(){
+    manualMove(cubeGroundPIDController.getOutput(getRightPosition()));
   }
 
   public double getRightPosition(){
@@ -196,11 +170,6 @@ public class Elevator extends SubsystemBase {
     if (upperLimitSwitch.get() == false) {
       return true;
     }
-    /*
-    if (getRightPosition() >= Constants.Elevator.ELEVATOR_POS_TOP) {
-      return true;
-    }
-    */
     return false;
   }
   public boolean isAtMaxDown(){
@@ -209,10 +178,6 @@ public class Elevator extends SubsystemBase {
     }
     // TODO: We need to check the wrist position and trust our height is correct
     // so that we can actually stop our sevles from destroying ourselves.
-
-
-    // We intentionally don't check getPosition at ELEVATOR_DOWN 
-    //  as we'd have no way to get a reset position if not.
     return false;
   }
 
@@ -223,6 +188,16 @@ public class Elevator extends SubsystemBase {
     Metrics.stopTimer(metric_key);
   }
 
+  /*
+   * buttons for new intake 
+   * high- Y
+   * mid- B
+   * cone ground- X
+   * cube ground - A
+   * sub- right trigger
+   * home- left trigger
+   */
+
   public void teleopPeriodic_impl()
   {
       if(Math.abs(controller.getRightY()) >= 0.05) {  // "Dead zone" check for Right Joystick
@@ -230,19 +205,30 @@ public class Elevator extends SubsystemBase {
       }else{
         if(controller.getAButton()){
           // TODO: make an e_Home (that handles the wrist)
-          manualDown();
+          cubeGroundPos();
           eGroundPidController.pause();
         }else if(controller.getXButton()){
-        
-        }else if(controller.getBButton()){
           e_GroundPosition();
+          cubeGroundPIDController.pause();
+        }else if(controller.getBButton()){
+          manualUp();
         }else if(controller.getYButton()){
           // TODO: make an e_High (that handles the wrist)
           manualUp();
           eGroundPidController.pause();
+          cubeGroundPIDController.pause();
+        }else if(controller.getLeftTriggerAxis() > .2){
+          manualUp();
+          eGroundPidController.pause();
+          cubeGroundPIDController.pause();
+        }else if(controller.getRightTriggerAxis() > .2){
+          manualDown();
+          eGroundPidController.pause();
+          cubeGroundPIDController.pause();
         }else {
           stop();
           eGroundPidController.pause();
+          cubeGroundPIDController.pause();
         }
       }
 
@@ -281,16 +267,9 @@ public class Elevator extends SubsystemBase {
   {
     if (isAtMaxDown()) {
       resetEncoders();
-    } else if (isAtMaxUp()) {
-      // Note that this motor is "inverted", so setting position here should be negative.
-      //rightMotor.getEncoder().setPosition(-Constants.Elevator.ELEVATOR_POS_TOP);
-    }
-
-    //SmartDashboard.putNumber("Left Elevator Encoder", leftmotor.getEncoder().getPosition());
+    } 
     SmartDashboard.putNumber("Elevator Encoder", getRightPosition());
-    //SmartDashboard.putString("Elevator State", elevatorState+"");
     SmartDashboard.putBoolean("Lower Switch", isAtMaxDown());
     SmartDashboard.putBoolean("Upper Switch", isAtMaxUp());
-    //SmartDashboard.putNumber("Stick lever", stick.getRawAxis(3));
   }
 }

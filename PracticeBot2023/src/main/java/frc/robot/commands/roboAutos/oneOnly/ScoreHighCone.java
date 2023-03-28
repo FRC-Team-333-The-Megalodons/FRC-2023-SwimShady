@@ -5,32 +5,35 @@
 package frc.robot.commands.roboAutos.oneOnly;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.roboActions.Combo.ElevatorGroundWhileWristAtOrigin;
-import frc.robot.commands.roboActions.Combo.ElevatorHighWithWristSafe;
-import frc.robot.commands.roboActions.intake.CloseClaw;
-import frc.robot.commands.roboActions.intake.OpenClaw;
-import frc.robot.commands.roboActions.wrist.WristConeScoringPosition;
+import frc.robot.Constants;
+import frc.robot.commands.roboActions.Combo.GoHighSmooth;
+import frc.robot.commands.roboActions.Combo.GoHome;
+import frc.robot.commands.roboActions.drive.Drive;
+import frc.robot.commands.roboActions.intake.Eject;
+import frc.robot.commands.roboActions.intake.IntakeIn;
+import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.IntakeAlternate;
+import frc.robot.utils.PIDController;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreHighCone extends SequentialCommandGroup {
   /** Creates a new ScoreHighCone. */
-  Elevator elevator;
-  IntakeOld intake;
-  public ScoreHighCone(Elevator elevator, IntakeOld intake) {
+  PIDController driveController, straightHeadingController;
+  public ScoreHighCone(Elevator elevator, IntakeAlternate intake, Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    this.elevator = elevator;
-    this.intake = intake;
+    driveController = new PIDController(.011, .01, 0, 35, 5, 1, -Constants.Values.TICKS_PER_METER*.25);
+    straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
     addCommands(
-      new CloseClaw(intake)
-      ,new ElevatorHighWithWristSafe(elevator, intake)
-      ,new WristConeScoringPosition(intake)
-      ,new OpenClaw(intake)
-      ,new ElevatorGroundWhileWristAtOrigin(elevator, intake) 
+      new IntakeIn(intake)
+      ,new GoHighSmooth(intake, elevator)
+      ,new Eject(intake)
+      ,new Drive(chassis, gyro, driveController, straightHeadingController,true)
+      ,new GoHome(intake, elevator)
     );
   }
 }

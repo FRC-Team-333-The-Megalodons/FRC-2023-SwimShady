@@ -8,12 +8,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.IntakeOld;
 import frc.robot.Constants;
-import frc.robot.commands.roboActions.Combo.DriveWhileIntaking;
-import frc.robot.commands.roboActions.Combo.ElevatorGroundWhileWristGround;
-import frc.robot.commands.roboActions.drive.Turn;
-import frc.robot.commands.roboActions.intake.OpenClaw;
-import frc.robot.commands.roboActions.wrist.WristAtOrigin;
-import frc.robot.commands.roboAutos.onePlusMobility.ConeHighPlusMobility;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.utils.PIDController;
@@ -34,17 +28,7 @@ public class ConeHighPlusPickUpMirror extends SequentialCommandGroup {
     turn0Controller = new PIDController(.0043, .008, 0, 90, .25, .25, 0);
 
     addCommands(
-      new ConeHighPlusMobility(chassis, gyro, elevator, intake)
-      ,new OpenClaw(intake)
-      ,new Turn(chassis, gyro, 175 , turnController, true)
-      ,new ElevatorGroundWhileWristGround(elevator, intake)
-      ,new DriveWhileIntaking(chassis, gyro, intake, driveStraightController, straightHeadingController, true)//if bad delete
-      ,new WristAtOrigin(intake)//if bad delete
-      /* 
-      ,new Drive(chassis, gyro, driveStraightController, true)
-      ,new IntakeIn(intake)
-      ,new WristAtOrigin(intake)
-      */
+
     );
   }
 }

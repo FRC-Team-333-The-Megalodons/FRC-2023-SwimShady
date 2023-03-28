@@ -6,17 +6,17 @@ package frc.robot.commands.roboActions.Combo;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.IntakeOld;
+import frc.robot.subsystems.IntakeAlternate;
 
-public class ElevatorHighWithWristStraight extends CommandBase {
-  /** Creates a new ElevatorHighWithWristStraight. */
+public class IntakeCubePosition extends CommandBase {
+  /** Creates a new IntakeCubePosition. */
+  IntakeAlternate intake;
   Elevator elevator;
-  IntakeOld intake;
-  public ElevatorHighWithWristStraight(Elevator elevator, IntakeOld intake) {
+  public IntakeCubePosition(IntakeAlternate intake, frc.robot.subsystems.Elevator elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevator,intake);
-    this.elevator = elevator;
+    addRequirements(intake,elevator);
     this.intake = intake;
+    this.elevator = elevator;
   }
 
   // Called when the command is initially scheduled.
@@ -26,24 +26,20 @@ public class ElevatorHighWithWristStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!elevator.isAtMaxUp()){
-      elevator.manualUp();
-    }else{
-      elevator.stop();
-    }
-    intake.setWristStaight();
+    intake.wristToIntakeCube();
+    elevator.cubeGroundPos();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    intake.stopWrist();
     elevator.stop();
-    intake.moveWrist(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.isAtMaxUp() && intake.isWristStraight();
+    return intake.intakeCubeController.isOnTarget() && elevator.cubeGroundPIDController.isOnTarget();
   }
 }
