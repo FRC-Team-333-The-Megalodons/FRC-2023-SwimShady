@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.IntakeAlternate;
 import frc.robot.Constants;
+import frc.robot.commands.roboActions.Combo.DriveWhileIntaking;
 import frc.robot.commands.roboActions.drive.Turn;
 import frc.robot.commands.roboAutos.onePlusMobility.ConeHighPlusMobility;
 import frc.robot.subsystems.Chassis;
@@ -31,7 +32,8 @@ public class ConeHighPlusPickUp extends SequentialCommandGroup {
 
     addCommands(
       new ConeHighPlusMobility(chassis, gyro, elevator, intake)
-      ,new Turn(chassis, gyro, 0, driveStraightController, isFinished())
+      ,new Turn(chassis, gyro, 0, turnController, isFinished())
+      ,new DriveWhileIntaking(chassis, gyro, intake, driveStraightController, straightHeadingController,true,false)
     );
   }
 }

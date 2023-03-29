@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 // the WPILib BSD license file in the root directory of this project.
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.LEDStrip.FancyLED;
 
 public class ColorSensor {
   Joystick joy;
@@ -16,13 +17,28 @@ public class ColorSensor {
     joy = new Joystick(0);
   }
 
-  boolean toggle = false;
+  boolean cone = true;
+  boolean teleop = false;
+
+  public void setTeleop(boolean teleop){
+    this.teleop = teleop;
+  }
   
   public void periodic(){
-    if(joy.getRawButton(3)){
-      strip.set(106, 13,173);
-    }else {
-      strip.set(255, 215, 0);
+    if(teleop){
+      if(joy.getRawButton(3)){
+        cone = true;
+      }else if(joy.getRawButton(4)){
+        cone = false;
+      }
+  
+      if(!cone){
+        strip.set(106, 13,173);//cube
+      }else{
+        strip.set(255, 215, 0);//cone
+      }
+    }else{
+      strip.setFancyDualLayer(FancyLED.KNIGHT_RIDER, 0,0,100,0,0,0);
     }
   }
 }

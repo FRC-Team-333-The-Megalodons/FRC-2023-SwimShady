@@ -121,6 +121,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.resetEncoders();
+    m_robotContainer.setLEDMode(false);
     CommandScheduler.getInstance().run();
   }
 
@@ -155,6 +156,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.setChassisBrake();
+    m_robotContainer.setLEDMode(false);
   }
 
   @Override
@@ -182,6 +184,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.resetEncoders();
     m_robotContainer.resetTiltOffset(); // Only ever call this in autonomousInit!!!
     m_robotContainer.setChassisBrake();
+    m_robotContainer.setLEDMode(false);
   }
 
   /** This function is called periodically during autonomous. */
@@ -204,6 +207,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().disable();
     m_robotContainer.resetEncoders();
     m_robotContainer.setChassisCoast();
+    m_robotContainer.setLEDMode(true);
   }
 
   /** This function is called periodically during operator control. */

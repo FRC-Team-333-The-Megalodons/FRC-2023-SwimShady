@@ -111,7 +111,6 @@ public class RobotContainer {
       default: return null;
     }    
   }
-  
 
   public void periodic() {
     final String metric_key = "RobotContainer::periodic";
@@ -184,5 +183,9 @@ public class RobotContainer {
 
   public void setChassisBrake(){
     m_chassis.setBrake();
+  }
+
+  public void setLEDMode(boolean teleop){
+    m_colorSensor.setTeleop(teleop);
   }
 }

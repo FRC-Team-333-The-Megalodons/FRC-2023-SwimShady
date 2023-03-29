@@ -18,8 +18,9 @@ public class DriveWhileIntaking extends CommandBase {
   IntakeAlternate intake;
   frc.robot.utils.PIDController turnController, driveController;
   boolean encodersReset;
+  boolean cone;
 
-  public DriveWhileIntaking(Chassis chassis, Gyro gyro, IntakeAlternate intake, PIDController driveController, PIDController straightHeadingController,  boolean encodersReset) {
+  public DriveWhileIntaking(Chassis chassis, Gyro gyro, IntakeAlternate intake, PIDController driveController, PIDController straightHeadingController,  boolean encodersReset, boolean cone) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(chassis,gyro);
     this.chassis = chassis;
@@ -28,6 +29,7 @@ public class DriveWhileIntaking extends CommandBase {
     this.driveController = driveController;
     this.turnController = straightHeadingController;
     this.encodersReset = encodersReset;
+    this.cone = cone;
   }
 
   // Called when the command is initially scheduled.
@@ -42,7 +44,11 @@ public class DriveWhileIntaking extends CommandBase {
   @Override
   public void execute() {
     chassis.arcadeDrive(turnController != null ? turnController.getOutput(gyro.getAngle()) : 0, driveController.getOutput(chassis.getEncodersAverage()));
-    intake.intakeIn();;
+    if(cone){
+      intake.intakeIn();
+    }else{
+      intake.eject();
+    }
   }
 
   // Called once the command ends or is interrupted.
