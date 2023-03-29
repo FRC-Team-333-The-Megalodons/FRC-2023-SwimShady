@@ -39,7 +39,7 @@ public class IntakeAlternate extends SubsystemBase {
   double wristValue;
   Elevator m_elevator;
 
-  public frc.robot.utils.PIDController intakeCubeController,intakeConeController, scoringController, substationController, midController;
+  public frc.robot.utils.PIDController intakeCubeController,intakeConeController, scoringController, substationController, midController, autoController;
 
   public IntakeAlternate() {
     intakeMotor = new CANSparkMax(Constants.RobotMap.PORT_INTAKE2, MotorType.kBrushless);
@@ -53,12 +53,14 @@ public class IntakeAlternate extends SubsystemBase {
     wristEncoder.setConnectedFrequencyThreshold(900);
     wristEncoder.reset();
 
-    intakeEncoder = intakeMotor.getEncoder();    
+    intakeEncoder = intakeMotor.getEncoder(); 
+
     intakeConeController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0,0.01,Constants.Wrist.WRIST_GROUND_INTAKE);
     intakeCubeController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN);
     scoringController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0.01,Constants.Wrist.WRIST_POS_TO_SCORE);
     substationController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_SUBSTATION);
     midController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_MID);
+    autoController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_SCORE_AUTO);
   }
 
   public void setElevator(Elevator e)
@@ -151,6 +153,10 @@ public class IntakeAlternate extends SubsystemBase {
 
   public void wristToMid(){
     moveWrist(midController.getOutput(getRealWristPosition()));
+  }
+
+  public void wristToScoreAuto(){
+    moveWrist(autoController.getOutput(getRealWristPosition()));
   }
 
   // WRIST UPPER LIMIT WITH CONE IN IT : 0.54

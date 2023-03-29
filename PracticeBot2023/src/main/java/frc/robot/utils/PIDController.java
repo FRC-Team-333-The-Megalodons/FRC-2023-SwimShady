@@ -79,6 +79,7 @@ public class PIDController {
         minTarget = target - minTolerance;
         maxTarget = target + maxTolerance;
         this.autoKill = autoKill;
+        timer = new Timer();
     }
 
     public double getOutput(double sensorValue){

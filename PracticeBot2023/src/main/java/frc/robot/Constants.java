@@ -60,8 +60,8 @@ public final class Constants {
 
     public static class Chassis {
         public static final double AUTO_UNBALANCE_START_SPEED = 0.1;
-        public static final double AUTO_UNBALANCE_INCREMENT = 0.02;
-        public static final double AUTO_UNBALANCE_MAX_SPEED = 0.83;
+        public static final double AUTO_UNBALANCE_INCREMENT = 0.2;
+        public static final double AUTO_UNBALANCE_MAX_SPEED = 0.95;
         public static final double AUTO_UNBALANCE_TILT_THRESHOLD = -12;
         public static final double TELEOP_X_SLOWDOWN_DIVISOR = 2.35;
         public static final double TELEOP_Y_SLOWDOWN_DIVISOR = 1.5;
@@ -99,7 +99,7 @@ public final class Constants {
         public static final double WRIST_MIN = 0.62; //0.74;
         public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.69; // (noice) 0.82;
         public static final double WRIST_STRAIGHT = 0.71; // 0.77;
-        public static final double WRIST_GROUND_INTAKE = 0.17; // 0.74;
+        public static final double WRIST_GROUND_INTAKE = 0.08; // 0.74;
         public static final double WRIST_APPROX_THRESHOLD = 0.07;
         public static final double WRIST_ENCODER_MULTIPLIER = 20;
         public static final double WRIST_CONE_SCORING_POSITION = .74;
@@ -109,14 +109,15 @@ public final class Constants {
         public static final double WRIST_UP_SLOW_SPEED = -0.37;
         public static final double WRIST_DOWN_SPEED = -1.0;
 
-        public static final double WRIST_POS_UPPER_LIMIT = 0.54;
-        public static final double WRIST_POS_GRAVITY_THRESHOLD = 0.45; // TODO: This is a guess, check if makes sense.
+        public static final double WRIST_POS_UPPER_LIMIT = 0.41;
+        public static final double WRIST_POS_GRAVITY_THRESHOLD = 0.45-.06; // TODO: This is a guess, check if makes sense.
         public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_UP = 0.1;
-        public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN = 0.24;
+        public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN = 0.1;
         public static final double WRIST_POS_THRESHOLD_WHERE_ELEVATOR_NEEDS_TO_STOP = 0.3;
-        public static final double WRIST_POS_TO_SUBSTATION = .28;
-        public static final double WRIST_POS_TO_SCORE = .29;
-        public static final double WRIST_POS_TO_MID = .14;
+        public static final double WRIST_POS_TO_SUBSTATION = .19;
+        public static final double WRIST_POS_TO_SCORE = .19;
+        public static final double WRIST_POS_TO_SCORE_AUTO = .23;
+        public static final double WRIST_POS_TO_MID = .04;
     }
 
     public static class Intake{
@@ -125,7 +126,7 @@ public final class Constants {
         public static final int OUTAKE = 10;
         public static final double INTAKE_SPEED = -0.6;
         public static final double INTAKE_PASSIVE_SPEED = 0;
-        public static final double EJECT_SPEED = 0.4;
+        public static final double EJECT_SPEED = 0.3;
         public static final double FAST_EJECT_SPEED = 0.6;
     }
 
@@ -158,9 +159,6 @@ public final class Constants {
 
         public static final int SHIFT_HIGH = 0;
         public static final int SHIFT_LOW = 0;
-        
-        public static final int PORT_INTAKE_SQUEEZE = 2;
-        public static final int PORT_INTAKE_UNSQUEEZE = 3;
     }
 
     public static class Values{

@@ -9,14 +9,20 @@ public class ColorSensor {
   Joystick joy;
   LEDStrip strip;
 
-  final int NUMBER_OF_LEDS = 285;
+  final int NUMBER_OF_LEDS = 130;
 
   public ColorSensor(){
-    strip = new LEDStrip(6, NUMBER_OF_LEDS);
+    strip = new LEDStrip(0, NUMBER_OF_LEDS);
     joy = new Joystick(0);
   }
+
+  boolean toggle = false;
   
   public void periodic(){
-    strip.set(100, 0, 0);  
+    if(joy.getRawButton(3)){
+      strip.set(106, 13,173);
+    }else {
+      strip.set(255, 215, 0);
+    }
   }
 }

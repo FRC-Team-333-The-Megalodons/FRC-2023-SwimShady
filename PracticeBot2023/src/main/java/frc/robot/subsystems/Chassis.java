@@ -95,12 +95,12 @@ public class Chassis extends SubsystemBase {
 
   public void lowGear() 
   {
-    solenoid.set(Value.kForward);
+    solenoid.set(Value.kReverse);
   }
 
   public void highGear()
   {
-    solenoid.set(Value.kReverse);
+    solenoid.set(Value.kForward);
   }
 
   public void teleopPeriodic(){

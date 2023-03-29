@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeAlternate;
 
-public class GoHighSmooth extends CommandBase {
-  /** Creates a new GoHighConeSmooth. */
+public class GoMidSmooth extends CommandBase {
+  /** Creates a new GoMidSmooth. */
   IntakeAlternate intakeAlternate;
   Elevator elevator;
-  public GoHighSmooth(IntakeAlternate intakeAlternate, Elevator elevator) {
+  public GoMidSmooth(IntakeAlternate intakeAlternate, Elevator elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeAlternate, elevator);
     this.intakeAlternate = intakeAlternate;
@@ -21,14 +21,12 @@ public class GoHighSmooth extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeAlternate.wristToScoreAuto();
+    intakeAlternate.wristToMid();
     elevator.manualUp();
   }
 
@@ -42,6 +40,6 @@ public class GoHighSmooth extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeAlternate.autoController.isOnTarget() && elevator.isAtMaxUp();
+    return intakeAlternate.midController.isOnTarget() && elevator.isAtMaxUp();
   }
 }

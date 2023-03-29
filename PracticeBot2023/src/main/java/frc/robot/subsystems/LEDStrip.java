@@ -65,9 +65,10 @@ public class LEDStrip extends SubsystemBase {
     for(int i = 0; i < ledBuffer.getLength(); ++i){
       ledBuffer.setRGB(i, r, g, b);
     }
+    LED.setData(ledBuffer);
   }
 
-  /* NOT CURRENTLY USED
+  
   public void setFancy(FancyLED ledMode, int r, int g, int b){
     if(ledMode == FancyLED.ONE_ON_ONE){
       for(var i = 0; i < ledBuffer.getLength(); i++){
@@ -80,8 +81,8 @@ public class LEDStrip extends SubsystemBase {
     }else if(ledMode == FancyLED.PULSE){
 
     }
+    LED.setData(ledBuffer);
   }
-  */
 
   int lastI = 0;
   int pulseRun = 0, pulseRange = 50, pulseMax = 100;
@@ -89,6 +90,7 @@ public class LEDStrip extends SubsystemBase {
   FancyLED m_prev_ledMode;
   int m_prev_r, m_prev_g, m_prev_b, m_prev_r2, m_prev_g2, m_prev_b2;
   boolean m_didLedBufferChange;
+
   public void setFancyDualLayer(FancyLED ledMode, int r, int g, int b, int r2, int g2, int b2){
     if (m_prev_ledMode == ledMode &&
         m_prev_r == r && m_prev_g == g && m_prev_b == b && 
@@ -130,6 +132,7 @@ public class LEDStrip extends SubsystemBase {
         pulseRun = 0;
       }
     }
+    LED.setData(ledBuffer);
   }
 
   public void resetBlinkRun(){
@@ -146,12 +149,7 @@ public class LEDStrip extends SubsystemBase {
     // This method will be called once per scheduler run
     ++blinkRun;
     ++durationRun;
-    if(blinkRun >= blinkMax){
-      blinkRun = 0;
-    }
-    if (m_didLedBufferChange) {
-      LED.setData(ledBuffer);
-    }
+    LED.setData(ledBuffer);
   }
 
   public static enum FancyLED{
