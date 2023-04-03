@@ -77,7 +77,7 @@ public final class Constants {
 
     public static class Elevator {
         public static final double ELEVATOR_POS_BOTTOM = 0;
-        public static final double ELEVATOR_POS_GROUND_INTAKE = 11.2;
+        public static final double ELEVATOR_POS_GROUND_INTAKE = 9.3;
         public static final double ELEVATOR_POS_DOWN_SLOWDOWN_POINT = 15;
         public static final double ELEVATOR_POS_LOWEST_POINT_WRIST_CAN_MOVE = 10;
         public static final double ELEVATOR_POS_LOWER_THRESHOLD_WHERE_WRIST_NEEDS_TO_BE_LIMITED = 9;
@@ -91,33 +91,33 @@ public final class Constants {
         public static final double ELEVATOR_UP_SLOWDOWN_ESPEED = 0.2;
         public static final double ELEVATOR_DOWN_ESPEED = -.93;
         public static final double ELEVATOR_DOWN_SLOWDOWN_ESPEED = -0.20;
-        public static final double ELEVATOR_POS_CUBE = 1.5;
+        public static final double ELEVATOR_POS_CUBE = .3;
     }
 
     public static class Wrist {
+
+        public static final double offset = .04;
         public static final double WRIST_MAX = 0.93; // 1.02;
         public static final double WRIST_MIN = 0.62; //0.74;
-        public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.69; // (noice) 0.82;
+        public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.7; // (noice) 0.82;
         public static final double WRIST_STRAIGHT = 0.71; // 0.77;
-        public static final double WRIST_GROUND_INTAKE = 0.08; // 0.74;
+        public static final double WRIST_GROUND_INTAKE = 0.09; // 0.74;
         public static final double WRIST_APPROX_THRESHOLD = 0.07;
         public static final double WRIST_ENCODER_MULTIPLIER = 20;
-        public static final double WRIST_CONE_SCORING_POSITION = .74;
-        public static final double WRIST_LIMIT_FOR_ELEVATOR_UP = 0.92;
         
         public static final double WRIST_UP_SPEED = 1.0;
         public static final double WRIST_UP_SLOW_SPEED = -0.37;
         public static final double WRIST_DOWN_SPEED = -1.0;
 
-        public static final double WRIST_POS_UPPER_LIMIT = 0.41;
+        public static final double WRIST_POS_UPPER_LIMIT = 0.41;//.47 new
         public static final double WRIST_POS_GRAVITY_THRESHOLD = 0.45-.06; // TODO: This is a guess, check if makes sense.
         public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_UP = 0.1;
-        public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN = 0.1;
+        public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN = 0.14;
         public static final double WRIST_POS_THRESHOLD_WHERE_ELEVATOR_NEEDS_TO_STOP = 0.3;
-        public static final double WRIST_POS_TO_SUBSTATION = .19;
-        public static final double WRIST_POS_TO_SCORE = .19;
-        public static final double WRIST_POS_TO_SCORE_AUTO = .23;
-        public static final double WRIST_POS_TO_MID = .04;
+        public static final double WRIST_POS_TO_SUBSTATION = .18;
+        public static final double WRIST_POS_TO_SCORE = .22;
+        public static final double WRIST_POS_TO_SCORE_AUTO = .22;
+        public static final double WRIST_POS_TO_MID = .05;
     }
 
     public static class Intake{

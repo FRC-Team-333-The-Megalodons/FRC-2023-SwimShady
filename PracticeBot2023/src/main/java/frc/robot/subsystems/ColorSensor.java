@@ -35,10 +35,10 @@ public class ColorSensor {
       if(!cone){
         strip.set(106, 13,173);//cube
       }else{
-        strip.set(255, 215, 0);//cone
+        strip.set(40, 20, 0);//cone
       }
     }else{
-      strip.setFancyDualLayer(FancyLED.KNIGHT_RIDER, 0,0,100,0,0,0);
+      strip.setFancyDualLayer(FancyLED.PULSE, 0,0,100,150,20,1);
     }
   }
 }

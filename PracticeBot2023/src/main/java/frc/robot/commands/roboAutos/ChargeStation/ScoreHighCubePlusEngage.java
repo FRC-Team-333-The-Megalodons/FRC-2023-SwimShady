@@ -5,6 +5,9 @@
 package frc.robot.commands.roboAutos.ChargeStation;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.roboActions.Combo.GoHome;
+import frc.robot.commands.roboAutos.ChargeStation.stages.DockAndEngage;
+import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
 
@@ -13,13 +16,13 @@ import frc.robot.subsystems.Gyro;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreHighCubePlusEngage extends SequentialCommandGroup {
   /** Creates a new ScoreHighCubePlusEngage. */
-  frc.robot.utils.PIDController turnController, turnResetController;
   public ScoreHighCubePlusEngage(frc.robot.subsystems.Elevator elevator, frc.robot.subsystems.IntakeAlternate intake, Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    turnController = new frc.robot.utils.PIDController(.0043, .008, 0, 90, .35, .45, 0);
-    turnResetController = new frc.robot.utils.PIDController(.0043, .008, 0, 90, .35, .45, 0);
     addCommands(
+      new ScoreHighCube(elevator, intake,chassis,gyro)
+      ,new GoHome(intake, elevator)
+      ,new DockAndEngage(chassis, gyro)
     );
   }
 }

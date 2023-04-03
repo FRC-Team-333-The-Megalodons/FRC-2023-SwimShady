@@ -27,7 +27,7 @@ public class Elevator extends SubsystemBase {
   Joystick stick;
   XboxController controller;
 
-  public frc.robot.utils.PIDController eGroundPidController, cubeGroundPIDController;
+  public frc.robot.utils.PIDController eGroundPidController, cubeGroundPIDController, singleSubPIDController;
   RobotStates.ElevatorState elevatorState; //todo let the robot know when it's at low medium or high and add it as a state
   DigitalInput lowerLimitSwitch;
   DigitalInput upperLimitSwitch;
@@ -38,8 +38,9 @@ public class Elevator extends SubsystemBase {
     leftmotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
     controller = new XboxController(1);
-    eGroundPidController = new PIDController(.05, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
-    cubeGroundPIDController = new PIDController(.05, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_CUBE);
+    eGroundPidController = new PIDController(.07, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
+    cubeGroundPIDController = new PIDController(.07, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_CUBE);
+    singleSubPIDController = new PIDController(.07, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_CUBE);
 
     rightMotor.setIdleMode(IdleMode.kBrake);
     leftmotor.setIdleMode(IdleMode.kBrake);
@@ -47,7 +48,7 @@ public class Elevator extends SubsystemBase {
     elevator = new MotorControllerGroup(rightMotor, leftmotor);
     elevator.setInverted(true);
 
-    lowerLimitSwitch = new DigitalInput(1);
+    lowerLimitSwitch = new DigitalInput(2);
     upperLimitSwitch = new DigitalInput(0);
     //this.intake = null;
     m_intake = intake;
@@ -147,6 +148,10 @@ public class Elevator extends SubsystemBase {
 
   public void cubeGroundPos(){
     manualMove(cubeGroundPIDController.getOutput(getRightPosition()));
+  }
+
+  public void singleSubPos(){
+    manualMove(singleSubPIDController.getOutput(getRightPosition()));
   }
 
   public double getRightPosition(){

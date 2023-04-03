@@ -5,17 +5,24 @@
 package frc.robot;
 
 import frc.robot.commands.roboAutos.ChargeStation.ScoreHighConePlusEngage;
+import frc.robot.commands.roboAutos.ChargeStation.ScoreHighCubePlusEngage;
+import frc.robot.commands.roboAutos.ChargeStation.ScoreMidCubePlusEngage;
 import frc.robot.commands.roboAutos.ChargeStation.stages.DockAndEngage;
 import frc.robot.commands.roboAutos.mobility.MobilityOnly;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCone;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
+import frc.robot.commands.roboAutos.oneOnly.ScoreMidCone;
+import frc.robot.commands.roboAutos.oneOnly.ScoreMidCube;
 import frc.robot.commands.roboAutos.onePlusMobility.ConeHighPlusMobility;
+import frc.robot.commands.roboAutos.onePlusMobility.ConeMidPlusMobility;
 import frc.robot.commands.roboAutos.onePlusMobility.CubeHighPlusMobility;
+import frc.robot.commands.roboAutos.onePlusMobility.CubeMidPlusMobility;
 import frc.robot.commands.roboAutos.onePlusPickUp.ConeHighPlusPickUp;
+import frc.robot.commands.roboAutos.onePlusPickUp.ConeMidPlusPickUp;
+import frc.robot.commands.roboAutos.onePlusPickUp.CubeHighPickUp;
 import frc.robot.commands.roboAutos.two.ScoreHighTwice;
 import frc.robot.commands.roboAutos.two.ScoreHybridTwice;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
@@ -40,7 +47,7 @@ public class RobotContainer {
   public static final boolean TWO_DRIVER_MODE = true;
 
   PneumaticHub m_hub;
-  ColorSensor m_colorSensor;
+  //ColorSensor m_colorSensor;
   Chassis m_chassis;
   //Intake m_intake;
   IntakeAlternate intake;
@@ -54,7 +61,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_hub = new PneumaticHub(Constants.RobotMap.PCM_ID);
-    m_colorSensor = new ColorSensor();
+    //m_colorSensor = new ColorSensor();
     //m_intake = new Intake(m_hub, null);
     intake = new IntakeAlternate();
     m_elevator = new Elevator(intake);
@@ -100,14 +107,24 @@ public class RobotContainer {
       case Robot.kNoAuto: return null;
       case Robot.kBalance: return new DockAndEngage(m_chassis,m_gyro);
       case Robot.kScoreConePlusBalance: return new ScoreHighConePlusEngage(m_elevator, intake, m_chassis, m_gyro);
+      case Robot.kScoreCubeHighPlusBalance: return new ScoreHighCubePlusEngage(m_elevator, intake, m_chassis, m_gyro);
       case Robot.kMobilityAuto: return new MobilityOnly(m_chassis, m_gyro);
       case Robot.kScoreHighCone: return new ScoreHighCone(m_elevator, intake,m_chassis,m_gyro);
       case Robot.kScoreHighCube: return new ScoreHighCube(m_elevator, intake,m_chassis,m_gyro);
       case Robot.kConeHighPlusMobility: return new ConeHighPlusMobility(m_chassis, m_gyro, m_elevator, intake);
       case Robot.kCubeHighPlusMobility: return new CubeHighPlusMobility(m_chassis, m_gyro, m_elevator, intake);
       case Robot.kConeHighPlusPickup: return new ConeHighPlusPickUp(m_chassis, m_gyro, m_elevator, intake);
+      case Robot.kCubeHighPlusPickup: return new CubeHighPickUp(m_elevator, intake, m_chassis, m_gyro);
       case Robot.kScoreHighTwiceAuto: return new ScoreHighTwice(m_chassis, m_gyro, m_elevator, intake);
       case Robot.kScoreHybridTwiceAuto: return new ScoreHybridTwice(m_chassis, m_gyro, m_elevator, intake);
+      case Robot.kScoreMidConeOnly: return new ScoreMidCone(m_elevator, intake, m_chassis, m_gyro);
+      case Robot.kScoreMidCUbeOnly: return new ScoreMidCube(m_elevator, intake, m_chassis, m_gyro);
+      case Robot.kScoreMidConeMobility: return new ConeMidPlusMobility(m_chassis, m_gyro, m_elevator, intake);
+      case Robot.kScoreMidCUbeMobility: return new CubeMidPlusMobility(m_chassis, m_gyro, m_elevator, intake);
+      case Robot.kScoreMidConeEngage: return new ScoreHighConePlusEngage(m_elevator, intake, m_chassis, m_gyro);
+      case Robot.kScoreMidCUbeEngage: return new ScoreMidCubePlusEngage(m_elevator, intake, m_chassis, m_gyro);
+      case Robot.kScoreMidConePickUp: return new ConeMidPlusPickUp(m_chassis, m_gyro, m_elevator, intake);
+
       default: return null;
     }    
   }
@@ -135,7 +152,7 @@ public class RobotContainer {
       m_gyro.periodic();
     } catch (Exception e) { /* Don't die if the gyro dies */}
     try {
-      m_colorSensor.periodic();
+      //m_colorSensor.periodic();
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
   }
 
@@ -186,6 +203,6 @@ public class RobotContainer {
   }
 
   public void setLEDMode(boolean teleop){
-    m_colorSensor.setTeleop(teleop);
+    //m_colorSensor.setTeleop(teleop);
   }
 }

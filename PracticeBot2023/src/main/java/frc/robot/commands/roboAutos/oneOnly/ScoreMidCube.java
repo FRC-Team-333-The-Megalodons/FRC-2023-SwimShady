@@ -28,7 +28,7 @@ public class ScoreMidCube extends SequentialCommandGroup {
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
     addCommands(
       new GoMidSmooth(intake, elevator)
-      ,new IntakeIn(intake)//actually eject for cube
+      ,new IntakeIn(intake,true)//actually eject for cube
       ,new GoHome(intake, elevator)
     );
   }

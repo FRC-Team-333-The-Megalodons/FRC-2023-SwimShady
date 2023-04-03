@@ -5,6 +5,7 @@
 package frc.robot.commands.roboAutos.ChargeStation.stages;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.roboActions.drive.Turn;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
 
@@ -13,11 +14,14 @@ import frc.robot.subsystems.Gyro;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class DockAndEngage extends SequentialCommandGroup {
   /** Creates a new DockAndEngage. */
+  frc.robot.utils.PIDController turnController;
   public DockAndEngage(Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    turnController = new frc.robot.utils.PIDController(.004, .006, 0, 60, .35, .35, 0);
     addCommands(
-      new Unbalance(chassis, gyro)
+      new Turn(chassis, gyro, 180, turnController, true)
+      ,new Unbalance(chassis, gyro)
       ,new Balance(chassis, gyro)
     );
   }

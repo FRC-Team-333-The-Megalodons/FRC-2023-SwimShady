@@ -150,7 +150,7 @@ public class Chassis extends SubsystemBase {
   {
     
     if(stick.getRawButton(7)){
-      x /= 1.5;
+      x /= 1.3;
       y /= 3.1;
     }
   
@@ -167,6 +167,7 @@ public class Chassis extends SubsystemBase {
     Metrics.startTimer(metric_key);
     periodic_impl();
     Metrics.stopTimer(metric_key);
+    SmartDashboard.putNumber("Pressure", hub.getPressure(0));
   }
 
   public void periodic_impl()

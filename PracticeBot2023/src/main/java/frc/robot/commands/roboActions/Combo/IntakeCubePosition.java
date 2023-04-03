@@ -40,6 +40,6 @@ public class IntakeCubePosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.intakeCubeController.isOnTarget() && elevator.cubeGroundPIDController.isOnTarget();
+    return intake.intakeCubeController.isOnTarget();
   }
 }

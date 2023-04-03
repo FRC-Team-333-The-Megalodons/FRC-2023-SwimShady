@@ -5,9 +5,11 @@
 package frc.robot.commands.roboAutos.ChargeStation;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.roboActions.Combo.GoHome;
 import frc.robot.commands.roboActions.drive.Turn;
 import frc.robot.commands.roboAutos.ChargeStation.stages.DockAndEngage;
 import frc.robot.commands.roboAutos.ChargeStation.stages.UnbalanceForMobility;
+import frc.robot.commands.roboAutos.oneOnly.ScoreHighCone;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
@@ -21,10 +23,12 @@ public class ChargePlusMobility extends SequentialCommandGroup {
   public ChargePlusMobility(Elevator elevator, IntakeAlternate intake, Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    turnController = new frc.robot.utils.PIDController(.0043, .008, 0, 90, .35, .45, 0);
+    turnController = new frc.robot.utils.PIDController(.003, .006, 0, 90, .35, .45, 0);
     turnResetController = new frc.robot.utils.PIDController(.0043, .008, 0, 90, .35, .45, 0);
     addCommands(
-      new Turn(chassis, gyro, 180, turnController, true)
+      new ScoreHighCone(elevator, intake, chassis, gyro)
+      ,new GoHome(intake, elevator)
+      ,new Turn(chassis, gyro, 180, turnController, true)
       ,new UnbalanceForMobility(chassis, gyro)
       ,new Turn(chassis, gyro, 0, turnResetController, true)
       ,new DockAndEngage(chassis, gyro)

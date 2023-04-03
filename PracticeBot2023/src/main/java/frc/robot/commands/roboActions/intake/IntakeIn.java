@@ -11,10 +11,18 @@ public class IntakeIn extends CommandBase {
   /** Creates a new IntakeIn. */
   IntakeAlternate intake;
   boolean shortDuration;
+  boolean cube;
   public IntakeIn(IntakeAlternate intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     this.intake = intake;
+  }
+
+  public IntakeIn(IntakeAlternate intake, boolean cubeEject) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake);
+    this.intake = intake;
+    this.cube = cubeEject;
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +34,11 @@ public class IntakeIn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intakeIn();
+    if(cube){
+      intake.cubeEject();
+    }else{
+      intake.intakeIn();
+    }
   }
 
   // Called once the command ends or is interrupted.

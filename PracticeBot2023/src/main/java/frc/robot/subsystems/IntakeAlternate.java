@@ -39,7 +39,7 @@ public class IntakeAlternate extends SubsystemBase {
   double wristValue;
   Elevator m_elevator;
 
-  public frc.robot.utils.PIDController intakeCubeController,intakeConeController, scoringController, substationController, midController, autoController;
+  public frc.robot.utils.PIDController intakeCubeController,intakeConeController, scoringController, substationController, midController, autoController, singleSubPidController;
 
   public IntakeAlternate() {
     intakeMotor = new CANSparkMax(Constants.RobotMap.PORT_INTAKE2, MotorType.kBrushless);
@@ -55,12 +55,13 @@ public class IntakeAlternate extends SubsystemBase {
 
     intakeEncoder = intakeMotor.getEncoder(); 
 
-    intakeConeController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0,0.01,Constants.Wrist.WRIST_GROUND_INTAKE);
-    intakeCubeController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN);
+    intakeConeController = new frc.robot.utils.PIDController(7.8, 7, 0, .8, 0,0.01,Constants.Wrist.WRIST_GROUND_INTAKE);
+    intakeCubeController = new PIDController(7.8, 7, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN);
     scoringController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0.01,Constants.Wrist.WRIST_POS_TO_SCORE);
     substationController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_SUBSTATION);
     midController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_MID);
     autoController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_SCORE_AUTO);
+    singleSubPidController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_SCORE_AUTO);
   }
 
   public void setElevator(Elevator e)
@@ -122,6 +123,10 @@ public class IntakeAlternate extends SubsystemBase {
     return false;
   }
 
+  public void cubeEject(){
+    intakeMotor.set(-.254);
+  }
+
   public void wristIn(){
     
     moveWrist(Constants.Wrist.WRIST_UP_SPEED);
@@ -157,6 +162,10 @@ public class IntakeAlternate extends SubsystemBase {
 
   public void wristToScoreAuto(){
     moveWrist(autoController.getOutput(getRealWristPosition()));
+  }
+
+  public void wristToSingleSub(){
+    moveWrist(singleSubPidController.getOutput(getRealWristPosition()));
   }
 
   // WRIST UPPER LIMIT WITH CONE IN IT : 0.54
@@ -231,6 +240,13 @@ public class IntakeAlternate extends SubsystemBase {
       eject();
     }else if(controller.getPOV() == 180){
       intakeMotor.set(-.254);
+    }else if(controller.getPOV() == 90){
+      wristToSingleSub();
+      intakeConeController.pause();
+      intakeCubeController.pause();
+      scoringController.pause();
+      substationController.pause();
+      midController.pause();
     }else {
       // If no one is holding the intake buttons, and gravity
       //  isn't helping us, do a persistent pull-in to help hold it.
@@ -254,7 +270,7 @@ public class IntakeAlternate extends SubsystemBase {
 
     if (Math.abs(controller.getLeftY()) > 0.05) {
       double y = -controller.getLeftY();
-      moveWrist(y);
+      moveWrist(y/1.5);
     } else {
 
       if(controller.getAButton()){
@@ -264,30 +280,35 @@ public class IntakeAlternate extends SubsystemBase {
         scoringController.pause();
         substationController.pause();
         midController.pause();
+        singleSubPidController.pause();
       }else if(controller.getXButton()){
         wristToIntake();
         intakeCubeController.pause();
         scoringController.pause();
         substationController.pause();
         midController.pause();
+        singleSubPidController.pause();
       }else if(controller.getBButton()){
         wristToMid();
         intakeConeController.pause();
         intakeCubeController.pause();
         substationController.pause();
         scoringController.pause();
+        singleSubPidController.pause();
       }else if(controller.getYButton()){
         wristToSCore();
         intakeConeController.pause();
         intakeCubeController.pause();
         substationController.pause();
         midController.pause();
+        singleSubPidController.pause();
       }else if(controller.getLeftTriggerAxis() > .2){
         wristToSubStation();
         intakeConeController.pause();
         intakeCubeController.pause();
         scoringController.pause();
         midController.pause();
+        singleSubPidController.pause();
       }else if(controller.getRightTriggerAxis() > .2){
         wristIn();
         intakeConeController.pause();
@@ -295,6 +316,7 @@ public class IntakeAlternate extends SubsystemBase {
         scoringController.pause();
         substationController.pause();
         midController.pause();
+        singleSubPidController.pause();
       }else {
         stopWrist();
         intakeConeController.pause();
@@ -302,6 +324,7 @@ public class IntakeAlternate extends SubsystemBase {
         scoringController.pause();
         substationController.pause();
         midController.pause();
+        singleSubPidController.pause();
       }
     }
   }

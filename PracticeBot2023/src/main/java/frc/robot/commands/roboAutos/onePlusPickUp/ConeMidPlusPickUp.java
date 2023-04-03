@@ -11,7 +11,7 @@ import frc.robot.Constants;
 import frc.robot.commands.roboActions.Combo.DriveWhileIntaking;
 import frc.robot.commands.roboActions.Combo.IntakeCubePosition;
 import frc.robot.commands.roboActions.drive.Turn;
-import frc.robot.commands.roboAutos.onePlusMobility.ConeHighPlusMobility;
+import frc.robot.commands.roboAutos.onePlusMobility.ConeMidPlusMobility;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.utils.PIDController;
@@ -19,10 +19,10 @@ import frc.robot.utils.PIDController;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ConeHighPlusPickUp extends SequentialCommandGroup {
-  /** Creates a new ConeHighPlusPickUp. */
+public class ConeMidPlusPickUp extends SequentialCommandGroup {
+  /** Creates a new ConeMidPlusPickUp. */
   frc.robot.utils.PIDController straightHeadingController, turnController, driveStraightController, resetDriveController, turn0Controller;
-  public ConeHighPlusPickUp(Chassis chassis, Gyro gyro, Elevator elevator, IntakeAlternate intake) {
+  public ConeMidPlusPickUp(Chassis chassis, Gyro gyro, Elevator elevator, IntakeAlternate intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 190);
@@ -32,7 +32,7 @@ public class ConeHighPlusPickUp extends SequentialCommandGroup {
     turn0Controller = new PIDController(.0043, .008, 0, 90, .25, .25, 0);
 
     addCommands(
-      new ConeHighPlusMobility(chassis, gyro, elevator, intake)
+      new ConeMidPlusMobility(chassis, gyro, elevator, intake)
       ,new Turn(chassis, gyro, 190, turnController, isFinished())
       ,new IntakeCubePosition(intake, elevator)
       ,new DriveWhileIntaking(chassis, gyro, intake, driveStraightController, straightHeadingController,true,false)

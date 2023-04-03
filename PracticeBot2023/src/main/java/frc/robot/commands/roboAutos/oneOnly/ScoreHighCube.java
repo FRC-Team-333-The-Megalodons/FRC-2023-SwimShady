@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.roboActions.Combo.GoHighSmooth;
 import frc.robot.commands.roboActions.Combo.GoHome;
-import frc.robot.commands.roboActions.drive.Drive;
+import frc.robot.commands.roboActions.intake.IntakeIn;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.IntakeAlternate;
@@ -27,7 +27,7 @@ public class ScoreHighCube extends SequentialCommandGroup {
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
     addCommands(
       new GoHighSmooth(intake, elevator)
-      ,new Drive(chassis, gyro, driveController, straightHeadingController,true)
+      ,new IntakeIn(intake,true)
       ,new GoHome(intake, elevator)
     );
   }

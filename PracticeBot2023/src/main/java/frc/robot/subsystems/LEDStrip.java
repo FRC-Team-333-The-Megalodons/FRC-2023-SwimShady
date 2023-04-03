@@ -85,7 +85,7 @@ public class LEDStrip extends SubsystemBase {
   }
 
   int lastI = 0;
-  int pulseRun = 0, pulseRange = 50, pulseMax = 100;
+  int pulseRun = 0, pulseRange = 70, pulseMax = 140;
 
   FancyLED m_prev_ledMode;
   int m_prev_r, m_prev_g, m_prev_b, m_prev_r2, m_prev_g2, m_prev_b2;
@@ -124,7 +124,7 @@ public class LEDStrip extends SubsystemBase {
       }
     }else if(ledMode == FancyLED.PULSE){
       for(int i = 0; i < ledBuffer.getLength(); ++i){
-        ledBuffer.setRGB(i, (pulseRun <= pulseRange ? r : 0) , (pulseRun <= pulseRange ? g : 0), (pulseRun <= pulseRange ? b : 0));
+        ledBuffer.setRGB(i, (pulseRun <= pulseRange ? r : r2) , (pulseRun <= pulseRange ? g : g2), (pulseRun <= pulseRange ? b : b2));
       }
 
       ++pulseRun;

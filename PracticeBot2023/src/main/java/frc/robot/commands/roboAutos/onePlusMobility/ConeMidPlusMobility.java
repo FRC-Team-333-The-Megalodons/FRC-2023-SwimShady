@@ -8,9 +8,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.roboActions.drive.Drive;
 import frc.robot.commands.roboActions.drive.Turn;
-import frc.robot.commands.roboAutos.oneOnly.ScoreHighCube;
+import frc.robot.commands.roboAutos.oneOnly.ScoreMidCone;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.IntakeAlternate;
 import frc.robot.utils.PIDController;
@@ -18,17 +17,17 @@ import frc.robot.utils.PIDController;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CubeHighPlusMobility extends SequentialCommandGroup {
-  /** Creates a new CubePlusMobility. */
+public class ConeMidPlusMobility extends SequentialCommandGroup {
+  /** Creates a new ConeMidPlusMobility. */
   frc.robot.utils.PIDController driveForwardController, straightHeadingController, turnToGamePieceController;
-  public CubeHighPlusMobility(Chassis chassis, Gyro gyro,Elevator elevator, IntakeAlternate intake) {
+  public ConeMidPlusMobility(Chassis chassis, Gyro gyro,frc.robot.subsystems.Elevator elevator, IntakeAlternate intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    driveForwardController = new PIDController(.014, .01, 0, 35, 5, 1, -Constants.Values.TICKS_PER_METER*2.515);
+    driveForwardController = new PIDController(.014, .01, 0, 35, 3, 1, -Constants.Values.TICKS_PER_METER*2.5);
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
     turnToGamePieceController = new PIDController(.0052, .007, 0, 60, .35, .35, 0);
     addCommands(
-      new ScoreHighCube(elevator, intake,chassis,gyro)
+      new ScoreMidCone(elevator, intake,chassis,gyro)
       ,new Drive(chassis,gyro,driveForwardController,straightHeadingController,true)
       ,new Turn(chassis, gyro, 180, turnToGamePieceController, true)
     );

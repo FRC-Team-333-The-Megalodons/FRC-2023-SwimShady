@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.utils.Metrics;
+/* 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
@@ -18,6 +19,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+*/
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,6 +38,7 @@ public class Robot extends TimedRobot {
   public static final String kNoAuto = "AUTO_NONE";
   public static final String kBalance = "AUTO_BALANCE";
   public static final String kScoreConePlusBalance = "AUTO_HIGH_CONE_PLUS_BALANCE";
+  public static final String kScoreCubeHighPlusBalance = "AUTO_HIGH_CUBE_PLUS_BALANCE";
   public static final String kMobilityAuto = "AUTO_MOBILITY_ONLY";
   public static final String kScoreHighCone = "AUTO_SCORE_HIGH_CONE";
   public static final String kScoreHighCube = "AUTO_SCORE_HIGH_CUBE";
@@ -45,6 +48,13 @@ public class Robot extends TimedRobot {
   public static final String kCubeHighPlusPickup = "AUTO_CUBE_HIGH_PLUS_PICKUP";
   public static final String kScoreHighTwiceAuto = "AUTO_SCORE_HIGH_TWICE";
   public static final String kScoreHybridTwiceAuto = "AUTO_SCORE_HYBRID_TWICE";
+  public static final String kScoreMidConeOnly = "SCORE_MID_CONE_ONLY";
+  public static final String kScoreMidCUbeOnly = "SCORE_MID_CUBE_ONLY";
+  public static final String kScoreMidConeMobility = "SCORE_MID_CONE_MOBILITY";
+  public static final String kScoreMidCUbeMobility = "SCORE_MID_CUBE_MOBILITY";
+  public static final String kScoreMidConeEngage = "SCORE_MID_CONE_ENGAGE";
+  public static final String kScoreMidCUbeEngage = "SCORE_MID_CUBE_ENGAGE";
+  public static final String kScoreMidConePickUp = "SCORE_MID_CONE_PICKUP";
 
   private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
 
@@ -69,17 +79,26 @@ public class Robot extends TimedRobot {
     m_autoChooser.setDefaultOption("No Auto", kNoAuto);
     m_autoChooser.addOption("Balance", kBalance);
     m_autoChooser.addOption("ConeHigh + Balance", kScoreConePlusBalance);
+    m_autoChooser.addOption("Cube High Balance", kScoreCubeHighPlusBalance);
     m_autoChooser.addOption("Mobility-Only", kMobilityAuto);
     m_autoChooser.addOption("High Cone Only", kScoreHighCone);
     m_autoChooser.addOption("High Cube Only", kScoreHighCube);
     m_autoChooser.addOption("Cone High + Mobility", kConeHighPlusMobility);
     m_autoChooser.addOption("Cube High + Mobility", kCubeHighPlusMobility);
     m_autoChooser.addOption("Cone High + Pickup", kConeHighPlusPickup);
+    m_autoChooser.addOption("Cube High PickUp", kCubeHighPlusPickup);
     m_autoChooser.addOption("Score High Twice", kScoreHighTwiceAuto);
     m_autoChooser.addOption("Score Hybrid Twice", kScoreHybridTwiceAuto);
+    m_autoChooser.addOption("Score mid cone only", kScoreMidConeOnly);
+    m_autoChooser.addOption("Score mid cube only", kScoreMidCUbeOnly);
+    m_autoChooser.addOption("Score mid cone mobility", kScoreMidConeMobility);
+    m_autoChooser.addOption("Score mid cube mobility", kScoreMidCUbeMobility);
+    m_autoChooser.addOption("Score mid cone engage", kScoreMidConeEngage);
+    m_autoChooser.addOption("Score mid cube engage", kScoreMidCUbeEngage);
+    m_autoChooser.addOption("Score mid cone pickup", kScoreMidConePickUp);
     SmartDashboard.putData("Auto Modes:", m_autoChooser);
 
-
+      /* 
         m_visionThread = new Thread(
         () -> {
           // Get the UsbCamera from CameraServer
@@ -114,8 +133,10 @@ public class Robot extends TimedRobot {
             outputStream.putFrame(mat);
           }
         });
+        
     m_visionThread.setDaemon(true);
     m_visionThread.start();
+    */
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
