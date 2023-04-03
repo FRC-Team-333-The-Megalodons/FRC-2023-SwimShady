@@ -9,7 +9,9 @@ import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.IntakeAlternate;
 import frc.robot.Constants;
 import frc.robot.commands.roboActions.Combo.DriveWhileIntaking;
+import frc.robot.commands.roboActions.Combo.GoHome;
 import frc.robot.commands.roboActions.Combo.IntakeCubePosition;
+import frc.robot.commands.roboActions.drive.Drive;
 import frc.robot.commands.roboActions.drive.Turn;
 import frc.robot.commands.roboAutos.onePlusMobility.ConeHighPlusMobility;
 import frc.robot.subsystems.Chassis;
@@ -36,6 +38,9 @@ public class ConeHighPlusPickUp extends SequentialCommandGroup {
       ,new Turn(chassis, gyro, 190, turnController, isFinished())
       ,new IntakeCubePosition(intake, elevator)
       ,new DriveWhileIntaking(chassis, gyro, intake, driveStraightController, straightHeadingController,true,false)
+      ,new GoHome(intake, elevator)
+      ,new Drive(chassis, gyro, resetDriveController, true)
+      ,new Turn(chassis, gyro, 360, turn0Controller,true)
     );
   }
 }

@@ -18,7 +18,7 @@ public class DockAndEngage extends SequentialCommandGroup {
   public DockAndEngage(Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    turnController = new frc.robot.utils.PIDController(.004, .006, 0, 60, .35, .35, 0);
+    turnController = new frc.robot.utils.PIDController(.00333, .0055, 0, 60, .45, .45, 0);
     addCommands(
       new Turn(chassis, gyro, 180, turnController, true)
       ,new Unbalance(chassis, gyro)
