@@ -43,8 +43,14 @@ public class LimeLight extends SubsystemBase {
     if ((targetDistance > 31)) {
       inRange = false;
     } else {
-      inRange = true;
+      if(x > 10 && x < 24)
+      {
+        inRange = false;
+      }
+      inRange = false;
     }
+
+    
 
     SmartDashboard.putNumber("LimelightXangle", x);
     SmartDashboard.putNumber("LimelightYangle", y);
