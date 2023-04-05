@@ -33,8 +33,9 @@ public class LimeLight extends SubsystemBase {
   @Override
   public void periodic() {
 
-    x = tx.getDouble(0);
-    y = ty.getDouble(0);
+    x = tx.getDouble(0); // Max value : 24
+    y = ty.getDouble(0); // Max value : 27
+    // Get's x and y values
 
     angletoRad = Math.toRadians(y);
 
@@ -43,7 +44,7 @@ public class LimeLight extends SubsystemBase {
     if ((targetDistance > 31)) {
       inRange = false;
     } else {
-      if(x > 10 && x < 24)
+      if(x > 10 && x < 24) // ADJUST THESE VALUES IN ORDER TO INCREASE ACCURANCY FOR ALIGNMENT. REQUIRES AT LEAST A 7 DEGREE TOLERANCE AREA.
       {
         inRange = false;
       }
