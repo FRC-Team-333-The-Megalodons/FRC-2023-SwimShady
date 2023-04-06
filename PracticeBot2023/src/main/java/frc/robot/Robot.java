@@ -75,25 +75,25 @@ public class Robot extends TimedRobot {
     //  find all three!
     // In this place, use addOption to add your Mode ID Name, along with a human-readable name.
     m_autoChooser.setDefaultOption("No Auto", kNoAuto);
-    m_autoChooser.addOption("Balance", kBalance);
-    m_autoChooser.addOption("ConeHigh + Balance", kScoreConePlusBalance);
-    m_autoChooser.addOption("Cube High Balance", kScoreCubeHighPlusBalance);
-    m_autoChooser.addOption("Mobility-Only", kMobilityAuto);
-    m_autoChooser.addOption("High Cone Only", kScoreHighCone);
-    m_autoChooser.addOption("High Cube Only", kScoreHighCube);
-    m_autoChooser.addOption("Cone High + Mobility", kConeHighPlusMobility);
-    m_autoChooser.addOption("Cube High + Mobility", kCubeHighPlusMobility);
-    m_autoChooser.addOption("Cone High + Pickup", kConeHighPlusPickup);
-    m_autoChooser.addOption("Cube High PickUp", kCubeHighPlusPickup);
-    m_autoChooser.addOption("Score High Twice", kScoreHighTwiceAuto);
-    m_autoChooser.addOption("Score Hybrid Twice", kScoreHybridTwiceAuto);
-    m_autoChooser.addOption("Score mid cone only", kScoreMidConeOnly);
-    m_autoChooser.addOption("Score mid cube only", kScoreMidCUbeOnly);
-    m_autoChooser.addOption("Score mid cone mobility", kScoreMidConeMobility);
-    m_autoChooser.addOption("Score mid cube mobility", kScoreMidCUbeMobility);
-    m_autoChooser.addOption("Score mid cone engage", kScoreMidConeEngage);
-    m_autoChooser.addOption("Score mid cube engage", kScoreMidCUbeEngage);
-    m_autoChooser.addOption("Score mid cone pickup", kScoreMidConePickUp);
+    m_autoChooser.addOption("Balance: (Only)", kBalance);
+    m_autoChooser.addOption("Balance: ^ cone - HIGH", kScoreConePlusBalance);
+    m_autoChooser.addOption("Balance: [] CUBE - HIGH", kScoreCubeHighPlusBalance);
+    m_autoChooser.addOption("Engage: ^ cone - mid", kScoreMidConeEngage);
+    m_autoChooser.addOption("Engage: [] CUBE - mid", kScoreMidCUbeEngage);
+    m_autoChooser.addOption("Mobility: (Only)", kMobilityAuto);
+    m_autoChooser.addOption("Mobility: ^ cone - mid", kScoreMidConeMobility);
+    m_autoChooser.addOption("Mobility: ^ cone - HIGH", kConeHighPlusMobility);
+    m_autoChooser.addOption("Mobility: [] CUBE - mid", kScoreMidCUbeMobility);
+    m_autoChooser.addOption("Mobility: [] CUBE - HIGH", kCubeHighPlusMobility);
+    m_autoChooser.addOption("Pickup: ^ cone - mid", kScoreMidConePickUp);
+    m_autoChooser.addOption("Pickup: ^ cone - HIGH", kConeHighPlusPickup);
+    m_autoChooser.addOption("Pickup: [] CUBE - HIGH", kCubeHighPlusPickup);
+    m_autoChooser.addOption("Score Only: ^ cone - mid", kScoreMidConeOnly);
+    m_autoChooser.addOption("Score Only: ^ cone - HIGH", kScoreHighCone);
+    m_autoChooser.addOption("Score Only: [] CUBE - mid", kScoreMidCUbeOnly);
+    m_autoChooser.addOption("Score Only: [] CUBE - HIGH", kScoreHighCube);
+    //m_autoChooser.addOption("Score High Twice", kScoreHighTwiceAuto);
+    //m_autoChooser.addOption("Score Hybrid Twice", kScoreHybridTwiceAuto);
     SmartDashboard.putData("Auto Modes:", m_autoChooser);
  
     m_visionThread = new Thread(

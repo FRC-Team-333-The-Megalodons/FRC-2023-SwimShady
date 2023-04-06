@@ -10,10 +10,10 @@ public class ColorSensor {
   Joystick joy;
   LEDStrip strip;
 
-  final int NUMBER_OF_LEDS = 130;
+  final int NUMBER_OF_LEDS = 500;
 
   public ColorSensor(){
-    strip = new LEDStrip(0, NUMBER_OF_LEDS);
+    strip = new LEDStrip(8, NUMBER_OF_LEDS);
     joy = new Joystick(0);
   }
 

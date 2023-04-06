@@ -124,10 +124,10 @@ public final class Constants {
         public static final int INTAKE_SHORT = -10;
         public static final int INTAKE_LONG = -100;
         public static final int OUTAKE = 10;
-        public static final double INTAKE_SPEED = -0.6;
+        public static final double INTAKE_SPEED = 0.6;
         public static final double INTAKE_PASSIVE_SPEED = 0;
-        public static final double EJECT_SPEED = 0.3;
-        public static final double FAST_EJECT_SPEED = 0.6;
+        public static final double EJECT_SPEED = -0.4;
+        public static final double FAST_EJECT_SPEED = -0.6;
     }
 
     public static class RobotMap{

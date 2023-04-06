@@ -6,10 +6,9 @@ package frc.robot.commands.roboAutos.onePlusPickUp;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.roboActions.Combo.DriveWhileGoHome;
 import frc.robot.commands.roboActions.Combo.DriveWhileIntaking;
-import frc.robot.commands.roboActions.Combo.GoHome;
-import frc.robot.commands.roboActions.Combo.IntakeConePosition;
-import frc.robot.commands.roboActions.drive.Drive;
+import frc.robot.commands.roboActions.Combo.IntakeCubePosition;
 import frc.robot.commands.roboActions.drive.Turn;
 import frc.robot.commands.roboAutos.onePlusMobility.CubeHighPlusMobility;
 import frc.robot.subsystems.Chassis;
@@ -26,17 +25,16 @@ public class CubeHighPickUp extends SequentialCommandGroup {
   public CubeHighPickUp(frc.robot.subsystems.Elevator elevator, IntakeAlternate intakeAlternate, Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 180);
-    driveStraightController = new PIDController(.02, .008, 0, 35, 1, 1, Constants.Values.TICKS_PER_METER*.333);
-    driveBackController = new PIDController(.02, .008, 0, 35, 1, 1, -Constants.Values.TICKS_PER_METER*2.515);
-    turnToGlassController = new PIDController(.00333, .0055, 0, 60, .45, .45, 0);
+    straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 183);
+    driveStraightController = new PIDController(.05, .019, 0, 35, 5, 5, Constants.Values.TICKS_PER_METER*.9);
+    driveBackController = new PIDController(.012, .01, 0, 35, 1, 1, -Constants.Values.TICKS_PER_METER*3);
+    turnToGlassController = new PIDController(.0038, .0055, 0, 60, .45, .45, 0);
 
     addCommands(
       new CubeHighPlusMobility(chassis, gyro, elevator, intakeAlternate)
-      ,new IntakeConePosition(intakeAlternate, elevator)
+      ,new IntakeCubePosition(intakeAlternate, elevator)
       ,new DriveWhileIntaking(chassis, gyro, intakeAlternate, driveStraightController, straightHeadingController,true,false)
-      ,new GoHome(intakeAlternate,elevator)
-      ,new Drive(chassis, gyro, driveBackController, true)
+      ,new DriveWhileGoHome(chassis, gyro, intakeAlternate, elevator, driveBackController, straightHeadingController)
       ,new Turn(chassis, gyro, 360, turnToGlassController,true)
     );
   }

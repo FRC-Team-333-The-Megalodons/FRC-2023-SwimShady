@@ -23,6 +23,7 @@ import frc.robot.commands.roboAutos.onePlusPickUp.CubeHighPickUp;
 import frc.robot.commands.roboAutos.two.ScoreHighTwice;
 import frc.robot.commands.roboAutos.two.ScoreHybridTwice;
 import frc.robot.subsystems.Chassis;
+//import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
@@ -68,6 +69,7 @@ public class RobotContainer {
     intake.setElevator(m_elevator);
     m_gyro = new Gyro();
     m_chassis = new Chassis(m_hub, m_elevator);
+    m_lLight = new LimeLight();
     configureBindings();
   }
 
@@ -153,6 +155,9 @@ public class RobotContainer {
     } catch (Exception e) { /* Don't die if the gyro dies */}
     try {
       //m_colorSensor.periodic();
+    } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
+    try {
+      m_lLight.periodic();
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
   }
 

@@ -23,6 +23,7 @@ public class IntakeIn extends CommandBase {
     addRequirements(intake);
     this.intake = intake;
     this.cube = cubeEject;
+    intake.resetMotorEncoder();
   }
 
   // Called when the command is initially scheduled.

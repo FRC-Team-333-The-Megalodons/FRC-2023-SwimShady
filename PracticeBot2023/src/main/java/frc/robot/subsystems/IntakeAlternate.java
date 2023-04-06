@@ -43,8 +43,8 @@ public class IntakeAlternate extends SubsystemBase {
 
   public IntakeAlternate() {
     intakeMotor = new CANSparkMax(Constants.RobotMap.PORT_INTAKE2, MotorType.kBrushless);
-    intakeMotor.setInverted(true);
     intakeMotor.setIdleMode(IdleMode.kBrake);
+    intakeMotor.setInverted(true);
 
     wristMotor = new CANSparkMax(Constants.RobotMap.PORT_WRIST2, MotorType.kBrushless);
     wristMotor.setIdleMode(IdleMode.kBrake);
@@ -56,7 +56,7 @@ public class IntakeAlternate extends SubsystemBase {
     intakeEncoder = intakeMotor.getEncoder(); 
 
     intakeConeController = new frc.robot.utils.PIDController(7.8, 7, 0, .8, 0,0.01,Constants.Wrist.WRIST_GROUND_INTAKE);
-    intakeCubeController = new PIDController(7.8, 7, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN);
+    intakeCubeController = new PIDController(7.8, 7, 0, .8, 0.02,.01,Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN);
     scoringController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0.01,Constants.Wrist.WRIST_POS_TO_SCORE);
     substationController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_SUBSTATION);
     midController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_MID);
@@ -110,21 +110,21 @@ public class IntakeAlternate extends SubsystemBase {
   }
 
   public boolean intakeAutoDone(){
-    if((intakeEncoder.getPosition()) <= -30){
+    if((intakeEncoder.getPosition()) >= 20){
       return true;
     }
     return false;
   }
 
   public boolean outakeAutoDone(){
-    if((intakeEncoder.getPosition()) >= 30){
+    if((intakeEncoder.getPosition()) <= -20){
       return true;
     }
     return false;
   }
 
   public void cubeEject(){
-    intakeMotor.set(-.254);
+    intakeMotor.set(.254);
   }
 
   public void wristIn(){
@@ -239,7 +239,7 @@ public class IntakeAlternate extends SubsystemBase {
     }else if(controller.getLeftBumper()){
       eject();
     }else if(controller.getPOV() == 180){
-      intakeMotor.set(-.254);
+      intakeMotor.set(.254);
     }else if(controller.getPOV() == 90){
       wristToSingleSub();
       intakeConeController.pause();

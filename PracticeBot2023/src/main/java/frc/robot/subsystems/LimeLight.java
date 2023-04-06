@@ -18,7 +18,7 @@ public class LimeLight extends SubsystemBase {
   double x;
   double y;
   boolean inRange;
-  double targetHeight = 20;// Change when nessesary
+  double targetHeight = 7;// Change when nessesary
   double targetDistance;
   double angletoRad;
 
@@ -39,24 +39,20 @@ public class LimeLight extends SubsystemBase {
 
     angletoRad = Math.toRadians(y);
 
-    targetDistance = (targetDistance / Math.tan(angletoRad));
+    targetDistance = (targetHeight / Math.tan(angletoRad));
 
-    if ((targetDistance > 31)) {
-      inRange = false;
-    } else {
-      if(x > 10 && x < 24) // ADJUST THESE VALUES IN ORDER TO INCREASE ACCURANCY FOR ALIGNMENT. REQUIRES AT LEAST A 7 DEGREE TOLERANCE AREA.
+    if ((targetDistance < 35) || (targetDistance > 36 && targetDistance < 41)) {
+      if(x > -7 && x < 7) // ADJUST THESE VALUES IN ORDER TO INCREASE ACCURANCY FOR ALIGNMENT. REQUIRES AT LEAST A 7 DEGREE TOLERANCE AREA.
       {
-        inRange = false;
+        inRange = true;
       }
       inRange = false;
+    } else {
+      inRange = false;
     }
-
-    
-
     SmartDashboard.putNumber("LimelightXangle", x);
     SmartDashboard.putNumber("LimelightYangle", y);
     SmartDashboard.putNumber("LimeLightDistance", targetDistance);//distance in inches
     SmartDashboard.putBoolean("Is_In_Range", inRange);
-
   }
 }
