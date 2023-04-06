@@ -26,7 +26,7 @@ public class CubeHighPickUp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 183);
-    driveStraightController = new PIDController(.05, .019, 0, 35, 5, 5, Constants.Values.TICKS_PER_METER*.9);
+    driveStraightController = new PIDController(.047, .02, 0, 35, 5, 5, Constants.Values.TICKS_PER_METER*1);
     driveBackController = new PIDController(.012, .01, 0, 35, 1, 1, -Constants.Values.TICKS_PER_METER*3);
     turnToGlassController = new PIDController(.0038, .0055, 0, 60, .45, .45, 0);
 

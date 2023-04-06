@@ -85,6 +85,7 @@ public class PIDController {
     public double getOutput(double sensorValue){
         SmartDashboard.putNumber("Target", target);
         SmartDashboard.putNumber("error", error);
+        SmartDashboard.putBoolean("Is on target",isOnTarget);
         timer.start();
         currentTime = timer.get() - lastTimeStamp;
         if(sensorValue > maxTarget){

@@ -49,14 +49,14 @@ public class IntakeAlternate extends SubsystemBase {
     wristMotor = new CANSparkMax(Constants.RobotMap.PORT_WRIST2, MotorType.kBrushless);
     wristMotor.setIdleMode(IdleMode.kBrake);
 
-    wristEncoder = new DutyCycleEncoder(9);
+    wristEncoder = new DutyCycleEncoder(Constants.RobotMap.WRIST_POTENTIOMETER_CHANNEL);
     wristEncoder.setConnectedFrequencyThreshold(900);
     wristEncoder.reset();
 
     intakeEncoder = intakeMotor.getEncoder(); 
 
     intakeConeController = new frc.robot.utils.PIDController(7.8, 7, 0, .8, 0,0.01,Constants.Wrist.WRIST_GROUND_INTAKE);
-    intakeCubeController = new PIDController(7.8, 7, 0, .8, 0.02,.01,Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN);
+    intakeCubeController = new PIDController(10, 8.8, 0, .8, 0.02,.01,Constants.Wrist.WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN);
     scoringController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0.01,Constants.Wrist.WRIST_POS_TO_SCORE);
     substationController = new frc.robot.utils.PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_SUBSTATION);
     midController = new PIDController(7.5, 6, 0, .8, 0.01,0,Constants.Wrist.WRIST_POS_TO_MID);
@@ -248,14 +248,7 @@ public class IntakeAlternate extends SubsystemBase {
       substationController.pause();
       midController.pause();
     }else {
-      // If no one is holding the intake buttons, and gravity
-      //  isn't helping us, do a persistent pull-in to help hold it.
-      if (getRealWristPosition() < Constants.Wrist.WRIST_POS_GRAVITY_THRESHOLD)
-      {
-        passiveIntakeIn();
-      } else {
-        stopIntake();
-      }
+      stopIntake();
     }
 
     /*

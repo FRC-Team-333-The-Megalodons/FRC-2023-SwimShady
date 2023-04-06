@@ -38,7 +38,7 @@ public class Elevator extends SubsystemBase {
     leftmotor = new CANSparkMax(Constants.RobotMap.PORT_ELEVATOR2, MotorType.kBrushless);
     stick = new Joystick(0);
     controller = new XboxController(1);
-    eGroundPidController = new PIDController(.07, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
+    eGroundPidController = new PIDController(.09, .01, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_GROUND_INTAKE);
     cubeGroundPIDController = new PIDController(.07, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_CUBE);
     singleSubPIDController = new PIDController(.07, .008, 0, 25, .2, .2,Constants.Elevator.ELEVATOR_POS_CUBE);
 
