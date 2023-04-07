@@ -328,6 +328,6 @@ public class IntakeAlternate extends SubsystemBase {
     double rawWristValue = getRealWristPosition();
     wristValue = (Double.valueOf(df1.format(rawWristValue)));
     SmartDashboard.putNumber("wrist value", wristValue);
-    SmartDashboard.putNumber("intake motor", intakeEncoder.getPosition());
+    //SmartDashboard.putNumber("intake motor", intakeEncoder.getPosition());
   }
 }

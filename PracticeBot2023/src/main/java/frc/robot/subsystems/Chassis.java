@@ -176,8 +176,9 @@ public class Chassis extends SubsystemBase {
     //SmartDashboard.putString("chassis State", chassisState+"");
     //SmartDashboard.putNumber("left chassis encoder", leftLeaderEncoder.getPosition());
     //SmartDashboard.putNumber("right chassis encoder", rightLeaderEncoder.getPosition());
-    SmartDashboard.putNumber("Meters moved", getChassisMetersMoved());
-    SmartDashboard.putNumber("Chassis Encoders", getEncodersAverage());
+    
+    //SmartDashboard.putNumber("Meters moved", getChassisMetersMoved());
+    //SmartDashboard.putNumber("Chassis Encoders", getEncodersAverage());
   }
 
   public ChassisStates evaluateState()

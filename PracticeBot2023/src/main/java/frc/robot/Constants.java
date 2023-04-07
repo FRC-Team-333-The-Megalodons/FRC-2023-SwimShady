@@ -96,12 +96,12 @@ public final class Constants {
 
     public static class Wrist {
 
-        public static final double offset = .040;
+        public static final double offset = .05;
         //public static final double WRIST_MAX = 0.93; // 1.02;
         //public static final double WRIST_MIN = 0.62; //0.74;
         //public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.7; // (noice) 0.82;
         //public static final double WRIST_STRAIGHT = 0.71; // 0.77;
-        public static final double WRIST_GROUND_INTAKE = 0.09 + offset; // 0.74;
+        public static final double WRIST_GROUND_INTAKE = 0.1 + offset; // 0.74;
         //public static final double WRIST_APPROX_THRESHOLD = 0.07;
         //public static final double WRIST_ENCODER_MULTIPLIER = 20;
         
@@ -114,9 +114,9 @@ public final class Constants {
         //public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_UP = 0.1;
         public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN = 0.15 + offset;
         //public static final double WRIST_POS_THRESHOLD_WHERE_ELEVATOR_NEEDS_TO_STOP = 0.3;
-        public static final double WRIST_POS_TO_SUBSTATION = 0.18 + offset;
-        public static final double WRIST_POS_TO_SCORE = 0.22 + offset;
-        public static final double WRIST_POS_TO_SCORE_AUTO = 0.22 + offset;
+        public static final double WRIST_POS_TO_SUBSTATION = 0.19 + offset;
+        public static final double WRIST_POS_TO_SCORE = 0.23 + offset;
+        public static final double WRIST_POS_TO_SCORE_AUTO = 0.23 + offset;
         public static final double WRIST_POS_TO_MID = 0.05 + offset;
     }
 

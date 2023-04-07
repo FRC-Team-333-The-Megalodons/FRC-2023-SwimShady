@@ -50,9 +50,10 @@ public class LimeLight extends SubsystemBase {
     } else {
       inRange = false;
     }
-    SmartDashboard.putNumber("LimelightXangle", x);
-    SmartDashboard.putNumber("LimelightYangle", y);
-    SmartDashboard.putNumber("LimeLightDistance", targetDistance);//distance in inches
-    SmartDashboard.putBoolean("Is_In_Range", inRange);
+    
+    //SmartDashboard.putNumber("LimelightXangle", x);
+    //SmartDashboard.putNumber("LimelightYangle", y);
+    //SmartDashboard.putNumber("LimeLightDistance", targetDistance);//distance in inches
+    //SmartDashboard.putBoolean("Is_In_Range", inRange);
   }
 }
