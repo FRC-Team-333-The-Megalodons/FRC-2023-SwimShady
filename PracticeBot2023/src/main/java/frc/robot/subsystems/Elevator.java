@@ -77,9 +77,9 @@ public class Elevator extends SubsystemBase {
     } else {
       rampDownRate = 0;
       if(rampUpRate == 0){
-        rampUpRate = .2;
-      }else if(rampUpRate != 1){
-        rampUpRate += .2;
+        rampUpRate = .25;
+      }else if(rampUpRate < 1){
+        rampUpRate += .25;
       }
       manualMove(Constants.Elevator.ELEVATOR_UP_ESPEED*rampUpRate);
     }

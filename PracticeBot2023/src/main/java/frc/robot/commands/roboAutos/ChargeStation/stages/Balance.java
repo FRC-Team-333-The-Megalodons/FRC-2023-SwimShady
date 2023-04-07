@@ -20,7 +20,7 @@ public class Balance extends CommandBase {
     this.chassis = chassis;
     this.gyro = gyro;
     //p = .028, i = .00013
-    balanceController = new frc.robot.utils.PIDController(0.0253, 0.0001, 0, 20, 0, 0, 0,true);
+    balanceController = new frc.robot.utils.PIDController(0.0254, 0.0001, 0, 20, 0, 0, 0,true);
   }
 
   // Called when the command is initially scheduled.
