@@ -6,10 +6,8 @@ package frc.robot.commands.roboAutos.onePlusPickUp;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.roboActions.Combo.DriveWhileGoHome;
 import frc.robot.commands.roboActions.Combo.DriveWhileIntaking;
 import frc.robot.commands.roboActions.Combo.IntakeCubePosition;
-import frc.robot.commands.roboActions.drive.Turn;
 import frc.robot.commands.roboAutos.onePlusMobility.CubeHighPlusMobility;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Gyro;
@@ -34,8 +32,8 @@ public class CubeHighPickUp extends SequentialCommandGroup {
       new CubeHighPlusMobility(chassis, gyro, elevator, intakeAlternate)
       ,new IntakeCubePosition(intakeAlternate, elevator)
       ,new DriveWhileIntaking(chassis, gyro, intakeAlternate, driveStraightController, straightHeadingController,true,false)
-      ,new DriveWhileGoHome(chassis, gyro, intakeAlternate, elevator, driveBackController, straightHeadingController)
-      ,new Turn(chassis, gyro, 360, turnToGlassController,true)
+      //,new DriveWhileGoHome(chassis, gyro, intakeAlternate, elevator, driveBackController, straightHeadingController)
+      //,new Turn(chassis, gyro, 360, turnToGlassController,true)
     );
   }
 }

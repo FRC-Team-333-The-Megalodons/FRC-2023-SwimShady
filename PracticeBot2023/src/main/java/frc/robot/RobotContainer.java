@@ -26,7 +26,6 @@ import frc.robot.subsystems.Chassis;
 //import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.LimeLight;
 import frc.robot.utils.Metrics;
 import frc.robot.subsystems.IntakeAlternate;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -54,7 +53,7 @@ public class RobotContainer {
   IntakeAlternate intake;
   Elevator m_elevator;
   Gyro m_gyro;
-  LimeLight m_lLight;
+  //LimeLight m_lLight;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -69,7 +68,7 @@ public class RobotContainer {
     intake.setElevator(m_elevator);
     m_gyro = new Gyro();
     m_chassis = new Chassis(m_hub, m_elevator);
-    m_lLight = new LimeLight();
+    //m_lLight = new LimeLight();
     configureBindings();
   }
 
@@ -157,7 +156,7 @@ public class RobotContainer {
       //m_colorSensor.periodic();
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
     try {
-      m_lLight.periodic();
+      //m_lLight.periodic();
     } catch (Exception e) { /* Don't die if the colorsensor dies. */ }
   }
 
