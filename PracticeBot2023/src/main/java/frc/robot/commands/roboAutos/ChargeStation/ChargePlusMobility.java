@@ -7,6 +7,7 @@ package frc.robot.commands.roboAutos.ChargeStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.roboActions.Combo.GoHome;
 import frc.robot.commands.roboActions.drive.Turn;
+import frc.robot.commands.roboActions.intake.IntakeIn;
 import frc.robot.commands.roboAutos.ChargeStation.stages.DockAndEngage;
 import frc.robot.commands.roboAutos.ChargeStation.stages.UnbalanceForMobility;
 import frc.robot.commands.roboAutos.oneOnly.ScoreHighCone;
@@ -29,6 +30,7 @@ public class ChargePlusMobility extends SequentialCommandGroup {
       //new ScoreHighCone(elevator, intake, chassis, gyro)
       //,new GoHome(intake, elevator)
       new Turn(chassis, gyro, 180, turnController, true)
+      ,new IntakeIn(intake)
       //,new UnbalanceForMobility(chassis, gyro)
       //,new Turn(chassis, gyro, 0, turnResetController, true)
       //,new DockAndEngage(chassis, gyro)
