@@ -23,7 +23,7 @@ public class ChargePlusMobility extends SequentialCommandGroup {
   public ChargePlusMobility(Elevator elevator, IntakeAlternate intake, Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    turnController = new frc.robot.utils.PIDController(.008, .003, 0, 90, 1, 1, 0);
+    turnController = new frc.robot.utils.PIDController(.0085, .004, 0, 90, 1.5, 1.5, 0);
     turnResetController = new frc.robot.utils.PIDController(.006, .001, 0, 90, .5, 1, 0);
     addCommands(
       //new ScoreHighCone(elevator, intake, chassis, gyro)
