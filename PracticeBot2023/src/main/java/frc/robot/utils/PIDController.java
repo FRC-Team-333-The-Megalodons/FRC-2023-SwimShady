@@ -88,14 +88,14 @@ public class PIDController {
         SmartDashboard.putBoolean("Is on target",isOnTarget);
         timer.start();
         currentTime = timer.get() - lastTimeStamp;
-        if(sensorValue > maxTarget){
-            error = maxTarget - sensorValue;
+        if(sensorValue > target){
+            error = target - sensorValue;
             greaterThanMax = true;
             lowerThanMin = false;
         }
 
-        if(sensorValue < minTarget){
-            error = minTarget - sensorValue;
+        if(sensorValue < target){
+            error = target - sensorValue;
             greaterThanMax = false;
             lowerThanMin = true;
         }
