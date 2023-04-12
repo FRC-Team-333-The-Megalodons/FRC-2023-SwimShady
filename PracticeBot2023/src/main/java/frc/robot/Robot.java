@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
   public static final String kScoreMidConeEngage = "SCORE_MID_CONE_ENGAGE";
   public static final String kScoreMidCUbeEngage = "SCORE_MID_CUBE_ENGAGE";
   public static final String kScoreMidConePickUp = "SCORE_MID_CONE_PICKUP";
+  public static final String kCHampsAuto = "CHAMPS AUTO";
 
   private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
 
@@ -91,6 +92,7 @@ public class Robot extends TimedRobot {
     m_autoChooser.addOption("Score Only: ^ cone - HIGH", kScoreHighCone);
     m_autoChooser.addOption("Score Only: [] CUBE - mid", kScoreMidCUbeOnly);
     m_autoChooser.addOption("Score Only: [] CUBE - HIGH", kScoreHighCube);
+    m_autoChooser.addOption("Champs charge", kCHampsAuto);
     //m_autoChooser.addOption("Score High Twice", kScoreHighTwiceAuto);
     //m_autoChooser.addOption("Score Hybrid Twice", kScoreHybridTwiceAuto);
     SmartDashboard.putData("Auto Modes:", m_autoChooser);

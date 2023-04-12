@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.roboAutos.ChargeStation.ChargePlusMobility;
 import frc.robot.commands.roboAutos.ChargeStation.ScoreHighConePlusEngage;
 import frc.robot.commands.roboAutos.ChargeStation.ScoreHighCubePlusEngage;
 import frc.robot.commands.roboAutos.ChargeStation.ScoreMidCubePlusEngage;
@@ -125,6 +126,7 @@ public class RobotContainer {
       case Robot.kScoreMidConeEngage: return new ScoreHighConePlusEngage(m_elevator, intake, m_chassis, m_gyro);
       case Robot.kScoreMidCUbeEngage: return new ScoreMidCubePlusEngage(m_elevator, intake, m_chassis, m_gyro);
       case Robot.kScoreMidConePickUp: return new ConeMidPlusPickUp(m_chassis, m_gyro, m_elevator, intake);
+      case Robot.kCHampsAuto: return new ChargePlusMobility(m_elevator, intake, m_chassis, m_gyro);
 
       default: return null;
     }    
