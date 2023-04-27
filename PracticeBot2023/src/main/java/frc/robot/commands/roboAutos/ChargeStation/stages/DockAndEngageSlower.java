@@ -12,13 +12,13 @@ import frc.robot.subsystems.Gyro;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class DockAndEngage extends SequentialCommandGroup {
+public class DockAndEngageSlower extends SequentialCommandGroup {
   /** Creates a new DockAndEngage. */
   frc.robot.utils.PIDController turnController;
-  public DockAndEngage(Chassis chassis, Gyro gyro) {
+  public DockAndEngageSlower(Chassis chassis, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    turnController = new frc.robot.utils.PIDController(.005, .00333, 0, 90, 3, 3, 0);//.0045, .0038, 0, 60, .35, .35, 0
+    turnController = new frc.robot.utils.PIDController(.0045, .0038, 0, 60, .35, .35, 0);
     addCommands(
       new Turn(chassis, gyro, 180, turnController, true)
       ,new Unbalance(chassis, gyro)

@@ -58,10 +58,7 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   Thread m_visionThread;
-
   private RobotContainer m_robotContainer;
-
-  
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -100,7 +97,7 @@ public class Robot extends TimedRobot {
     m_visionThread = new Thread(
       () -> {
         // Get the UsbCamera from CameraServer
-        UsbCamera camera = CameraServer.startAutomaticCapture();
+        UsbCamera camera = CameraServer.startAutomaticCapture(0);
         // Set the resolution
         camera.setResolution(100, 75);
 

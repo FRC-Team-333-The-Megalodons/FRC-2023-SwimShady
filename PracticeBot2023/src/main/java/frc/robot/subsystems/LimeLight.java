@@ -5,10 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import java.lang.Math;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class LimeLight extends SubsystemBase {
   NetworkTable table;
@@ -21,17 +25,35 @@ public class LimeLight extends SubsystemBase {
   double targetDistance;
   double angletoRad;
 
+  HttpCamera httpCamera;
+
+
   /** Creates a new LimeLight. */
   public LimeLight() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    tx = table.getEntry("tx");
-    ty = table.getEntry("ty");
+    NetworkTableEntry ledMode = table.getEntry("ledMode");
+    ledMode.setDouble(1);
+    NetworkTableEntry camMode = table.getEntry("camMode");
+    camMode.setDouble(1);
+
+    /*
+    String url = SmartDashboard.getString("limelight_Stream", "http://10.3.33.219:5800");
+    httpCamera = new HttpCamera("LimelightCamera", url+"/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+    CameraServer.addCamera(httpCamera);
+    */
+    
+    //NetworkTableEntry stream_url = table.getEntry("source");
+    //SmartDashboard.putString("LLightStreamUrl", stream_url.getString(""));
+    //table.putValue("ledMode", NetworkTableValue.makeInteger(1));
+    //tx = table.getEntry("tx");
+    //ty = table.getEntry("ty");
 
   }
 
   @Override
   public void periodic() {
 
+    /*
     x = tx.getDouble(0); // Max value : 24
     y = ty.getDouble(0); // Max value : 27
     // Get's x and y values
@@ -54,5 +76,6 @@ public class LimeLight extends SubsystemBase {
     //SmartDashboard.putNumber("LimelightYangle", y);
     //SmartDashboard.putNumber("LimeLightDistance", targetDistance);//distance in inches
     //SmartDashboard.putBoolean("Is_In_Range", inRange);
+    */
   }
 }

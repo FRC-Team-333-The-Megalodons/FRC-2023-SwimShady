@@ -62,7 +62,7 @@ public final class Constants {
         public static final double AUTO_UNBALANCE_START_SPEED = 0.1;
         public static final double AUTO_UNBALANCE_INCREMENT = 0.2;
         public static final double AUTO_UNBALANCE_MAX_SPEED = 0.95;
-        public static final double AUTO_UNBALANCE_TILT_THRESHOLD = -12;
+        public static final double AUTO_UNBALANCE_TILT_THRESHOLD = -16;
         public static final double TELEOP_X_SLOWDOWN_DIVISOR = 2.35;
         public static final double TELEOP_Y_SLOWDOWN_DIVISOR = 1.5;
 
@@ -101,7 +101,7 @@ public final class Constants {
         //public static final double WRIST_MIN = 0.62; //0.74;
         //public static final double WRIST_MIN_WHEN_ELEVATOR_DOWN = 0.7; // (noice) 0.82;
         //public static final double WRIST_STRAIGHT = 0.71; // 0.77;
-        public static final double WRIST_GROUND_INTAKE = 0.11 + offset; // 0.74;
+        public static final double WRIST_GROUND_INTAKE = 0.10 + offset; // 0.74;
         //public static final double WRIST_APPROX_THRESHOLD = 0.07;
         //public static final double WRIST_ENCODER_MULTIPLIER = 20;
         
@@ -112,7 +112,7 @@ public final class Constants {
         public static final double WRIST_POS_UPPER_LIMIT = 0.41 + offset;//.47 new
         //public static final double WRIST_POS_GRAVITY_THRESHOLD = (0.45-.06)+offset; // TODO: This is a guess, check if makes sense.
         //public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_UP = 0.1;
-        public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN = 0.15 + offset;
+        public static final double WRIST_POS_LOWER_LIMIT_WHILE_ELEVATOR_DOWN = 0.17 + offset;
         //public static final double WRIST_POS_THRESHOLD_WHERE_ELEVATOR_NEEDS_TO_STOP = 0.3;
         public static final double WRIST_POS_TO_SUBSTATION = 0.2 + offset;
         public static final double WRIST_POS_TO_SCORE = 0.25 + offset;

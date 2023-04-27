@@ -128,7 +128,6 @@ public class IntakeAlternate extends SubsystemBase {
   }
 
   public void wristIn(){
-    
     moveWrist(Constants.Wrist.WRIST_UP_SPEED);
   }
 

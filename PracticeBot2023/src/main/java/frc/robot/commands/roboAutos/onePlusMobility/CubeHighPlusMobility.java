@@ -26,11 +26,11 @@ public class CubeHighPlusMobility extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     driveForwardController = new PIDController(.0145, .01, 0, 35, 5, 1, -Constants.Values.TICKS_PER_METER*2.7);
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
-    turnToGamePieceController = new PIDController(.0045, .007, 0, 60, .35, .35, 0);
+    turnToGamePieceController = new PIDController(.005, .00333, 0, 90, 3, 3, 0);//.0045, .007, 0, 60, .35, .35, 0
     addCommands(
       new ScoreHighCube(elevator, intake,chassis,gyro)
       ,new Drive(chassis,gyro,driveForwardController,straightHeadingController,true)
-      ,new Turn(chassis, gyro, 177, turnToGamePieceController, true)
+      ,new Turn(chassis, gyro, 180, turnToGamePieceController, true)
     );
   }
 }

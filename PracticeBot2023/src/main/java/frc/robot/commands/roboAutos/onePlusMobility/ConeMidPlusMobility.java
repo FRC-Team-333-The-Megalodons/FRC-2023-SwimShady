@@ -25,7 +25,7 @@ public class ConeMidPlusMobility extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     driveForwardController = new PIDController(.0145, .01, 0, 35, 3, 1, -Constants.Values.TICKS_PER_METER*2.7);
     straightHeadingController = new PIDController(.05, .007, 0, .15, .2, .2, 0);
-    turnToGamePieceController = new PIDController(.0045, .007, 0, 60, .35, .35, 0);
+    turnToGamePieceController = new PIDController(.005, .00333, 0, 90, 3, 3, 0);
     addCommands(
       new ScoreMidCone(elevator, intake,chassis,gyro)
       ,new Drive(chassis,gyro,driveForwardController,straightHeadingController,true)
