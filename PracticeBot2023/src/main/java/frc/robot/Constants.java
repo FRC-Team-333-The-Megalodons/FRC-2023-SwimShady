@@ -61,7 +61,7 @@ public final class Constants {
     public static class Chassis {
         public static final double AUTO_UNBALANCE_START_SPEED = 0.1;
         public static final double AUTO_UNBALANCE_INCREMENT = 0.2;
-        public static final double AUTO_UNBALANCE_MAX_SPEED = 0.95;
+        public static final double AUTO_UNBALANCE_MAX_SPEED = 0.870;
         public static final double AUTO_UNBALANCE_TILT_THRESHOLD = -16;
         public static final double TELEOP_X_SLOWDOWN_DIVISOR = 2.35;
         public static final double TELEOP_Y_SLOWDOWN_DIVISOR = 1.5;
